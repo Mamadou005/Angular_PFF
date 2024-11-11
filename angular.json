@@ -38,7 +38,8 @@
               "plyr",
               "sweetalert2",
               "bs-stepper",
-              "feather-icons"
+              "feather-icons",
+              "@ckeditor/ckeditor5-build-classic"
             ],
             "outputPath": "dist/vuexy",
             "index": "src/index.html",

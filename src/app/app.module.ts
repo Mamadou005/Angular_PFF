@@ -1,35 +1,41 @@
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { RouterModule, Routes } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { RouterModule, Routes } from '@angular/router';
 
-import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { FakeDbService } from '@fake-db/fake-db.service';
+import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
 
-import 'hammerjs';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { ToastrModule } from 'ngx-toastr';
-import { TranslateModule } from '@ngx-translate/core';
 import { ContextMenuModule } from '@ctrl/ngx-rightclick';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateModule } from '@ngx-translate/core';
+import 'hammerjs';
+import { ToastrModule } from 'ngx-toastr';
 
-import { CoreModule } from '@core/core.module';
 import { CoreCommonModule } from '@core/common.module';
 import { CoreSidebarModule, CoreThemeCustomizerModule } from '@core/components';
 import { CardSnippetModule } from '@core/components/card-snippet/card-snippet.module';
+import { CoreModule } from '@core/core.module';
 
 import { coreConfig } from 'app/app-config';
-import { AuthGuard } from 'app/auth/helpers/auth.guards';
-import { fakeBackendProvider } from 'app/auth/helpers'; // used to create fake backend
-import { JwtInterceptor, ErrorInterceptor } from 'app/auth/helpers';
 import { AppComponent } from 'app/app.component';
-import { LayoutModule } from 'app/layout/layout.module';
+import { ErrorInterceptor, fakeBackendProvider, JwtInterceptor } from 'app/auth/helpers'; // used to create fake backend
+import { AuthGuard } from 'app/auth/helpers/auth.guards';
 import { ContentHeaderModule } from 'app/layout/components/content-header/content-header.module';
+import { LayoutModule } from 'app/layout/layout.module';
+
+import { FormsModule } from '@angular/forms';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+
+
+
 
 import { ContextMenuComponent } from 'app/main/extensions/context-menu/context-menu.component';
 import { AnimatedCustomContextMenuComponent } from './main/extensions/context-menu/custom-context-menu/animated-custom-context-menu/animated-custom-context-menu.component';
 import { BasicCustomContextMenuComponent } from './main/extensions/context-menu/custom-context-menu/basic-custom-context-menu/basic-custom-context-menu.component';
 import { SubMenuCustomContextMenuComponent } from './main/extensions/context-menu/custom-context-menu/sub-menu-custom-context-menu/sub-menu-custom-context-menu.component';
+
 
 const appRoutes: Routes = [
   {
@@ -116,7 +122,9 @@ const appRoutes: Routes = [
         CoreThemeCustomizerModule,
         CardSnippetModule,
         LayoutModule,
-        ContentHeaderModule
+        ContentHeaderModule,
+        FormsModule,  // Ajout dans les imports
+        CKEditorModule // Ajout dans les imports
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

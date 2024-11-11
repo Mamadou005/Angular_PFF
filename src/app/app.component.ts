@@ -1,11 +1,11 @@
-import { Component, Inject, OnDestroy, OnInit, ElementRef, Renderer2 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
+import { Component, ElementRef, Inject, OnDestroy, OnInit, Renderer2, ViewEncapsulation } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
 import * as Waves from 'node-waves';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 import { CoreMenuService } from '@core/components/core-menu/core-menu.service';
 import { CoreSidebarService } from '@core/components/core-sidebar/core-sidebar.service';
@@ -13,23 +13,32 @@ import { CoreConfigService } from '@core/services/config.service';
 import { CoreLoadingScreenService } from '@core/services/loading-screen.service';
 import { CoreTranslationService } from '@core/services/translation.service';
 
-import { menu } from 'app/menu/menu';
+import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic'; // Importez CKEditor
+import { locale as menuGerman } from 'app/menu/i18n/de';
 import { locale as menuEnglish } from 'app/menu/i18n/en';
 import { locale as menuFrench } from 'app/menu/i18n/fr';
-import { locale as menuGerman } from 'app/menu/i18n/de';
 import { locale as menuPortuguese } from 'app/menu/i18n/pt';
+import { menu } from 'app/menu/menu';
+
+
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class AppComponent implements OnInit, OnDestroy {
   coreConfig: any;
   menu: any;
   defaultLanguage: 'en'; // This language will be used as a fallback when a translation isn't found in the current language
   appLanguage: 'en'; // Set application default language i.e fr
-
+  public Editor = ClassicEditor; // Assignez l'éditeur
+  public editorData: string = ''; // Initialisation de la donnée de l'éditeur
+  public editorConfig = {
+    toolbar: ['bold', 'italic', 'link', 'bulletedList', 'numberedList']
+  };
+  
   // Private
   private _unsubscribeAll: Subject<any>;
 
