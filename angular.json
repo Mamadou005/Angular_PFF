@@ -46,7 +46,11 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
-            "assets": ["src/favicon.ico", "src/assets"],
+            "assets": [
+              "src/favicon.ico",
+              "src/assets",
+              "src/lib"
+            ],
             "styles": [
               "src/styles.scss",
               "node_modules/highlight.js/scss/atom-one-dark.scss",

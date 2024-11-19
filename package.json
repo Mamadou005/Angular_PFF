@@ -13,7 +13,8 @@
     "bundle-analyzer": "webpack-bundle-analyzer dist/vuexy/stats.json",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "postinstall": "node src/@core/copy-webviewer-files.js"
   },
   "private": true,
   "dependencies": {
