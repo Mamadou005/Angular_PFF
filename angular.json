@@ -38,14 +38,19 @@
               "plyr",
               "sweetalert2",
               "bs-stepper",
-              "feather-icons"
+              "feather-icons",
+              "@ckeditor/ckeditor5-build-classic"
             ],
             "outputPath": "dist/vuexy",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
-            "assets": ["src/favicon.ico", "src/assets"],
+            "assets": [
+              "src/favicon.ico",
+              "src/assets",
+              "src/lib"
+            ],
             "styles": [
               "src/styles.scss",
               "node_modules/highlight.js/scss/atom-one-dark.scss",
