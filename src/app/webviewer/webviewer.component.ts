@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import WebViewer, {WebViewerInstance} from "@pdftron/webviewer";
 import {Subject} from "rxjs";
 
@@ -13,6 +13,7 @@ export class WebviewerComponent implements AfterViewInit {
   @ViewChild('viewer') viewer!: ElementRef;
   
   @Output() coreControlsEvent:EventEmitter<string> = new EventEmitter();
+  @Input() urlFichier?: string
 
   private documentLoaded$: Subject<void>;
 
@@ -25,6 +26,7 @@ export class WebviewerComponent implements AfterViewInit {
     WebViewer({
       path: '../../lib',
       enableOfficeEditing: true,
+      initialDoc: "https://pdftron.s3.amazonaws.com/downloads/pl/report.docx",
       licenseKey: 'demo:1731372460021:7ef9fd110300000000ec33ffa1b45492254e5640546bff52dc10b5080f'  // sign up to get a free trial key at https://dev.apryse.com
     }, this.viewer.nativeElement).then(instance => {
       this.wvInstance = instance;
