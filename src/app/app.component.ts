@@ -268,4 +268,6 @@ export class AppComponent implements OnInit, OnDestroy {
   toggleSidebar(key): void {
     this._coreSidebarService.getSidebarRegistry(key).toggleOpen();
   }
+  
+  
 }

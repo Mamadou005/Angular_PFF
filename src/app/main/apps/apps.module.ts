@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { FullCalendarModule } from '@fullcalendar/angular';
@@ -23,6 +23,10 @@ const routes: Routes = [
     loadChildren: () => import('./todo/todo.module').then(m => m.TodoModule)
   },
   {
+    path: 'rapport',
+    loadChildren: () => import('./rapport/rapport.module').then(m => m.RapportModule)
+  },
+  {
     path: 'calendar',
     loadChildren: () => import('./calendar/calendar.module').then(m => m.CalendarModule)
   },
@@ -44,6 +48,7 @@ FullCalendarModule.registerPlugins([dayGridPlugin, timeGridPlugin, listPlugin, i
 
 @NgModule({
   declarations: [],
-  imports: [CommonModule, RouterModule.forChild(routes)]
+  imports: [CommonModule, RouterModule.forChild(routes)],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppsModule {}

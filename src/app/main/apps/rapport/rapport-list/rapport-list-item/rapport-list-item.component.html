@@ -1,0 +1,33 @@
+<!-- Rapport List Item -->
+<li class="rapport-item">
+  <div class="rapport-title-wrapper">
+    <div class="rapport-title-area">
+      <i data-feather="more-vertical" class="drag-icon"></i>
+      <div class="title-wrapper">
+        <span class="rapport-title">{{ rapport.titre }}</span>
+      </div>
+    </div>
+    <div class="rapport-item-action">
+      <div class="badge-wrapper mr-1">
+        <div
+          class="badge badge-pill text-capitalize"
+          [ngClass]="{
+            'badge-light-primary': rapport.etatSoumission === 'SUBMITTED',
+            'badge-light-success': rapport.etatSoumission === 'APPROVED',
+            'badge-light-danger': rapport.etatSoumission === 'REJECTED'
+          }"
+        >
+          {{ rapport.etatSoumission | lowercase }}
+        </div>
+      </div>
+      <small class="text-nowrap text-muted mr-1">{{ rapport.dateSoumission | date: 'MMM d, yyyy' }}</small>
+      <div class="groupe-etudiant">
+        <small class="text-muted">Groupe : {{ rapport.groupeEtudiant?.nom }}</small>
+      </div>
+      <div class="echeance">
+        <small class="text-muted">Échéance : {{ rapport.echeance?.description }}</small>
+      </div>
+    </div>
+  </div>
+</li>
+<!--/ Rapport List Item -->

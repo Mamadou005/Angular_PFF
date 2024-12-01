@@ -1,0 +1,35 @@
+<div class="content-area-wrapper container-xxl p-0">
+  <!-- Rapport Main Sidebar (Filter) -->
+  <core-sidebar
+    class="sidebar-left"
+    name="rapport-sidebar-main"
+    overlayClass="body-content-overlay"
+    collapsibleSidebar="bs-gt-lg"
+  >
+    <app-rapport-main-sidebar></app-rapport-main-sidebar>
+  </core-sidebar>
+  <!--/ Rapport Main Sidebar -->
+
+  <!-- content-right -->
+  <div class="content-right">
+    <div class="content-wrapper container-xxl p-0">
+      <div class="content-body">
+        <!-- Rapport List -->
+        <app-rapport-list></app-rapport-list>
+        <!--/ Rapport List -->
+
+        <!-- Rapport Right Sidebar (Detail) -->
+        <core-sidebar
+          class="modal modal-slide-in sidebar-rapport-modal fade"
+          name="rapport-sidebar-right"
+          overlayClass="modal-backdrop"
+          hideOnEsc="true"
+        >
+          <app-rapport-right-sidebar></app-rapport-right-sidebar>
+        </core-sidebar>
+        <!--/ Rapport Right Sidebar -->
+      </div>
+    </div>
+  </div>
+  <!--/ content-right -->
+</div>
