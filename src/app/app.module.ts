@@ -20,7 +20,7 @@ import { CoreModule } from '@core/core.module';
 
 import { coreConfig } from 'app/app-config';
 import { AppComponent } from 'app/app.component';
-import { ErrorInterceptor, fakeBackendProvider, JwtInterceptor } from 'app/auth/helpers'; // used to create fake backend
+import { ErrorInterceptor, fakeBackendProvider } from 'app/auth/helpers'; // used to create fake backend
 import { AuthGuard } from 'app/auth/helpers/auth.guards';
 import { ContentHeaderModule } from 'app/layout/components/content-header/content-header.module';
 import { LayoutModule } from 'app/layout/layout.module';
@@ -31,11 +31,13 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 
 
 
+import { RapportService } from 'app/main/apps/rapport/rapport.service';
 import { ContextMenuComponent } from 'app/main/extensions/context-menu/context-menu.component';
 import { AnimatedCustomContextMenuComponent } from './main/extensions/context-menu/custom-context-menu/animated-custom-context-menu/animated-custom-context-menu.component';
 import { BasicCustomContextMenuComponent } from './main/extensions/context-menu/custom-context-menu/basic-custom-context-menu/basic-custom-context-menu.component';
 import { SubMenuCustomContextMenuComponent } from './main/extensions/context-menu/custom-context-menu/sub-menu-custom-context-menu/sub-menu-custom-context-menu.component';
-import {WebviewerComponent} from "./webviewer/webviewer.component";
+import { WebviewerComponent } from './webviewer/webviewer.component';
+
 
 
 const appRoutes: Routes = [
@@ -83,6 +85,10 @@ const appRoutes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'webview', component: WebviewerComponent 
+  },
+  
+  {
     path: '',
     redirectTo: '/dashboard/ecommerce',
     pathMatch: 'full'
@@ -129,10 +135,11 @@ const appRoutes: Routes = [
         CKEditorModule // Ajout dans les imports
     ],
     providers: [
-        { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+        //{ provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
         { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
         // ! IMPORTANT: Provider used to create fake backend, comment while using real API
-        fakeBackendProvider
+        fakeBackendProvider,
+        RapportService,
     ],
     bootstrap: [AppComponent]
 })

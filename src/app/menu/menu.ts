@@ -70,6 +70,14 @@ export const menu: CoreMenu[] = [
         url: 'apps/todo'
       },
       {
+        id: 'rapport',
+        title: 'Rapport',
+        translate: 'MENU.APPS.RAPPORT',
+        type: 'item',
+        icon: 'file',
+        url: 'apps/rapport'
+      },
+      {
         id: 'calendar',
         title: 'Calendar',
         translate: 'MENU.APPS.CALENDAR',
