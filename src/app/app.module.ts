@@ -20,7 +20,7 @@ import { CoreModule } from '@core/core.module';
 
 import { coreConfig } from 'app/app-config';
 import { AppComponent } from 'app/app.component';
-import { ErrorInterceptor, fakeBackendProvider } from 'app/auth/helpers'; // used to create fake backend
+import { ErrorInterceptor, fakeBackendProvider, JwtInterceptor } from 'app/auth/helpers'; // used to create fake backend
 import { AuthGuard } from 'app/auth/helpers/auth.guards';
 import { ContentHeaderModule } from 'app/layout/components/content-header/content-header.module';
 import { LayoutModule } from 'app/layout/layout.module';
@@ -135,7 +135,7 @@ const appRoutes: Routes = [
         CKEditorModule // Ajout dans les imports
     ],
     providers: [
-        //{ provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+        { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
         { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
         // ! IMPORTANT: Provider used to create fake backend, comment while using real API
         fakeBackendProvider,
