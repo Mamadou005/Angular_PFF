@@ -23,8 +23,8 @@
     <!-- Login-->
     <div class="d-flex col-lg-4 align-items-center auth-bg px-2 p-lg-5">
       <div class="col-12 col-sm-8 col-md-6 col-lg-12 px-xl-2 mx-auto">
-        <h2 class="card-title font-weight-bold mb-1">Welcome to Vuexy! 👋</h2>
-        <p class="card-text mb-2">Please sign-in to your account and start the adventure</p>
+        <h2 class="card-title font-weight-bold mb-1">Bienvenue sur AcademyLog ! 👋</h2>
+        <p class="card-text mb-2">Veuillez vous connecter à votre compte et commencez l'aventure</p>
         <ngb-alert [type]="'primary'" [dismissible]="false">
           <div class="alert-body font-small-2">
             <p>
@@ -68,7 +68,7 @@
           <div class="form-group">
             <div class="d-flex justify-content-between">
               <label for="login-password">Password</label
-              ><a routerLink="/pages/authentication/forgot-password-v2"><small>Forgot Password?</small></a>
+              ><a routerLink="/pages/authentication/forgot-password-v2"><small>Mot de passe oublié?</small></a>
             </div>
             <div class="input-group input-group-merge form-password-toggle">
               <input
@@ -104,26 +104,17 @@
           <div class="form-group">
             <div class="custom-control custom-checkbox">
               <input class="custom-control-input" id="remember-me" type="checkbox" tabindex="3" />
-              <label class="custom-control-label" for="remember-me"> Remember Me</label>
+              <label class="custom-control-label" for="remember-me"> Se souvenir de moi</label>
             </div>
           </div>
           <button [disabled]="loading" class="btn btn-primary btn-block" tabindex="4" rippleEffect>
-            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>Sign in
+            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>Se connecter
           </button>
         </form>
         <p class="text-center mt-2">
-          <span>New on our platform?</span
-          ><a routerLink="/pages/authentication/register-v2"><span>&nbsp;Create an account</span></a>
+          <span>Nouveau sur notre plateforme?</span
+          ><a routerLink="/pages/authentication/register-v2"><span>&nbsp;Créez un compte</span></a>
         </p>
-        <div class="divider my-2">
-          <div class="divider-text">or</div>
-        </div>
-        <div class="auth-footer-btn d-flex justify-content-center">
-          <a class="btn btn-facebook" href="javascript:void(0)"><i data-feather="facebook"></i></a
-          ><a class="btn btn-twitter white" href="javascript:void(0)"><i data-feather="twitter"></i></a
-          ><a class="btn btn-google" href="javascript:void(0)"><i data-feather="mail"></i></a
-          ><a class="btn btn-github" href="javascript:void(0)"><i data-feather="github"></i></a>
-        </div>
       </div>
     </div>
     <!-- /Login-->

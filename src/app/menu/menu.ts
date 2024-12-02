@@ -22,7 +22,6 @@ export const menu: CoreMenu[] = [
         title: 'Analytics',
         translate: 'MENU.DASHBOARD.ANALYTICS',
         type: 'item',
-        role: ['Admin'], //? To set multiple role: ['Admin', 'Client']
         icon: 'circle',
         url: 'dashboard/analytics'
       },
@@ -46,17 +45,9 @@ export const menu: CoreMenu[] = [
     icon: 'package',
     children: [
       {
-        id: 'email',
-        title: 'Email',
-        translate: 'MENU.APPS.EMAIL',
-        type: 'item',
-        icon: 'mail',
-        url: 'apps/email'
-      },
-      {
         id: 'chat',
         title: 'Chat',
-        translate: 'MENU.APPS.CHAT',
+        translate: 'Clavardage',
         type: 'item',
         icon: 'message-square',
         url: 'apps/chat'
@@ -64,7 +55,7 @@ export const menu: CoreMenu[] = [
       {
         id: 'todo',
         title: 'Todo',
-        translate: 'MENU.APPS.TODO',
+        translate: 'Sujet',
         type: 'item',
         icon: 'check-square',
         url: 'apps/todo'
@@ -80,12 +71,12 @@ export const menu: CoreMenu[] = [
       {
         id: 'calendar',
         title: 'Calendar',
-        translate: 'MENU.APPS.CALENDAR',
+        translate: 'Calendrier',
         type: 'item',
         icon: 'calendar',
         url: 'apps/calendar'
       },
-      {
+     /* {
         id: 'pages',
         title: 'Pages',
         translate: 'MENU.PAGES.SECTION',
@@ -427,7 +418,7 @@ export const menu: CoreMenu[] = [
             url: 'apps/e-commerce/checkout'
           }
         ]
-      },
+      },*/
       {
         id: 'users',
         title: 'User',
@@ -463,7 +454,7 @@ export const menu: CoreMenu[] = [
       }
     ]
   },
-  // User Interface
+ /* // User Interface
   {
     id: 'user-interface',
     type: 'section',
@@ -1203,5 +1194,5 @@ export const menu: CoreMenu[] = [
         openInNewTab: true
       }
     ]
-  }
+  }*/
 ];

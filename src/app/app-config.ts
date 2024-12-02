@@ -16,8 +16,8 @@ import { CoreConfig } from '@core/types';
 // prettier-ignore
 export const coreConfig: CoreConfig = {
   app: {
-    appName     : 'ISEP',                                        // App Name
-    appTitle    : 'ISEP Amadou Traore', // App Title
+    appName     : 'A-Log',                                        // App Name
+    appTitle    : 'AcademyLog', // App Title
     appLogoImage: 'assets/images/logo/logo.png',                  // App Logo
     appLanguage : 'en',                                           // App Default Language (en, fr, de, pt etc..)
   },
@@ -47,6 +47,6 @@ export const coreConfig: CoreConfig = {
     enableLocalStorage: true,
     customizer  : true,                       // Boolean: true, false (Enable theme customizer)
     scrollTop   : true,                       // Boolean: true, false (Enable scroll to top button)
-    buyNow      : true                        // Boolean: true, false (Set false in real project, For demo purpose only)
+    buyNow      : false                        // Boolean: true, false (Set false in real project, For demo purpose only)
   }
 }

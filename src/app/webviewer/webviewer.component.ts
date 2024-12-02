@@ -6,22 +6,23 @@ import {
   Input,
   OnChanges,
   OnDestroy,
+  OnInit,
   Output,
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import WebViewer, { WebViewerInstance } from '@pdftron/webviewer';
-import { Subject } from 'rxjs';
-import { RapportService } from '../main/apps/rapport/rapport.service';
-import { DocumentService } from './document.service';
+import {ActivatedRoute} from '@angular/router';
+import WebViewer, {WebViewerInstance} from '@pdftron/webviewer';
+import {Subject} from 'rxjs';
+import {RapportService} from '../main/apps/rapport/rapport.service';
+import {DocumentService} from './document.service';
 
 @Component({
   selector: 'app-webviewer',
   styleUrls: ['webviewer.component.css'],
   templateUrl: 'webviewer.component.html',
 })
-export class WebviewerComponent implements AfterViewInit, OnChanges, OnDestroy {
+export class WebviewerComponent implements AfterViewInit, OnChanges, OnDestroy, OnInit {
   wvInstance?: WebViewerInstance;
   @ViewChild('viewer') viewer!: ElementRef; // Référence à l'élément HTML du viewer
   @Output() coreControlsEvent: EventEmitter<string> = new EventEmitter();
@@ -30,6 +31,7 @@ export class WebviewerComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   private documentLoaded$ = new Subject<void>();
   private annotationsLoaded$ = new Subject<void>();
+  private fichierUrl: string;
 
   constructor(
     private documentService: DocumentService,
@@ -66,7 +68,7 @@ export class WebviewerComponent implements AfterViewInit, OnChanges, OnDestroy {
       {
         path: '../../lib', // Chemin vers les ressources WebViewer
         enableOfficeEditing: true,
-        initialDoc: url || undefined, // Document initial (peut être vide)
+        initialDoc: this.fichierUrl, // Document initial (peut être vide)
         licenseKey:
           'demo:1731372460021:7ef9fd110300000000ec33ffa1b45492254e5640546bff52dc10b5080f',
       },
@@ -108,19 +110,11 @@ export class WebviewerComponent implements AfterViewInit, OnChanges, OnDestroy {
 
     this.rapportService.getRapportById(this.documentId).subscribe(
       (rapport) => {
-        const rapportUrl = this.createHtmlDocumentUrl(rapport.contenu);
-        this.wvInstance?.UI.loadDocument(rapportUrl, {
-          filename: `rapport_${this.documentId}.html`,
-        });
+        this.fichierUrl = rapport.contenu;
+
       },
       (error) => console.error('Error loading rapport:', error)
     );
-  }
-
-  private createHtmlDocumentUrl(content: string): string {
-    // Création d'une URL Blob pour le contenu HTML dynamique
-    const blob = new Blob([content], { type: 'text/html' });
-    return URL.createObjectURL(blob);
   }
 
   private addRectangleAnnotation(
@@ -142,12 +136,8 @@ export class WebviewerComponent implements AfterViewInit, OnChanges, OnDestroy {
   ngOnInit(): void {
     // Récupération des paramètres de la route pour charger le bon document
     this.route.queryParams.subscribe((params) => {
-      const rapportId = params['id'];
-      console.log("voici l'id du document " +rapportId);
-      if (rapportId) {
-        this.documentId = rapportId;
-        this.loadDocument();
-      }
+      const rapportId = params.get('content');
+      console.log("voici l'id du document " + rapportId);
     });
   }
 

@@ -1,274 +1,214 @@
 export class TodoFakeData {
   public static tasks = [
     {
-      id: 1,
-      title: 'Entire change break our wife wide it daughter mention member.',
-      dueDate: '2020-11-25',
-      description:
-        '<p>Chocolate cake topping bonbon jujubes donut sweet wafer. Marzipan gingerbread powder brownie bear claw. Chocolate bonbon sesame snaps jelly caramels oat cake.</p>',
-      assignee: {
-        fullName: 'Jacob Ramirez',
-        avatar: 'assets/images/avatars/12.png'
+      "id": 1,
+      "title": "Développement d'une application de gestion de bibliothèque numérique",
+      "dueDate": "2024-06-30",
+      "description": "<p>Créer une application web permettant la gestion des emprunts, des retours, et du suivi des utilisateurs avec des technologies comme Spring Boot et Angular.</p>",
+      "assignee": {
+        "fullName": "Sarah Johnson",
+        "avatar": "assets/images/avatars/1.png"
       },
-      tags: ['update'],
-      completed: false,
-      deleted: false,
-      important: false
+      "tags": ["web", "angular", "spring boot"],
+      "completed": false,
+      "deleted": false,
+      "important": true
     },
     {
-      id: 2,
-      title: 'Citizen stand administration step agency century.',
-      dueDate: '2020-12-14',
-      description:
-        '<p>Chocolate cake topping bonbon jujubes donut sweet wafer. Marzipan gingerbread powder brownie bear claw. Chocolate bonbon sesame snaps jelly caramels oat cake.</p>',
-      assignee: {
-        fullName: 'Andrew Anderson',
-        avatar: ''
+      "id": 2,
+      "title": "Conception d'un système de recommandation basé sur l'apprentissage machine",
+      "dueDate": "2024-07-15",
+      "description": "<p>Développer un moteur de recommandations utilisant des algorithmes de machine learning pour suggérer des produits dans une boutique en ligne.</p>",
+      "assignee": {
+        "fullName": "James Smith",
+        "avatar": ""
       },
-      tags: ['team', 'medium'],
-      completed: true,
-      deleted: false,
-      important: false
+      "tags": ["machine learning", "AI", "data science"],
+      "completed": false,
+      "deleted": false,
+      "important": true
     },
     {
-      id: 3,
-      title: 'Meet Jane and ask for coffee ❤️',
-      dueDate: '2020-11-25',
-      description:
-        '<p>Chocolate cake topping bonbon jujubes donut sweet wafer. Marzipan gingerbread powder brownie bear claw. Chocolate bonbon sesame snaps jelly caramels oat cake.</p>',
-      assignee: {
-        fullName: 'Benjamin Jacobs',
-        avatar: ''
+      "id": 3,
+      "title": "Automatisation des tests logiciels avec Selenium et Jenkins",
+      "dueDate": "2024-05-20",
+      "description": "<p>Mettre en place une chaîne d'intégration continue incluant des tests automatisés pour garantir la qualité du logiciel.</p>",
+      "assignee": {
+        "fullName": "Emily Brown",
+        "avatar": "assets/images/avatars/2.png"
       },
-      tags: ['high'],
-      completed: false,
-      deleted: false,
-      important: false
+      "tags": ["testing", "automation", "ci/cd"],
+      "completed": false,
+      "deleted": false,
+      "important": false
     },
     {
-      id: 4,
-      title: 'Answer the support tickets and close completed tickets. ',
-      dueDate: '2020-11-20',
-      description:
-        '<p>Chocolate cake topping bonbon jujubes donut sweet wafer. Marzipan gingerbread powder brownie bear claw. Chocolate bonbon sesame snaps jelly caramels oat cake.</p>',
-      assignee: {
-        fullName: 'Curtis Schmidt',
-        avatar: 'assets/images/avatars/9.png'
+      "id": 4,
+      "title": "Développement d'une plateforme de gestion de cours en ligne",
+      "dueDate": "2024-09-01",
+      "description": "<p>Créer une plateforme d'e-learning permettant aux enseignants de publier des cours et aux étudiants de suivre leur progression.</p>",
+      "assignee": {
+        "fullName": "David Williams",
+        "avatar": "assets/images/avatars/3.png"
       },
-      tags: ['medium'],
-      completed: false,
-      deleted: false,
-      important: true
+      "tags": ["education", "web", "e-learning"],
+      "completed": false,
+      "deleted": false,
+      "important": true
     },
     {
-      id: 5,
-      title: 'Test functionality of apps developed by dev team for enhancements. ',
-      dueDate: '2020-12-06',
-      description:
-        '<p>Chocolate cake topping bonbon jujubes donut sweet wafer. Marzipan gingerbread powder brownie bear claw. Chocolate bonbon sesame snaps jelly caramels oat cake.</p>',
-      assignee: {
-        fullName: 'Katherine Perkins',
-        avatar: 'assets/images/avatars/9.png'
+      "id": 5,
+      "title": "Conception d'une application mobile pour la gestion des tâches personnelles",
+      "dueDate": "2024-08-10",
+      "description": "<p>Développer une application mobile intuitive permettant aux utilisateurs de créer, suivre et organiser leurs tâches quotidiennes.</p>",
+      "assignee": {
+        "fullName": "Sophia Martinez",
+        "avatar": "assets/images/avatars/4.png"
       },
-      tags: ['medium'],
-      completed: true,
-      deleted: false,
-      important: true
+      "tags": ["mobile", "productivity", "flutter"],
+      "completed": false,
+      "deleted": false,
+      "important": false
     },
     {
-      id: 6,
-      title: 'Conduct a mini awareness meeting regarding health care. ',
-      dueDate: '2020-12-06',
-      description:
-        '<p>Chocolate cake topping bonbon jujubes donut sweet wafer. Marzipan gingerbread powder brownie bear claw. Chocolate bonbon sesame snaps jelly caramels oat cake.</p>',
-      assignee: {
-        fullName: 'David Murphy',
-        avatar: ''
+      "id": 6,
+      "title": "Développement d'une plateforme de gestion des ressources humaines",
+      "dueDate": "2024-06-15",
+      "description": "<p>Créer une application web pour gérer les employés, les congés, les fiches de paie et les évaluations de performance avec des technologies modernes.</p>",
+      "assignee": {
+        "fullName": "Oliver Taylor",
+        "avatar": "assets/images/avatars/5.png"
       },
-      tags: ['high', 'medium'],
-      completed: true,
-      deleted: true,
-      important: false
+      "tags": ["web", "hr", "management"],
+      "completed": false,
+      "deleted": false,
+      "important": true
     },
     {
-      id: 7,
-      title: 'Plan new dashboard design with design team for Google app store. ',
-      dueDate: '2020-12-05',
-      description:
-        '<p>Chocolate cake topping bonbon jujubes donut sweet wafer. Marzipan gingerbread powder brownie bear claw. Chocolate bonbon sesame snaps jelly caramels oat cake.</p>',
-      assignee: {
-        fullName: 'Karina Miller',
-        avatar: 'assets/images/avatars/1.png'
+      "id": 7,
+      "title": "Système de gestion d'énergie pour maisons intelligentes",
+      "dueDate": "2024-07-10",
+      "description": "<p>Concevoir un système IoT permettant de surveiller et d'optimiser la consommation énergétique dans une maison connectée.</p>",
+      "assignee": {
+        "fullName": "Liam Wilson",
+        "avatar": ""
       },
-      tags: ['medium'],
-      completed: false,
-      deleted: false,
-      important: true
+      "tags": ["iot", "energy", "automation"],
+      "completed": false,
+      "deleted": false,
+      "important": true
     },
     {
-      id: 8,
-      title: 'Pick up Nats from her school and drop at dance class😁 ',
-      dueDate: '2020-12-08',
-      description:
-        '<p>Chocolate cake topping bonbon jujubes donut sweet wafer. Marzipan gingerbread powder brownie bear claw. Chocolate bonbon sesame snaps jelly caramels oat cake.</p>',
-      assignee: {
-        fullName: 'Thomas Moses',
-        avatar: 'assets/images/avatars/7.png'
+      "id": 8,
+      "title": "Application de gestion des finances personnelles",
+      "dueDate": "2024-05-30",
+      "description": "<p>Développer une application qui aide les utilisateurs à suivre leurs revenus, dépenses et investissements en temps réel.</p>",
+      "assignee": {
+        "fullName": "Charlotte Harris",
+        "avatar": "assets/images/avatars/6.png"
       },
-      tags: ['low', 'medium'],
-      completed: false,
-      deleted: false,
-      important: false
+      "tags": ["mobile", "finance", "analytics"],
+      "completed": false,
+      "deleted": false,
+      "important": true
     },
     {
-      id: 9,
-      title: 'Finish documentation and make it live',
-      dueDate: '2020-11-25',
-      description:
-        '<p>Chocolate cake topping bonbon jujubes donut sweet wafer. Marzipan gingerbread powder brownie bear claw. Chocolate bonbon sesame snaps jelly caramels oat cake.</p>',
-      assignee: {
-        fullName: 'Angel Morrow',
-        avatar: ''
+      "id": 9,
+      "title": "Plateforme de gestion des événements et inscriptions",
+      "dueDate": "2024-08-20",
+      "description": "<p>Créer une plateforme en ligne permettant aux organisateurs d'événements de gérer les inscriptions et les participants avec des rappels automatisés.</p>",
+      "assignee": {
+        "fullName": "Amelia Clark",
+        "avatar": "assets/images/avatars/7.png"
       },
-      tags: ['high', 'update'],
-      completed: false,
-      deleted: true,
-      important: false
+      "tags": ["web", "events", "management"],
+      "completed": false,
+      "deleted": false,
+      "important": false
     },
     {
-      id: 10,
-      title: 'List out all the SEO resources and send it to new SEO team. ',
-      dueDate: '2020-12-09',
-      description:
-        '<p>Chocolate cake topping bonbon jujubes donut sweet wafer. Marzipan gingerbread powder brownie bear claw. Chocolate bonbon sesame snaps jelly caramels oat cake.</p>',
-      assignee: {
-        fullName: 'Karen Carrillo',
-        avatar: ''
+      "id": 10,
+      "title": "Développement d'un chatbot alimenté par l'IA pour le support client",
+      "dueDate": "2024-06-01",
+      "description": "<p>Concevoir un chatbot intelligent capable de répondre automatiquement aux requêtes des clients et de résoudre les problèmes fréquents.</p>",
+      "assignee": {
+        "fullName": "Ethan Davis",
+        "avatar": "assets/images/avatars/8.png"
       },
-      tags: ['low'],
-      completed: true,
-      deleted: false,
-      important: false
+      "tags": ["ai", "chatbot", "support"],
+      "completed": false,
+      "deleted": false,
+      "important": true
     },
     {
-      id: 11,
-      title: 'Refactor Code and fix the bugs and test it on server ',
-      dueDate: '2020-12-01',
-      description:
-        '<p>Chocolate cake topping bonbon jujubes donut sweet wafer. Marzipan gingerbread powder brownie bear claw. Chocolate bonbon sesame snaps jelly caramels oat cake.</p>',
-      assignee: {
-        fullName: 'Timothy Brewer',
-        avatar: 'assets/images/avatars/1.png'
+      "id": 11,
+      "title": "Système de gestion des rendez-vous médicaux",
+      "dueDate": "2024-06-25",
+      "description": "<p>Créer une application permettant aux patients de planifier des rendez-vous, recevoir des rappels et accéder à leur dossier médical en ligne.</p>",
+      "assignee": {
+        "fullName": "Sophia Bennett",
+        "avatar": "assets/images/avatars/3.png"
       },
-      tags: ['low'],
-      completed: true,
-      deleted: false,
-      important: true
+      "tags": ["health", "web", "management"],
+      "completed": false,
+      "deleted": false,
+      "important": true
     },
     {
-      id: 12,
-      title: 'Reminder to mail clients for holidays',
-      dueDate: '2020-12-09',
-      description:
-        '<p>Chocolate cake topping bonbon jujubes donut sweet wafer. Marzipan gingerbread powder brownie bear claw. Chocolate bonbon sesame snaps jelly caramels oat cake.</p>',
-      assignee: {
-        fullName: 'Brian Barry',
-        avatar: ''
+      "id": 12,
+      "title": "Application de géolocalisation des transports publics",
+      "dueDate": "2024-07-05",
+      "description": "<p>Développer une application mobile qui affiche les horaires en temps réel et les itinéraires des transports en commun dans une ville donnée.</p>",
+      "assignee": {
+        "fullName": "Mason Carter",
+        "avatar": "assets/images/avatars/4.png"
       },
-      tags: ['team'],
-      completed: false,
-      deleted: false,
-      important: false
+      "tags": ["mobile", "geolocation", "transport"],
+      "completed": false,
+      "deleted": false,
+      "important": true
     },
     {
-      id: 13,
-      title: "Submit quotation for Abid's ecommerce website and admin project",
-      dueDate: '2020-12-01',
-      description:
-        '<p>Chocolate cake topping bonbon jujubes donut sweet wafer. Marzipan gingerbread powder brownie bear claw. Chocolate bonbon sesame snaps jelly caramels oat cake.</p>',
-      assignee: {
-        fullName: 'Joshua Golden',
-        avatar: 'assets/images/avatars/5.png'
+      "id": 13,
+      "title": "Plateforme d'apprentissage en ligne avec quiz interactifs",
+      "dueDate": "2024-06-15",
+      "description": "<p>Créer une plateforme où les utilisateurs peuvent suivre des cours, passer des quiz interactifs et obtenir des certifications en ligne.</p>",
+      "assignee": {
+        "fullName": "Emily Foster",
+        "avatar": ""
       },
-      tags: ['team'],
-      completed: false,
-      deleted: false,
-      important: false
+      "tags": ["elearning", "web", "education"],
+      "completed": false,
+      "deleted": false,
+      "important": true
     },
     {
-      id: 14,
-      title: 'Send PPT with real-time reports',
-      dueDate: '2020-11-29',
-      description:
-        '<p>Chocolate cake topping bonbon jujubes donut sweet wafer. Marzipan gingerbread powder brownie bear claw. Chocolate bonbon sesame snaps jelly caramels oat cake.</p>',
-      assignee: {
-        fullName: 'Paula Hammond',
-        avatar: 'assets/images/avatars/5.png'
+      "id": 14,
+      "title": "Système d'analyse des sentiments pour les réseaux sociaux",
+      "dueDate": "2024-06-20",
+      "description": "<p>Développer un outil d'analyse basé sur l'IA pour détecter les sentiments exprimés dans les publications sur les réseaux sociaux.</p>",
+      "assignee": {
+        "fullName": "Ava Martin",
+        "avatar": "assets/images/avatars/10.png"
       },
-      tags: ['medium'],
-      completed: true,
-      deleted: false,
-      important: true
+      "tags": ["ai", "social media", "analytics"],
+      "completed": false,
+      "deleted": false,
+      "important": true
     },
     {
-      id: 15,
-      title: 'Skype Tommy for project status & report',
-      dueDate: '2020-11-29',
-      description:
-        '<p>Chocolate cake topping bonbon jujubes donut sweet wafer. Marzipan gingerbread powder brownie bear claw. Chocolate bonbon sesame snaps jelly caramels oat cake.</p>',
-      assignee: {
-        fullName: 'Tyler Garcia',
-        avatar: ''
+      "id": 15,
+      "title": "Système de gestion des inventaires pour PME",
+      "dueDate": "2024-07-01",
+      "description": "<p>Concevoir une application de gestion des stocks adaptée aux petites et moyennes entreprises, avec des alertes pour les niveaux critiques.</p>",
+      "assignee": {
+        "fullName": "Lucas Hill",
+        "avatar": "assets/images/avatars/11.png"
       },
-      tags: ['medium'],
-      completed: false,
-      deleted: false,
-      important: false
-    },
-    {
-      id: 16,
-      title: 'Hire 5 new Fresher or Experienced, frontend and backend developers ',
-      dueDate: '2020-12-12',
-      description:
-        '<p>Chocolate cake topping bonbon jujubes donut sweet wafer. Marzipan gingerbread powder brownie bear claw. Chocolate bonbon sesame snaps jelly caramels oat cake.</p>',
-      assignee: {
-        fullName: 'Darlene Shields',
-        avatar: 'assets/images/avatars/1.png'
-      },
-      tags: ['low'],
-      completed: true,
-      deleted: false,
-      important: false
-    },
-    {
-      id: 17,
-      title: 'Plan a party for development team 🎁',
-      dueDate: '2020-12-04',
-      description:
-        '<p>Chocolate cake topping bonbon jujubes donut sweet wafer. Marzipan gingerbread powder brownie bear claw. Chocolate bonbon sesame snaps jelly caramels oat cake.</p>',
-      assignee: {
-        fullName: 'Destiny Michael',
-        avatar: ''
-      },
-      tags: ['medium', 'low'],
-      completed: false,
-      deleted: false,
-      important: false
-    },
-    {
-      id: 18,
-      title: 'Fix Responsiveness for new structure 💻',
-      dueDate: '2020-11-18',
-      description:
-        '<p>Chocolate cake topping bonbon jujubes donut sweet wafer. Marzipan gingerbread powder brownie bear claw. Chocolate bonbon sesame snaps jelly caramels oat cake.</p>',
-      assignee: {
-        fullName: 'Danielle Anderson',
-        avatar: 'assets/images/avatars/12.png'
-      },
-      tags: ['low'],
-      completed: false,
-      deleted: false,
-      important: true
+      "tags": ["management", "inventory", "business"],
+      "completed": false,
+      "deleted": false,
+      "important": true
     }
   ];
 
@@ -297,7 +237,7 @@ export class TodoFakeData {
     {
       id: 0,
       handle: 'all',
-      title: 'My Task',
+      title: 'Mes sujets',
       icon: 'mail'
     },
     {
@@ -309,13 +249,13 @@ export class TodoFakeData {
     {
       id: 2,
       handle: 'completed',
-      title: 'Completed',
+      title: 'Completer',
       icon: 'check'
     },
     {
       id: 3,
       handle: 'deleted',
-      title: 'Deleted',
+      title: 'supprimer',
       icon: 'trash'
     }
   ];
