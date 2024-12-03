@@ -1,0 +1,45 @@
+<div class="card border-light mb-3">
+  <div class="card-header">
+    <h5 class="card-title">{{ sujet.titre }}</h5>
+    <p class="card-subtitle text-muted">{{ sujet.description }}</p>
+  </div>
+
+  <div class="card-body">
+    <!-- Groupe Étudiant -->
+    <p class="mb-2">
+      <strong>Groupe Étudiant :</strong> {{ sujet.groupeEtudiant?.nom || 'Non assigné' }}
+    </p>
+
+    <!-- Échéance -->
+    <p class="mb-2">
+      <strong>Échéance :</strong>
+      {{ sujet.echeance.dateDebut | date: 'shortDate' }} -
+      {{ sujet.echeance.dateFin | date: 'shortDate' }}
+      ({{ sujet.echeance.description || 'Aucune description' }})
+    </p>
+    
+
+    <!-- Encadreur -->
+    <p class="mb-2">
+      <strong>Encadreur :</strong>
+      {{ sujet.encadreur.nom }} {{ sujet.encadreur.prenom }} ({{ sujet.encadreur.email }})
+    </p>
+
+    <!-- Rapport -->
+    <div *ngIf="sujet.echeance.rapport">
+      <h6>Rapport :</h6>
+      <ul>
+        <li><strong>Titre :</strong> {{ sujet.echeance.rapport.titre }}</li>
+        <li><strong>Date de soumission :</strong> {{ sujet.echeance.rapport.dateSoumission | date: 'shortDate' }}</li>
+        <li><strong>État de soumission :</strong> {{ sujet.echeance.rapport.etatSoumission }}</li>
+        <li><strong>Contenu :</strong> {{ sujet.echeance.rapport.contenu }}</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card-footer">
+    <!-- Actions -->
+    <button class="btn btn-primary btn-sm" (click)="onEditSujet()">Modifier</button>
+    <button class="btn btn-danger btn-sm" (click)="onDeleteSujet()">Supprimer</button>
+  </div>
+</div>

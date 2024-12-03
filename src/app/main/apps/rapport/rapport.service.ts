@@ -14,7 +14,7 @@ export class RapportService {
   public onRapportDataChange: BehaviorSubject<Rapport[]> = new BehaviorSubject<Rapport[]>([]);
   public onFiltersChange: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]); // Gestion des filtres
 
-  private readonly API_URL = 'http://localhost:8080/api/rapport';
+  private readonly API_URL = 'http://localhost:8080/api/rapport'; 
 
   constructor(private http: HttpClient) {}
 

@@ -1,0 +1,144 @@
+<!-- Modal Full Screen -->
+<div class="modal-dialog modal-fullscreen">
+  <div class="modal-content p-0">
+    <form
+      id="form-modal-sujet"
+      class="sujet-modal needs-validation"
+      (ngSubmit)="onSubmit(sujetForm)"
+      #sujetForm="ngForm"
+    >
+      <div class="modal-header align-items-center mb-1">
+        <h5 *ngIf="isDataEmpty === true; else updateSujetsRef" class="modal-title">
+          Ajouter un projet
+        </h5>
+        <ng-template #updateSujetsRef>
+          <h5 class="modal-title">
+            Sujet: {{ sujet.titre }} ({{ sujet.echeance?.dateFin }})
+          </h5>
+          <div class="sujet-item-action d-flex align-items-center justify-content-between ml-auto">
+            <button
+              (click)="toggleComplete()"
+              class="btn btn-sm"
+              [ngClass]="sujet.completed ? 'btn-outline-success' : 'btn-outline-secondary'"
+              rippleEffect
+            >
+              {{ sujet.completed ? 'Complété' : 'Marquer comme Complété' }}
+            </button>
+          </div>
+        </ng-template>
+
+        <div class="sujet-item-action d-flex align-items-center justify-content-between ml-auto">
+          <button
+            *ngIf="isDataEmpty === false"
+            (click)="deleteSujet()"
+            type="button"
+            class="sujet-item-favorite cursor-pointer mr-75 btn p-0"
+          >
+            <i data-feather="trash" [size]="18"></i>
+          </button>
+
+          <button
+            (click)="closeSidebar()"
+            type="button"
+            class="close font-large-1 font-weight-normal py-0"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            ×
+          </button>
+        </div>
+      </div>
+
+      <div class="modal-body flex-grow-1 pb-sm-0 pb-3">
+        <div class="action-tags">
+          <!-- Title Input -->
+          <div class="form-group">
+            <label for="sujetTitleAdd" class="form-label">Titre</label>
+            <input
+              type="text"
+              id="sujetTitleAdd"
+              name="addTitle"
+              class="new-sujet-item-title form-control"
+              [class.error]="sujetForm.submitted && titleRef.invalid"
+              placeholder="Titre"
+              [(ngModel)]="sujet.titre"
+              #titleRef="ngModel"
+              required
+            />
+            <span *ngIf="sujetForm.submitted && titleRef.invalid" class="invalid-form">
+              <small class="form-text text-danger" *ngIf="titleRef.errors?.required">Ce champ est requis !</small>
+            </span>
+          </div>
+
+          <!-- Due Date Picker -->
+          <div class="form-group position-relative">
+            <label for="task-due-date" class="form-label">Date de fin</label>
+            <ng2-flatpickr
+              #dueDateRef
+              name="addDueDate"
+              [setDate]="sujet.echeance?.dateFin"
+            ></ng2-flatpickr>
+          </div>
+
+          <!-- Encadreur Section -->
+          <div class="form-group">
+            <label for="encadreur" class="form-label">Encadreur</label>
+            <input
+              type="text"
+              id="encadreur"
+              name="encadreur"
+              class="form-control"
+              *ngIf="sujet.encadreur"
+              [(ngModel)]="sujet?.encadreur.nom"
+              placeholder="Nom de l'encadreur"
+              required
+            />
+          </div>
+
+          <!-- Content View Button -->
+          <div class="form-group">
+            <label class="form-label">Contenu</label>
+            <a
+              [routerLink]="'/webview'"
+              [queryParams]="{ content: sujet.description }"
+              class="btn btn-outline-primary"
+            >
+              Voir le contenu dans une nouvelle page
+            </a>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="form-group my-1">
+          <button
+            type="submit"
+            class="btn btn-primary add-sujet-item mr-1"
+            *ngIf="isDataEmpty === true"
+            [disabled]="!sujetForm.form.valid"
+            rippleEffect
+          >
+            Ajouter
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary update-btn update-sujet-item mr-1"
+            *ngIf="isDataEmpty === false"
+            (click)="updateSujet()"
+            rippleEffect
+          >
+            Mettre à jour
+          </button>
+          <button
+            class="btn btn-outline-secondary add-sujet-item"
+            type="button"
+            (click)="closeSidebar()"
+            data-dismiss="modal"
+            rippleEffect
+          >
+            Fermer
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
