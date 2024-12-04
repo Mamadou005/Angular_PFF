@@ -4,10 +4,9 @@ export class Sujet {
   titre?: string ;
   description?: string ;
   groupeEtudiant?: GroupeEtudiant;
-  echeance ?: Echeanche ;
+  echeance ?: any;
   encadreur?: Utilisateur ;
   rapport?: Rapport;
-  
 }
 
 export class Utilisateur {
@@ -15,7 +14,7 @@ export class Utilisateur {
   nom?: string ;
   prenom?: string ;
   email?: string ;
-  role?: String ;
+  role?: string ;
 }
 
 export class Echeanche {
@@ -25,8 +24,8 @@ export class Echeanche {
   dateFin?: string;
   description?: string ; 
   rapport? : Rapport ;
+  secretaireId ?: number;
 }
-
 
 export class GroupeEtudiant {
   id?: number ;

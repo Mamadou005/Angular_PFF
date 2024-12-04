@@ -59,7 +59,6 @@ export class SujetMainSidebarComponent implements OnInit {
     );
   }
 
-  
   applyFilters(): void {
     this._sujetService.applyFilters(); 
   }
@@ -68,40 +67,6 @@ export class SujetMainSidebarComponent implements OnInit {
     this._coreSidebarService.getSidebarRegistry(nameRef).toggleOpen();
     this._coreSidebarService.getSidebarRegistry(closeNameRef).toggleOpen();
     //this._sujetService.createNewSujet();
-  }
-  createNewSujet(): void {
-
-    this.sujet.encadreur ={ id :  this.authenticationService.currentUserValue.id};
-
-    this.isCreatingSujet = true;
-
-    this._sujetService.createNewSujet(this.sujet).subscribe(
-      (createdSujet) => {
-        // Ajoute le sujet créé à la liste
-        this._sujetService.getSujetsList().subscribe(
-            sujets => {
-              this._sujetService.tempSujets = sujets;
-              this._sujetService.onSujetDataChange.next(this._sujetService.tempSujets);
-            }
-        );
-
-
-        // Réinitialiser l'état de création du sujet
-        this.isCreatingSujet = false;
-
-        // Fermer la sidebar après la création du sujet
-        this._coreSidebarService.getSidebarRegistry('sujet-sidebar-right')?.close();
-        this._coreSidebarService.getSidebarRegistry('sujet-sidebar-right')?.toggleCollapsible();
-
-        // Cacher le formulaire après création
-        this.showForm = false;
-      },
-      (error) => {
-        this.isCreatingSujet = false;
-        this.errorMessage = 'Erreur lors de la création du sujet : ' + (error.message || 'Erreur inconnue');
-        console.error('Erreur lors de la création du sujet :', error);
-      }
-    );
   }
 
   // Basculer l'état d'ouverture d'une sidebar
@@ -122,5 +87,5 @@ export class SujetMainSidebarComponent implements OnInit {
     console.log("Formulaire de création de sujet ouvert");
   }
 
-  
+
 }
