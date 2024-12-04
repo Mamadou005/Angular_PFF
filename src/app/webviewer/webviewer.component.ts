@@ -16,6 +16,7 @@ import WebViewer, {WebViewerInstance} from '@pdftron/webviewer';
 import {Subject} from 'rxjs';
 import {RapportService} from '../main/apps/rapport/rapport.service';
 import {DocumentService} from './document.service';
+import {SujetService} from "../main/apps/sujet/sujet.service";
 
 @Component({
   selector: 'app-webviewer',
@@ -28,6 +29,7 @@ export class WebviewerComponent implements AfterViewInit, OnChanges, OnDestroy, 
   @Output() coreControlsEvent: EventEmitter<string> = new EventEmitter();
   @Input() documentId: number = 1; // Identifiant du document, valeur par défaut
   public rapportContent: string = '';
+  public sujetContent: string = '';
 
   private documentLoaded$ = new Subject<void>();
   private annotationsLoaded$ = new Subject<void>();
@@ -36,6 +38,7 @@ export class WebviewerComponent implements AfterViewInit, OnChanges, OnDestroy, 
   constructor(
     private documentService: DocumentService,
     private rapportService: RapportService,
+    private sujetService: SujetService,
     private route: ActivatedRoute
   ) {}
 
@@ -54,6 +57,7 @@ export class WebviewerComponent implements AfterViewInit, OnChanges, OnDestroy, 
       changes['documentId'] &&
       this.documentId !== changes['documentId'].previousValue
     ) {
+      this.loadDocument();
       this.loadDocument();
     }
   }
@@ -117,6 +121,21 @@ export class WebviewerComponent implements AfterViewInit, OnChanges, OnDestroy, 
     );
   }
 
+  private loadSujet(): void {
+    if (!this.documentId || !this.wvInstance) {
+      console.warn('Sujet ID or WebViewer instance is not ready yet.');
+      return;
+    }
+
+    this.sujetService.getSujetById(this.documentId).subscribe(
+        (sujet) => {
+          this.fichierUrl = sujet.description;
+
+        },
+        (error) => console.error('Error loading sujet:', error)
+    );
+  }
+
   private addRectangleAnnotation(
     Annotations: any,
     annotationManager: any
@@ -139,6 +158,7 @@ export class WebviewerComponent implements AfterViewInit, OnChanges, OnDestroy, 
       const rapportId = params.get('content');
       console.log("voici l'id du document " + rapportId);
     });
+
   }
 
   ngOnDestroy(): void {

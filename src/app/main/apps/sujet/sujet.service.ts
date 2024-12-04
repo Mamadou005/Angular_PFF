@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { Sujet } from './sujet.model'; 
+import {Echeanche, Sujet} from './sujet.model';
 import { catchError } from 'rxjs/operators';
 import { environment } from 'environments/environment';
 
@@ -12,6 +12,7 @@ export class SujetService implements Resolve<any> {
 
   // Public
   public sujets: Sujet[];
+  public echeances: Echeanche[];
   public assignee;
   public filters;
   public tags;
@@ -30,8 +31,8 @@ export class SujetService implements Resolve<any> {
 
   // Private
   private apiUrl: string = environment.apiUrl;
-  private filtersSubject = new BehaviorSubject<any[]>([]); 
-  filters$ = this.filtersSubject.asObservable(); 
+  private filtersSubject = new BehaviorSubject<any[]>([]);
+  filters$ = this.filtersSubject.asObservable();
   private routeParams: any;
   private sortSujetRef = key => (a, b) => {
     let fieldA;
@@ -106,7 +107,7 @@ export class SujetService implements Resolve<any> {
    * @returns {Promise<Sujet[]>}
    */
   getSujetsList(): Observable<any[]> {
-    return this._httpClient.get<any[]>(this.apiUrl+'/api/sujets');
+    return this._httpClient.get<any[]>(this.apiUrl + '/api/sujets');
   }
 
   /**
@@ -115,20 +116,18 @@ export class SujetService implements Resolve<any> {
   getFilters(): Observable<any[]> {
     return new Observable<any[]>((observer) => {
       this._httpClient.get('api/sujets-filters').subscribe(
-        (filters: any[]) => {  
-          this.filters = filters;
-          this.onFiltersChange.next(this.filters);
-          observer.next(filters); 
-          observer.complete(); 
-        },
-        (error) => {
-          observer.error(error);  
-        }
+          (filters: any[]) => {
+            this.filters = filters;
+            this.onFiltersChange.next(this.filters);
+            observer.next(filters);
+            observer.complete();
+          },
+          (error) => {
+            observer.error(error);
+          }
       );
     });
   }
-  
-
 
   /**
    * Get Tags
@@ -219,7 +218,7 @@ export class SujetService implements Resolve<any> {
    * Create New Sujet
    */
   createNewSujet(newSujet: Sujet): Observable<Sujet> {
-    return this._httpClient.post<Sujet>(this.apiUrl+'/api/sujets', newSujet);
+    return this._httpClient.post<Sujet>(this.apiUrl + '/api/sujets', newSujet);
   }
 
   /**
@@ -256,27 +255,27 @@ export class SujetService implements Resolve<any> {
    */
   postSujet() {
     return new Observable((observer) => {
-      this._httpClient.post(this.apiUrl+'/api/sujets/' + this.currentSujet.id, { ...this.currentSujet })
-        .subscribe(
-          (response) => {
-            
-            this.getSujetsList().subscribe(
-              (sujets) => {
-                observer.next(sujets); 
-                observer.complete();     
+      this._httpClient.post(this.apiUrl + '/api/sujets/' + this.currentSujet.id, {...this.currentSujet})
+          .subscribe(
+              (response) => {
+
+                this.getSujetsList().subscribe(
+                    (sujets) => {
+                      observer.next(sujets);
+                      observer.complete();
+                    },
+                    (error) => {
+                      observer.error(error);
+                    }
+                );
               },
               (error) => {
-                observer.error(error);   
+                observer.error(error);
               }
-            );
-          },
-          (error) => {
-            observer.error(error);  
-          }
-        );
+          );
     });
   }
-  
+
 
   /**
    * Post New Sujet (Add Sujet to fake-db)
@@ -285,26 +284,26 @@ export class SujetService implements Resolve<any> {
    */
   postNewSujet() {
     return new Observable((observer) => {
-      this._httpClient.post(this.apiUrl+'/api/sujets/', this.currentSujet).subscribe(
-        (response) => {
-          this.getSujetsList().subscribe(
-            (sujets) => {
-              this.sortSujets(this.sortParamRef);
-              observer.next(sujets);  
-              observer.complete();     
-            },
-            (error) => {
-              observer.error(error);  
-            }
-          );
-        },
-        (error) => {
-          observer.error(error);  
-        }
+      this._httpClient.post(this.apiUrl + '/api/sujets/', this.currentSujet).subscribe(
+          (response) => {
+            this.getSujetsList().subscribe(
+                (sujets) => {
+                  this.sortSujets(this.sortParamRef);
+                  observer.next(sujets);
+                  observer.complete();
+                },
+                (error) => {
+                  observer.error(error);
+                }
+            );
+          },
+          (error) => {
+            observer.error(error);
+          }
       );
     });
   }
-  
+
 
   /**
    * Sort Sujets
@@ -358,12 +357,29 @@ export class SujetService implements Resolve<any> {
   }
 
   deleteSujet(sujetId: number): Observable<void> {
-    return this._httpClient.delete<void>(this.apiUrl+`/api/sujets/${sujetId}`).pipe(
-      catchError(error => {
-        console.error('Erreur lors de la suppression du sujet :', error);
-        return throwError(error); 
-      })
+    return this._httpClient.delete<void>(this.apiUrl + `/api/sujets/${sujetId}`).pipe(
+        catchError(error => {
+          console.error('Erreur lors de la suppression du sujet :', error);
+          return throwError(error);
+        })
     );
   }
-  
+
+  getSujetById(sujetId: number): Observable<Sujet> {
+    return this._httpClient.get<Sujet>(this.apiUrl + `/api/sujets/${sujetId}`).pipe(
+        catchError(error => {
+          console.error('Erreur lors de la recuperation du sujet :', error);
+          return throwError(error);
+        })
+    );
+  }
+
+  getAllEcheances(): Observable<Echeanche[]> {
+    return this._httpClient.get<Echeanche[]>(`${this.apiUrl}/api/echeances`).pipe(
+        catchError(error => {
+          console.error('Erreur lors de la récupération des échéances :', error);
+          return throwError(() => error);
+        })
+    );
+  }
 }

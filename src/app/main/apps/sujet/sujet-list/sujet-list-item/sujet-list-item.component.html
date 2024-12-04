@@ -17,17 +17,15 @@
       {{ sujet.echeance.dateFin | date: 'shortDate' }}
       ({{ sujet.echeance.description || 'Aucune description' }})
     </p>
-    
 
     <!-- Encadreur -->
-    <p class="mb-2">
-      <strong>Encadreur :</strong>
-      {{ sujet.encadreur.nom }} {{ sujet.encadreur.prenom }} ({{ sujet.encadreur.email }})
-    </p>
+   <p class="mb-2">
+     <strong>Encadreur :</strong>
+     {{ sujet.encadreur.nom }} {{ sujet.encadreur.prenom }} ({{ sujet.encadreur.email }})
+   </p>
 
-    <!-- Rapport -->
     <div *ngIf="sujet.echeance.rapport">
-      <h6>Rapport :</h6>
+      <h6>Sujet :</h6>
       <ul>
         <li><strong>Titre :</strong> {{ sujet.echeance.rapport.titre }}</li>
         <li><strong>Date de soumission :</strong> {{ sujet.echeance.rapport.dateSoumission | date: 'shortDate' }}</li>

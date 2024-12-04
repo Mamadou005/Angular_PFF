@@ -9,7 +9,7 @@
     >
       <div class="modal-header align-items-center mb-1">
         <h5 *ngIf="isDataEmpty === true; else updateSujetsRef" class="modal-title">
-          Ajouter un projet
+          Ajouter un sujet
         </h5>
         <ng-template #updateSujetsRef>
           <h5 class="modal-title">
@@ -71,41 +71,53 @@
           </div>
 
           <!-- Due Date Picker -->
-          <div class="form-group position-relative">
-            <label for="task-due-date" class="form-label">Date de fin</label>
-            <ng2-flatpickr
-              #dueDateRef
-              name="addDueDate"
-              [setDate]="sujet.echeance?.dateFin"
-            ></ng2-flatpickr>
-          </div>
+<!--      List des echeances-->
+<!--          <div class="form-group position-relative">-->
+<!--            <label for="task-due-date" class="form-label">Date de fin</label>-->
+<!--            <ng2-flatpickr-->
+<!--              #dueDateRef-->
+<!--              name="addDueDate"-->
+<!--              [setDate]="sujet.echeance?.dateFin"-->
+<!--            ></ng2-flatpickr>-->
+<!--          </div>-->
 
-          <!-- Encadreur Section -->
-          <div class="form-group">
-            <label for="encadreur" class="form-label">Encadreur</label>
-            <input
-              type="text"
-              id="encadreur"
-              name="encadreur"
-              class="form-control"
-              *ngIf="sujet.encadreur"
-              [(ngModel)]="sujet?.encadreur.nom"
-              placeholder="Nom de l'encadreur"
-              required
-            />
-          </div>
+            <div class="form-group position-relative">
+                <label for="task-due-date" class="form-label">Date de fin</label>
+                <select
+                        id="task-due-date"
+                        class="form-control"
+                        [(ngModel)]="sujet.echeance"
+                        [ngModelOptions]="{ standalone: true }"
+                >
+                    <option *ngFor="let echeance of listeEcheances" [value]="convert(echeance)">
+                        {{ echeance.dateFin | date: 'yyyy-MM-ddTHH:mm:ss.SSSZ' }}
+                    </option>
+                </select>
+            </div>
 
-          <!-- Content View Button -->
-          <div class="form-group">
-            <label class="form-label">Contenu</label>
-            <a
-              [routerLink]="'/webview'"
-              [queryParams]="{ content: sujet.description }"
-              class="btn btn-outline-primary"
-            >
-              Voir le contenu dans une nouvelle page
-            </a>
-          </div>
+
+<!--            &lt;!&ndash;Edit form&ndash;&gt;-->
+<!--            <div class="form-group">-->
+<!--                <label class="form-label">Description</label>-->
+<!--                <a-->
+<!--                        [routerLink]="'/webview'"-->
+<!--                        [queryParams]="{ content: sujet.description }"-->
+<!--                        class="btn btn-outline-primary"-->
+<!--                >-->
+<!--                    Voir le contenu dans une nouvelle page-->
+<!--                </a>-->
+<!--            </div>-->
+
+
+            <div class="form-group">
+                <label class="form-label">Description</label>
+                <textarea
+                        class="form-control"
+                        [(ngModel)]="sujet.description"
+                        rows="5"
+                        placeholder="Entrez une description"
+                ></textarea>
+            </div>
         </div>
 
         <!-- Action Buttons -->
@@ -116,6 +128,7 @@
             *ngIf="isDataEmpty === true"
             [disabled]="!sujetForm.form.valid"
             rippleEffect
+            (click)="createNewSujet()"
           >
             Ajouter
           </button>
