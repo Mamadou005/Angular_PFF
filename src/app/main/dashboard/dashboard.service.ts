@@ -17,7 +17,7 @@ export class DashboardService {
    */
   constructor(private _httpClient: HttpClient) {
     // Set the defaults
-    this.onApiDataChanged = new BehaviorSubject({});
+    this.onApiDataChanged = new BehaviorSubject<any>(null);  // Utilisation de null comme valeur par défaut
   }
 
   /**
@@ -27,24 +27,14 @@ export class DashboardService {
    * @param {RouterStateSnapshot} state
    * @returns {Observable<any> | Promise<any> | any}
    */
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | Promise<any> | any {
-    return new Promise<void>((resolve, reject) => {
-      Promise.all([this.getApiData()]).then(() => {
-        resolve();
-      }, reject);
-    });
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
+    return this.getApiData();  // Retourne l'Observable directement sans la promesse
   }
 
   /**
    * Get Api Data
    */
-  getApiData(): Promise<any[]> {
-    return new Promise((resolve, reject) => {
-      this._httpClient.get('api/dashboard-data').subscribe((response: any) => {
-        this.apiData = response;
-        this.onApiDataChanged.next(this.apiData);
-        resolve(this.apiData);
-      }, reject);
-    });
+  getApiData(): Observable<any> {
+    return this._httpClient.get('api/dashboard-data');
   }
 }

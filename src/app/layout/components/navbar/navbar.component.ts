@@ -1,19 +1,18 @@
-import { Component, OnDestroy, OnInit, HostBinding, HostListener, ViewEncapsulation } from '@angular/core';
+import { Component, HostBinding, HostListener, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { MediaObserver } from '@angular/flex-layout';
 
+import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { TranslateService } from '@ngx-translate/core';
 
-import { AuthenticationService } from 'app/auth/service';
 import { CoreSidebarService } from '@core/components/core-sidebar/core-sidebar.service';
 import { CoreConfigService } from '@core/services/config.service';
 import { CoreMediaService } from '@core/services/media.service';
+import { AuthenticationService } from 'app/auth/service';
 
-import { User } from 'app/auth/models';
+import { Utilisateur } from 'app/auth/models';
 
-import { coreConfig } from 'app/app-config';
 import { Router } from '@angular/router';
 
 @Component({
@@ -30,7 +29,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   public currentSkin: string;
   public prevSkin: string;
 
-  public currentUser: User;
+  public currentUser: Utilisateur | null = null;
 
   public languageOptions: any;
   public navigation: any;
@@ -83,7 +82,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
     private _mediaObserver: MediaObserver,
     public _translateService: TranslateService
   ) {
-    this._authenticationService.currentUser.subscribe(x => (this.currentUser = x));
+    this._authenticationService.currentUser.subscribe(x => {
+      this.currentUser = x;
+      console.log("Current User:", JSON.stringify(x, null, 2));
+    });
 
     this.languageOptions = {
       en: {
@@ -177,7 +179,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
    */
   ngOnInit(): void {
     // get the currentUser details from localStorage
-    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    const storedUser = localStorage.getItem('currentUser');
+    if (storedUser) {
+      this.currentUser = JSON.parse(storedUser);
+    }
 
     // Subscribe to the config changes
     this._coreConfigService.config.pipe(takeUntil(this._unsubscribeAll)).subscribe(config => {

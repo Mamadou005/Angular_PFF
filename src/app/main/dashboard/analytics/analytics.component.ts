@@ -1,12 +1,12 @@
-import { Component, OnInit, ViewEncapsulation, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 
 import { first } from 'rxjs/operators';
 
 import { CoreConfigService } from '@core/services/config.service';
 
-import { colors } from 'app/colors.const';
-import { User } from 'app/auth/models';
+import { Utilisateur } from 'app/auth/models';
 import { UserService } from 'app/auth/service';
+import { colors } from 'app/colors.const';
 import { DashboardService } from 'app/main/dashboard/dashboard.service';
 
 @Component({
@@ -27,7 +27,7 @@ export class AnalyticsComponent implements OnInit {
   public data: any;
   public currentUser: any;
   public loading = false;
-  public users: User[] = [];
+  public users: Utilisateur[] = [];
   public gainedChartoptions;
   public orderChartoptions;
   public avgsessionChartoptions;

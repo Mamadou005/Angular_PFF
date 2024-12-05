@@ -11,11 +11,11 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
-import WebViewer, {WebViewerInstance} from '@pdftron/webviewer';
-import {Subject} from 'rxjs';
-import {RapportService} from '../main/apps/rapport/rapport.service';
-import {DocumentService} from './document.service';
+import { ActivatedRoute } from '@angular/router';
+import WebViewer, { WebViewerInstance } from '@pdftron/webviewer';
+import { Subject } from 'rxjs';
+import { RapportService } from '../main/apps/rapport/rapport.service';
+import { DocumentService } from './document.service';
 
 @Component({
   selector: 'app-webviewer',
@@ -110,7 +110,7 @@ export class WebviewerComponent implements AfterViewInit, OnChanges, OnDestroy, 
 
     this.rapportService.getRapportById(this.documentId).subscribe(
       (rapport) => {
-        this.fichierUrl = rapport.contenu;
+        this.fichierUrl = rapport.contenuUrl;
 
       },
       (error) => console.error('Error loading rapport:', error)

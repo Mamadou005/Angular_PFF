@@ -24,15 +24,6 @@ export const menu: CoreMenu[] = [
         type: 'item',
         icon: 'circle',
         url: 'dashboard/analytics'
-      },
-      {
-        // If role is not assigned will be display to all
-        id: 'ecommerce',
-        title: 'eCommerce',
-        translate: 'MENU.DASHBOARD.ECOMMERCE',
-        type: 'item',
-        icon: 'circle',
-        url: 'dashboard/ecommerce'
       }
     ]
   },

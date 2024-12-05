@@ -3,14 +3,14 @@ import { Router } from '@angular/router';
 
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 
+import { Utilisateur } from 'app/auth/models';
 import { AuthenticationService } from 'app/auth/service';
-import { User } from 'app/auth/models';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CoreMenuService {
-  currentUser: User;
+  currentUser: Utilisateur;
   onItemCollapsed: Subject<any>;
   onItemCollapseToggled: Subject<any>;
 

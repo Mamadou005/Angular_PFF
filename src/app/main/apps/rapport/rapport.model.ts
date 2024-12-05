@@ -2,7 +2,7 @@ export class Rapport {
   id?: number;
   titre: string = '';
   dateSoumission: string = '';
-  contenu: string = '';
+  contenuUrl: string = '';
   etatSoumission: string = '';
 
   groupeEtudiant: {
