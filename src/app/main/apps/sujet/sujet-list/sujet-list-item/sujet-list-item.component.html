@@ -1,43 +1,55 @@
-<div class="card border-light mb-3">
-  <div class="card-header">
-    <h5 class="card-title">{{ sujet.titre }}</h5>
-    <p class="card-subtitle text-muted">{{ sujet.description }}</p>
-  </div>
+<!-- Todo List Item -->
+<li class="todo-item" [class.completed]="sujet.completed">
+    <div class="todo-title-wrapper">
+        <div class="todo-title-area">
+            <i data-feather="more-vertical" class="drag-icon"></i>
+            <div class="title-wrapper">
+                <div class="custom-control custom-checkbox">
+                    <input
+                            type="checkbox"
+                            class="custom-control-input todo-checkbox"
+                            id="customCheck{{ sujet.id }}"
+                            name="customCheck{{ sujet.id }}"
+                            [disabled]="sujet.completed"
+                            [checked]="sujet.completed"
+                            (click)="$event.stopPropagation()"
+                    />
+                    <label class="custom-control-label" for="customCheck{{ sujet.id }}"></label>
+                </div>
+                <span class="todo-title">{{ sujet.titre }}</span>
+            </div>
+        </div>
+        <div class="todo-item-action">
+            <div class="badge-wrapper mr-1">
+                <div
+                        class="badge badge-pill badge-light-primary text-capitalize"
+                        [ngClass]="{
+            'badge-light-success': sujet.completed ,
+            'badge-light-danger': ! sujet.completed
+          }"
+                >
+                    {{ sujet.echeance.dateFin }}
+                </div>
+            </div>
+            <small class="text-nowrap text-muted mr-1">{{ sujet.echeance.dateFin | date: ' MMM d' }}</small>
+                <div
+                        class="avatar"
+                        *ngIf="sujet.encadreur; else noAvatar"
+                        [ngClass]="{
 
-  <div class="card-body">
-    <!-- Groupe Étudiant -->
-    <p class="mb-2">
-      <strong>Groupe Étudiant :</strong> {{ sujet.groupeEtudiant?.nom || 'Non assigné' }}
-    </p>
+            'bg-light-success':! sujet?.completed,
+            'bg-light-danger':  sujet?.completed
 
-    <!-- Échéance -->
-    <p class="mb-2">
-      <strong>Échéance :</strong>
-      {{ sujet.echeance.dateDebut | date: 'shortDate' }} -
-      {{ sujet.echeance.dateFin | date: 'shortDate' }}
-      ({{ sujet.echeance.description || 'Aucune description' }})
-    </p>
-
-    <!-- Encadreur -->
-   <p class="mb-2">
-     <strong>Encadreur :</strong>
-     {{ sujet.encadreur.nom }} {{ sujet.encadreur.prenom }} ({{ sujet.encadreur.email }})
-   </p>
-
-    <div *ngIf="sujet.echeance.rapport">
-      <h6>Sujet :</h6>
-      <ul>
-        <li><strong>Titre :</strong> {{ sujet.echeance.rapport.titre }}</li>
-        <li><strong>Date de soumission :</strong> {{ sujet.echeance.rapport.dateSoumission | date: 'shortDate' }}</li>
-        <li><strong>État de soumission :</strong> {{ sujet.echeance.rapport.etatSoumission }}</li>
-        <li><strong>Contenu :</strong> {{ sujet.echeance.rapport.contenu }}</li>
-      </ul>
+          }"
+                >
+                    <div class="avatar-content">{{ sujet.encadreur?.prenom + ' '+ sujet.encadreur?.nom | initials }}</div>
+                </div>
+                <ng-template #noAvatar>
+                    <div class="avatar bg-light-secondary">
+                        <div class="avatar-content"><i data-feather="user"></i></div>
+                    </div>
+                </ng-template>
+        </div>
     </div>
-  </div>
-
-  <div class="card-footer">
-    <!-- Actions -->
-    <button class="btn btn-primary btn-sm" (click)="onEditSujet()">Modifier</button>
-    <button class="btn btn-danger btn-sm" (click)="onDeleteSujet()">Supprimer</button>
-  </div>
-</div>
+</li>
+<!--/ Todo List Item -->

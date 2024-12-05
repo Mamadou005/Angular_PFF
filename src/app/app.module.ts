@@ -1,5 +1,5 @@
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { NgModule } from '@angular/core';
+import {LOCALE_ID, NgModule} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
@@ -21,6 +21,7 @@ import { CoreModule } from '@core/core.module';
 import { coreConfig } from 'app/app-config';
 import { AppComponent } from 'app/app.component';
 import { ErrorInterceptor, fakeBackendProvider, JwtInterceptor } from 'app/auth/helpers'; // used to create fake backend
+import localeFr from '@angular/common/locales/fr';
 import { AuthGuard } from 'app/auth/helpers/auth.guards';
 import { ContentHeaderModule } from 'app/layout/components/content-header/content-header.module';
 import { LayoutModule } from 'app/layout/layout.module';
@@ -37,6 +38,7 @@ import { AnimatedCustomContextMenuComponent } from './main/extensions/context-me
 import { BasicCustomContextMenuComponent } from './main/extensions/context-menu/custom-context-menu/basic-custom-context-menu/basic-custom-context-menu.component';
 import { SubMenuCustomContextMenuComponent } from './main/extensions/context-menu/custom-context-menu/sub-menu-custom-context-menu/sub-menu-custom-context-menu.component';
 import { WebviewerComponent } from './webviewer/webviewer.component';
+import {registerLocaleData} from "@angular/common";
 
 
 
@@ -98,7 +100,7 @@ const appRoutes: Routes = [
     redirectTo: '/pages/miscellaneous/error' //Error 404 - Page not found
   }
 ];
-
+registerLocaleData(localeFr, 'fr');
 @NgModule({
     declarations: [
         AppComponent,
@@ -137,6 +139,7 @@ const appRoutes: Routes = [
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
         { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+         { provide: LOCALE_ID , useValue: 'fr' },
         // ! IMPORTANT: Provider used to create fake backend, comment while using real API
         fakeBackendProvider,
         RapportService,

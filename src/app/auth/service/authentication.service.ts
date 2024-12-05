@@ -64,16 +64,17 @@ export class AuthenticationService {
             // Display welcome toast!
             setTimeout(() => {
               this._toastrService.success(
-                'You have successfully logged in as an ' +
+                  'Vous vous êtes connecté avec succès en tant qu\'utilisateur ' +
                   user.role +
-                  ' user to Vuexy. Now you can start to explore. Enjoy! 🎉',
-                '👋 Welcome, ' + user.firstName + '!',
-                { toastClass: 'toast ngx-toastr', closeButton: true }
+                  ' sur Academy Log. Vous pouvez maintenant commencer à explorer. Profitez-en ! 🎉',
+                  '👋 Bienvenue, ' + user.prenom + ' !',
+                  { toastClass: 'toast ngx-toastr', closeButton: true }
               );
             }, 2500);
 
             // notify
             this.currentUserSubject.next(user);
+
           }
 
           return user;

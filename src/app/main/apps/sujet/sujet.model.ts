@@ -7,6 +7,7 @@ export class Sujet {
   echeance ?: any;
   encadreur?: Utilisateur ;
   rapport?: Rapport;
+  completed?: boolean;
 }
 
 export class Utilisateur {

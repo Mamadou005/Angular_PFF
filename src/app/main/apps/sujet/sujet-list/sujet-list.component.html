@@ -1,117 +1,69 @@
-<!-- Sujet List -->
-<div class="sujet-app-list">
-    <!-- Sujet search -->
-    <div class="app-fixed-search d-flex align-items-center justify-content-between mb-3">
-      <div class="sidebar-toggle d-block d-lg-none ml-1">
-        <button class="btn p-0" (click)="toggleSidebar('sujet-sidebar-main')">
-          <i data-feather="menu" [size]="23"></i>
-        </button>
-      </div>
-  
-      <div class="d-flex align-items-center w-100">
-        <div class="input-group input-group-merge">
-          <div class="input-group-prepend">
-            <span class="input-group-text"><i data-feather="search" class="text-muted"></i></span>
-          </div>
-          <input
-            type="text"
-            class="form-control"
-            id="sujet-search"
-            placeholder="Search sujet"
-            aria-label="Search..."
-            aria-describedby="sujet-search"
-            (keyup)="updateQuery($event)"
-          />
+<!-- Todo List -->
+<div class="todo-app-list">
+    <!-- Todo search -->
+    <div class="app-fixed-search d-flex align-items-center">
+        <div class="sidebar-toggle d-block d-lg-none ml-1">
+            <button class="btn p-0" (click)="toggleSidebar('todo-sidebar-main')">
+                <i data-feather="menu" [size]="23"></i>
+            </button>
         </div>
-  
-        <div ngbDropdown class="ml-2">
-          <a
-            ngbDropdownToggle
-            href="javascript:void(0);"
-            class="hide-arrow"
-            id="sujetActions"
-            aria-haspopup="true"
-            aria-expanded="false"
-          >
-            <i data-feather="more-vertical" [size]="18" class="text-body"></i>
-          </a>
-          <div ngbDropdownMenu class="dropdown-menu-right" aria-labelledby="sujetActions">
-            <a ngbDropdownItem (click)="updateSort('')">Reset Sort</a>
-            <a ngbDropdownItem (click)="updateSort('titre-asc')">Sort A - Z</a>
-            <a ngbDropdownItem (click)="updateSort('titre-desc')">Sort Z - A</a>
-            <a ngbDropdownItem (click)="updateSort('groupe')">Sort Group</a>
-            <a ngbDropdownItem (click)="updateSort('dateSoumission')">Sort Submission Date</a>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!--/ Sujet search -->
-  
-    <!-- Sujet List -->
-    <div class="sujet-task-list-wrapper list-group" [perfectScrollbar]>
-      <ul class="sujet-task-list media-list" id="sujet-task-list" dragula="sujet-tasks-drag-area">
-        <li *ngFor="let sujet of sujets">
-          <!-- Sujet List Item -->
-          <div class="media list-group-item d-flex align-items-center mb-2">
-            <div class="media-body w-100 d-flex justify-content-between align-items-center">
-              <!-- Sujet Title and Group -->
-              <div class="d-flex flex-column">
-                <h5 class="mt-0 mb-1">{{ sujet.titre }}</h5>
-                <p class="text-muted mb-0">Echéance: <!-- {{ sujet.dateEcheance }} --></p>
-                <p class="text-muted mb-0">Groupe: <!-- {{ sujet.groupe.nom }} --></p>
-              </div>
-  
-              <!-- Action Icons -->
-              <div class="d-flex">
-                <!-- View Content Button -->
-                <a
-                  [routerLink]="'/webview'"
-                  [queryParams]="{ content: sujet.description }"
-                  class="btn btn-outline-primary btn-sm mx-1"
-                  title="Voir la description"
-                >
-                  <i data-feather="eye" [size]="16"></i>
-                </a>
-  
-                <!-- Edit Button -->
-                <button
-                  (click)="editSujet(sujet.id)"
-                  class="btn btn-outline-warning btn-sm mx-1"
-                  title="Modifier"
-                >
-                  <i data-feather="edit" [size]="16"></i>
-                </button>
-  
-                <!-- Delete Button -->
-                <button
-                  (click)="deleteSujet(sujet.id)"
-                  class="btn btn-outline-danger btn-sm mx-1"
-                  title="Supprimer"
-                >
-                  <i data-feather="trash" [size]="16"></i>
-                </button>
-  
-                <!-- Submit Button -->
-                <button
-                  (click)="submitSujet(sujet.id)"
-                  class="btn btn-outline-success btn-sm mx-1"
-                  title="Soumettre"
-                >
-                  <i data-feather="check-circle" [size]="16"></i>
-                </button>
-              </div>
+
+        <div class="d-flex align-content-center justify-content-between w-100">
+            <div class="input-group input-group-merge">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i data-feather="search" class="text-muted"></i></span>
+                </div>
+                <input
+                        type="text"
+                        class="form-control"
+                        id="todo-search"
+                        placeholder="Rechecher sujet"
+                        aria-label="Search..."
+                        aria-describedby="todo-search"
+                        (keyup)="updateQuery($event)"
+                />
             </div>
-          </div>
-        </li>
-      </ul>
-  
-      <ng-template #noResults>
-        <div class="no-results show">
-          <h5>Aucun élément trouvé</h5>
         </div>
-      </ng-template>
+        <div ngbDropdown>
+            <a
+                    ngbDropdownToggle
+                    href="javascript:void(0);"
+                    class="hide-arrow mr-1"
+                    id="todoActions"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+            >
+                <i data-feather="more-vertical" [size]="18" class="text-body"></i>
+            </a>
+            <div ngbDropdownMenu class="dropdown-menu-right" aria-labelledby="todoActions">
+                <a ngbDropdownItem class="sort-asc" routerLink="/apps/todo" (click)="updateSort('')">Reset Sort</a>
+                <a ngbDropdownItem class="sort-asc" (click)="updateSort('title-asc')">Sort A - Z</a>
+                <a ngbDropdownItem class="sort-desc" (click)="updateSort('title-desc')">Sort Z - A</a>
+                <a ngbDropdownItem class="" (click)="updateSort('assignee')">Sort Assignee</a>
+                <a ngbDropdownItem class="" (click)="updateSort('due-date')">Sort Due Date</a>
+            </div>
+        </div>
     </div>
-    <!--/ Sujet List -->
-  </div>
-  <!--/ Sujet List -->
-  
+    <!--/ Todo search -->
+
+    <!-- Todo List -->
+    <div class="todo-task-list-wrapper list-group" [perfectScrollbar]>
+        <ul class="todo-task-list media-list" id="todo-task-list" dragula="todo-tasks-drag-area">
+            <app-sujet-list-item
+                    [sujet]="sujet"
+                    *ngFor="let sujet of sujets; let i = index"
+                    (click)="openSujet(sujet.id); $event.stopPropagation()"
+            ></app-sujet-list-item>
+            <ng-container *ngIf="sujets.length; else noResults"></ng-container>
+        </ul>
+
+        <ng-template #noResults>
+            <div class="no-results show">
+                <h5>No Items Found</h5>
+            </div>
+        </ng-template>
+    </div>
+    <!--/ Todo List -->
+</div>
+<!--/ Todo List -->
