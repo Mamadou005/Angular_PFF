@@ -1,8 +1,10 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { CoreSidebarService } from '@core/components/core-sidebar/core-sidebar.service';
-import { Sujet } from 'app/main/apps/sujet/sujet.model'; // Modification pour utiliser le modèle Sujet
+import {Echeanche, Sujet} from 'app/main/apps/sujet/sujet.model'; // Modification pour utiliser le modèle Sujet
 import { SujetService } from '../../sujet.service';
+import {AuthenticationService} from "../../../../../auth/service";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-sujet-right-sidebar',
@@ -12,14 +14,23 @@ import { SujetService } from '../../sujet.service';
 export class SujetRightSidebarComponent implements OnInit {
   public isDataEmpty: boolean = false;
   public sujet: Sujet = new Sujet(); // Initialisation correcte de l'objet Sujet
-
+  public isCreatingSujet: boolean = false;
+  public errorMessage: string = ''; // Message d'erreur
   public selectTags: any;
   public selectAssignee: any;
+  public listeEcheances: Echeanche[] = [];
 
-  @ViewChild('dueDateRef') private dueDateRef: any;
 
-  constructor(private _sujetService: SujetService, private _coreSidebarService: CoreSidebarService) {}
 
+
+  //@ViewChild('dueDateRef') private dueDateRef: any;
+
+  constructor(
+      private _sujetService: SujetService,
+      private _coreSidebarService: CoreSidebarService,
+      private authenticationService: AuthenticationService,
+  ) {}
+  showForm = false;
   ngOnInit(): void {
     // Récupération des sujets avec abonnement
     if(this.sujet == null){
@@ -44,6 +55,16 @@ export class SujetRightSidebarComponent implements OnInit {
       this.selectTags = filters.map(filter => filter.handle);
       this.selectAssignee = filters.find(filter => filter.field === 'assignee');
     });
+
+    this._sujetService.getAllEcheances().subscribe({
+      next: (data: Echeanche[]) => {
+        this.listeEcheances = data;
+      },
+      error: (err) => {
+        console.error('Erreur lors de la récupération des échéances :', err);
+      }
+    });
+
   }
 
   closeSidebar() {
@@ -113,4 +134,33 @@ export class SujetRightSidebarComponent implements OnInit {
   private isSujet(response: any): response is Sujet {
     return response && typeof response === 'object' && 'id' in response;
   }
+
+  createNewSujet(): void {
+    this.sujet.encadreur ={ id :  this.authenticationService.currentUserValue.id};
+    this.isCreatingSujet = true;
+    this.sujet.echeance = JSON.parse (this.sujet.echeance) ;
+    this._sujetService.createNewSujet(this.sujet).subscribe(
+        (createdSujet) => {
+          this._sujetService.getSujetsList().subscribe(
+              sujets => {
+                this._sujetService.tempSujets = sujets;
+                this._sujetService.onSujetDataChange.next(this._sujetService.tempSujets);
+              }
+          );
+          this.isCreatingSujet = false;
+          this._coreSidebarService.getSidebarRegistry('sujet-sidebar-right')?.close();
+          this._coreSidebarService.getSidebarRegistry('sujet-sidebar-right')?.toggleCollapsible();
+          this.showForm = false;
+        },
+        (error) => {
+          this.isCreatingSujet = false;
+          this.errorMessage = 'Erreur lors de la création du sujet : ' + (error.message || 'Erreur inconnue');
+          console.error('Erreur lors de la création du sujet :', error);
+        }
+    );
+  }
+  convert(echeance: any) {
+    return JSON.stringify(echeance);
+  }
+
 }

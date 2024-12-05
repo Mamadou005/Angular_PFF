@@ -6,6 +6,7 @@ import { SujetService } from 'app/main/apps/sujet/sujet.service';
   selector: 'app-sujet-list-item',
   templateUrl: './sujet-list-item.component.html'
 })
+
 export class SujetListItemComponent implements OnInit {
   @Input() sujet: Sujet; // Propriété d'entrée pour recevoir l'objet sujet
   public selected: boolean = false; // Initialisation de l'état sélectionné
