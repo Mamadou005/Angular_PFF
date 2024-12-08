@@ -18,6 +18,7 @@ const routes: Routes = [
     path: 'chat',
     loadChildren: () => import('./chat/chat.module').then(m => m.ChatModule)
   },
+
   {
     path: 'todo',
     loadChildren: () => import('./todo/todo.module').then(m => m.TodoModule)

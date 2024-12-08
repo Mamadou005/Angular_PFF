@@ -4,6 +4,7 @@ import { first } from 'rxjs/operators';
 import { CoreSidebarService } from '@core/components/core-sidebar/core-sidebar.service';
 
 import { ChatService } from 'app/main/apps/chat/chat.service';
+import {Discussion} from "../../DIscussion.model";
 
 @Component({
   selector: 'app-chat-sidebar',
