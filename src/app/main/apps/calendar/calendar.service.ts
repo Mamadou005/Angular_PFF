@@ -137,6 +137,7 @@ export class CalendarService implements Resolve<any> {
     this.currentEvent = eventForm;
     this.onCurrentEventChange.next(this.currentEvent);
     this.postNewEvent();
+
   }
 
   /**

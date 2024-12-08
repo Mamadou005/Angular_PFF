@@ -3,6 +3,7 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { CoreSidebarService } from '@core/components/core-sidebar/core-sidebar.service';
 
 import { CalendarService } from 'app/main/apps/calendar/calendar.service';
+import {AuthenticationService} from "../../../../../auth/service";
 
 @Component({
   selector: 'app-calendar-main-sidebar',
@@ -14,14 +15,16 @@ export class CalendarMainSidebarComponent implements OnInit {
   public calendarRef = [];
   public tempRef = [];
   public checkAll = true;
+  public isSecretaire: boolean = false;
 
   /**
    * Constructor
    *
    * @param {CoreSidebarService} _coreSidebarService
    * @param {CalendarService} _calendarService
+   * @param authService
    */
-  constructor(private _coreSidebarService: CoreSidebarService, private _calendarService: CalendarService) {}
+  constructor(private _coreSidebarService: CoreSidebarService, private _calendarService: CalendarService,private authService: AuthenticationService,) {}
 
   // Public Methods
   // -----------------------------------------------------------------------------------------------------
@@ -93,6 +96,7 @@ export class CalendarMainSidebarComponent implements OnInit {
    * On init
    */
   ngOnInit(): void {
+    this.isSecretaire = this.authService.currentUserValue.role.includes("SECRETAIRE")
     // Subscribe to Calendar changes
     this._calendarService.onCalendarChange.subscribe(res => {
       this.calendarRef = res;

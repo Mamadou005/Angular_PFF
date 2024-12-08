@@ -4,6 +4,7 @@ import { CoreSidebarService } from '@core/components/core-sidebar/core-sidebar.s
 
 import { TodoService } from 'app/main/apps/todo/todo.service';
 import {Echeanche} from "../../../sujet/sujet.model";
+import {AuthenticationService} from "../../../../../auth/service";
 
 @Component({
   selector: 'app-todo-main-sidebar',
@@ -14,14 +15,16 @@ export class TodoMainSidebarComponent implements OnInit {
   public filters: Array<{}>;
   public tags: Array<{}>;
   public listeEcheances: any[];
+  public isEtudiant: boolean = false;
 
   /**
    * Constructor
    *
    * @param {TodoService} _todoService
    * @param {CoreSidebarService} _coreSidebarService
+   * @param authService
    */
-  constructor(private _coreSidebarService: CoreSidebarService, private _todoService: TodoService) {}
+  constructor(private _coreSidebarService: CoreSidebarService, private _todoService: TodoService,private authService: AuthenticationService,) {}
 
   // Public Methods
   // -----------------------------------------------------------------------------------------------------
@@ -54,6 +57,7 @@ export class TodoMainSidebarComponent implements OnInit {
    * On init
    */
   ngOnInit(): void {
+    this.isEtudiant = this.authService.currentUserValue.role.includes("ETUDIANT")
   this.filters = [
       {
         id: 0,

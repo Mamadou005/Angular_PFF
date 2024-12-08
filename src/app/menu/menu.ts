@@ -41,7 +41,7 @@ export const menu: CoreMenu[] = [
         translate: 'Clavardage',
         type: 'item',
         icon: 'message-square',
-        url: 'apps/chat'
+        url: 'apps/chat',
       },
       {
         id: 'todo',
@@ -65,7 +65,8 @@ export const menu: CoreMenu[] = [
         translate: 'Calendrier',
         type: 'item',
         icon: 'calendar',
-        url: 'apps/calendar'
+        url: 'apps/calendar',
+        role: ['ADMIN','SECRETAIRE','ENCADREUR'],
       },
      /* {
         id: 'pages',
@@ -416,6 +417,7 @@ export const menu: CoreMenu[] = [
         translate: 'MENU.APPS.USER.COLLAPSIBLE',
         type: 'collapsible',
         icon: 'user',
+        role: ['ADMIN'],
         children: [
           {
             id: 'list',

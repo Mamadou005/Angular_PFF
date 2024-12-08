@@ -4,6 +4,7 @@ import { CoreSidebarService } from '@core/components/core-sidebar/core-sidebar.s
 
 import { EventRef } from 'app/main/apps/calendar/calendar.model';
 import { CalendarService } from 'app/main/apps/calendar/calendar.service';
+import {AuthenticationService} from "../../../../../auth/service";
 
 @Component({
   selector: 'app-calendar-event-sidebar',
@@ -47,13 +48,15 @@ export class CalendarEventSidebarComponent implements OnInit {
     enableTime: true,
     dateFormat: 'Y-m-d'
   };
+  public isSecretaire: boolean = false;
 
   /**
    *
    * @param {CoreSidebarService} _coreSidebarService
    * @param {CalendarService} _calendarService
+   * @param authService
    */
-  constructor(private _coreSidebarService: CoreSidebarService, private _calendarService: CalendarService) {}
+  constructor(private _coreSidebarService: CoreSidebarService, private _calendarService: CalendarService,private authService: AuthenticationService,) {}
 
   // Public Methods
   // -----------------------------------------------------------------------------------------------------
@@ -107,6 +110,7 @@ export class CalendarEventSidebarComponent implements OnInit {
    * On init
    */
   ngOnInit(): void {
+    this.isSecretaire = this.authService.currentUserValue.role.includes("SECRETAIRE")
     // Subscribe to current event changes
     this._calendarService.onCurrentEventChange.subscribe(response => {
       this.event = response;
