@@ -11,6 +11,7 @@ import { RapportService } from 'app/main/apps/rapport/rapport.service';
   encapsulation: ViewEncapsulation.None,
 })
 export class RapportRightSidebarComponent implements OnInit {
+
   public rapport: Rapport = new Rapport();
   public selectedFile: File | null = null;
   public rapportForm: FormGroup;
@@ -90,6 +91,7 @@ export class RapportRightSidebarComponent implements OnInit {
   updateData(data: any) {
     this.isDataEmpty = !data || data.length === 0;
   }
+
 
   onSubmit(form: NgForm) {
     console.log('Form Submitted', form.value);

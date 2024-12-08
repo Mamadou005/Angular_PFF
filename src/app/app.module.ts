@@ -40,6 +40,7 @@ import { BasicCustomContextMenuComponent } from './main/extensions/context-menu/
 import { SubMenuCustomContextMenuComponent } from './main/extensions/context-menu/custom-context-menu/sub-menu-custom-context-menu/sub-menu-custom-context-menu.component';
 import { WebviewerComponent } from './webviewer/webviewer.component';
 import {registerLocaleData} from "@angular/common";
+import {ChatService} from "./main/apps/chat/chat.service";
 
 
 
@@ -109,7 +110,7 @@ registerLocaleData(localeFr, 'fr');
         BasicCustomContextMenuComponent,
         AnimatedCustomContextMenuComponent,
         SubMenuCustomContextMenuComponent,
-        WebviewerComponent
+        WebviewerComponent,
     ],
     imports: [
         BrowserModule,
@@ -138,13 +139,18 @@ registerLocaleData(localeFr, 'fr');
         CKEditorModule // Ajout dans les imports
     ],
     providers: [
-        { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-        { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-         { provide: LOCALE_ID , useValue: 'fr' },
+        {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
+        {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
+        {provide: LOCALE_ID, useValue: 'fr'},
         // ! IMPORTANT: Provider used to create fake backend, comment while using real API
       
         RapportService,
+        ChatService,
     ],
+    exports: [
+
+    ],
+
     bootstrap: [AppComponent]
 })
 export class AppModule {}
