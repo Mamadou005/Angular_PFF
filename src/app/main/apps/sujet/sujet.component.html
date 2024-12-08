@@ -1,35 +1,35 @@
 <div class="content-area-wrapper container-xxl p-0">
-  <!-- Sujet Main Sidebar (Filter) -->
-  <core-sidebar
-    class="sujet-left"
-    name="sujet-sidebar-main"
-    overlayClass="body-content-overlay"
-    collapsibleSidebar="bs-gt-lg"
-  >
-    <app-sujet-main-sidebar></app-sujet-main-sidebar>
-  </core-sidebar>
-  <!--/ Sujet Main Sidebar -->
+    <!-- Todo Main Sidebar (Filter) -->
+    <core-sidebar
+            class="sidebar-left"
+            name="todo-sidebar-main"
+            overlayClass="body-content-overlay"
+            collapsibleSidebar="bs-gt-lg"
+    >
+        <app-sujet-main-sidebar></app-sujet-main-sidebar>
+    </core-sidebar>
+    <!--/ Todo Main Sidebar -->
 
-  <!-- content-right -->
-  <div class="content-right">
-    <div class="content-wrapper container-xxl p-0">
-      <div class="content-body">
-        <!-- Sujet List -->
-        <app-sujet-list></app-sujet-list>
-        <!--/ Sujet List -->
+    <!-- content-right -->
+    <div class="content-right">
+        <div class="content-wrapper container-xxl p-0">
+            <div class="content-body">
+                <!-- Todo List -->
+                <app-sujet-list></app-sujet-list>
+                <!--/ Todo List -->
 
-        <!-- Sujet Right Sidebar (Detail) -->
-        <core-sidebar
-          class="modal modal-slide-in sidebar-sujet-modal fade"
-          name="sujet-sidebar-right"
-          overlayClass="modal-backdrop"
-          hideOnEsc="true"
-        >
-          <app-sujet-right-sidebar></app-sujet-right-sidebar>
-        </core-sidebar>
-        <!--/ Sujet Right Sidebar -->
-      </div>
+                <!-- Todo Right Sidebar (Detail) -->
+                <core-sidebar
+                        class="modal modal-slide-in sidebar-todo-modal fade"
+                        name="todo-sidebar-right"
+                        overlayClass="modal-backdrop"
+                        hideOnEsc="true"
+                >
+                    <app-sujet-right-sidebar></app-sujet-right-sidebar>
+                </core-sidebar>
+                <!--/ Todo Right Sidebar -->
+            </div>
+        </div>
     </div>
-  </div>
-  <!--/ content-right -->
+    <!--/ content-right -->
 </div>
