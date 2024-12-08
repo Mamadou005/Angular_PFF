@@ -51,15 +51,33 @@ export class RapportService {
   
 
   addRapport(rapport: Rapport): Observable<any> {
-    return this.http.post(`${this.API_URL}`, rapport).pipe(
-      tap((response) => console.log('Réponse du backend après ajout du rapport:', response)),
+    return this.http.post<Rapport>(`${this.API_URL}`, rapport).pipe(
+      tap((response) => {
+        console.log('Réponse du backend après ajout du rapport:', response);
+  
+        // Mettre à jour la liste des rapports en récupérant les données actuelles
+        this.refreshRapports();
+      }),
       catchError((error) => {
         console.error('Erreur dans addRapport:', error);
         return throwError(() => new Error('Erreur lors de l\'ajout du rapport: ' + (error.message || error)));
       })
-
     );
   }
+  
+  refreshRapports(): void {
+    this.getInitialRapports().subscribe(
+      (rapports) => {
+        this.rapports = rapports;
+        this.onRapportDataChange.next(this.rapports); // Mise à jour via BehaviorSubject
+        console.log('Liste des rapports mise à jour:', this.rapports);
+      },
+      (error) => {
+        console.error('Erreur lors du rafraîchissement des rapports:', error);
+      }
+    );
+  }
+  
   
   
 
@@ -120,4 +138,5 @@ export class RapportService {
     }
     console.log('Rapports triés:', this.rapports);
   }
+  
 }

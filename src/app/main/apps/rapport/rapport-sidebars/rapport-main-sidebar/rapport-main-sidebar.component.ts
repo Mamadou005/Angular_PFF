@@ -39,14 +39,17 @@ export class RapportMainSidebarComponent {
       this._rapportService.uploadFileToMinIO(this.selectedFile).subscribe(
         (fileUrl: string) => {
           console.log('URL du fichier uploadé reçu:', fileUrl);
-          rapport.contenuUrl = fileUrl;  
-      
+          rapport.contenuUrl = fileUrl;
+  
           this._rapportService.addRapport(rapport).subscribe(
             (response) => {
               console.log('Réponse après ajout du rapport:', response);
-              alert("Rapport ajouté avec succès !");
+              alert('Rapport ajouté avec succès !');
+  
+              // Masquer le formulaire et réinitialiser les champs
               this.showForm = false;
               form.reset();
+              this.selectedFile = null;
             },
             (error) => {
               console.error('Erreur lors de l\'ajout du rapport:', error);
@@ -59,15 +62,13 @@ export class RapportMainSidebarComponent {
           alert(`Erreur lors de l'upload du fichier : ${error.message}`);
         }
       );
-      
-
     } else {
       alert('Le formulaire est invalide ou aucun fichier n\'a été sélectionné.');
     }
   }
   
   
-  
+
 
   toggleSidebar(nameRef: string): void {
     const sidebar = this._coreSidebarService.getSidebarRegistry(nameRef);
@@ -75,4 +76,5 @@ export class RapportMainSidebarComponent {
       sidebar.toggleOpen();
     }
   }
+  
 }

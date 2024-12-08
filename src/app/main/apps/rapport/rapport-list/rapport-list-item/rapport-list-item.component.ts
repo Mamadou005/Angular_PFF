@@ -9,8 +9,12 @@ import { RapportService } from 'app/main/apps/rapport/rapport.service';
 export class RapportListItemComponent implements OnInit {
   @Input() rapport: Rapport;  // Input property to receive the rapport object
   public selected: boolean = false;  // Initialize selected state
+  public rapports: Rapport[] = [];
 
-  constructor(private _rapportService: RapportService) {}
+
+  constructor(
+    private _rapportService: RapportService,
+    private rapportService: RapportService) {}
 
   checkboxStateChange(stateRef: boolean): void {
     // Update the rapport's submission state based on checkbox state
@@ -27,5 +31,11 @@ export class RapportListItemComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.rapportService.onRapportDataChange.subscribe((rapports) => {
+      this.rapports = rapports;
+      console.log('Liste des rapports actualisée:', this.rapports);
+    });
+    this.rapportService.refreshRapports();
+
   }
 }
