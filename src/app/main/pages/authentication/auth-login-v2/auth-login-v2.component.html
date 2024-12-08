@@ -25,21 +25,7 @@
       <div class="col-12 col-sm-8 col-md-6 col-lg-12 px-xl-2 mx-auto">
         <h2 class="card-title font-weight-bold mb-1">Bienvenue sur AcademyLog ! 👋</h2>
         <p class="card-text mb-2">Veuillez vous connecter à votre compte et commencez l'aventure</p>
-        <ngb-alert [type]="'primary'" [dismissible]="false">
-          <div class="alert-body font-small-2">
-            <p>
-              <small class="mr-50"><span class="font-weight-bold">Admin:</span> admin@demo.com | admin</small>
-            </p>
-            <p>
-              <small class="mr-50"><span class="font-weight-bold">Client:</span> client@demo.com | client</small>
-            </p>
-          </div>
-          <span
-            class="feather icon-help-circle auth-help-icon font-medium-3"
-            placement="left"
-            ngbTooltip="This is just for role based JWT authorization demo purpose"
-          ></span>
-        </ngb-alert>
+        
 
         <ngb-alert [type]="'danger'" [dismissible]="false" *ngIf="error">
           <div class="alert-body">
@@ -55,21 +41,21 @@
               formControlName="email"
               class="form-control"
               [ngClass]="{ 'is-invalid': submitted && f.email.errors }"
-              placeholder="admin@demo.com"
+              placeholder="academyLog@gmail.com"
               aria-describedby="login-email"
               autofocus=""
               tabindex="1"
             />
             <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
-              <div *ngIf="f.email.errors.required">Email is required</div>
-              <div *ngIf="f.email.errors.email">Email must be a valid email address</div>
+              <div *ngIf="f.email.errors.required">l'email est requis</div>
+              <div *ngIf="f.email.errors.email">L'email doit être valide</div>
             </div>
           </div>
           <div class="form-group">
-            <div class="d-flex justify-content-between">
+            <!-- <div class="d-flex justify-content-between">
               <label for="login-password">Password</label
               ><a routerLink="/pages/authentication/forgot-password-v2"><small>Mot de passe oublié?</small></a>
-            </div>
+            </div> -->
             <div class="input-group input-group-merge form-password-toggle">
               <input
                 [type]="passwordTextType ? 'text' : 'password'"
@@ -101,12 +87,12 @@
               <div *ngIf="f.password.errors.required">Password is required</div>
             </div>
           </div>
-          <div class="form-group">
+          <!-- <div class="form-group">
             <div class="custom-control custom-checkbox">
               <input class="custom-control-input" id="remember-me" type="checkbox" tabindex="3" />
               <label class="custom-control-label" for="remember-me"> Se souvenir de moi</label>
             </div>
-          </div>
+          </div> -->
           <button [disabled]="loading" class="btn btn-primary btn-block" tabindex="4" rippleEffect>
             <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>Se connecter
           </button>

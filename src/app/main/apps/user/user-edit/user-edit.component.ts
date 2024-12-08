@@ -1,114 +1,125 @@
-import { Component, OnInit, OnDestroy, ViewEncapsulation, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-
+import { Router } from '@angular/router';
+import { UserEditService } from 'app/main/apps/user/user-edit/user-edit.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { FlatpickrOptions } from 'ng2-flatpickr';
-import { cloneDeep } from 'lodash';
-
-import { UserEditService } from 'app/main/apps/user/user-edit/user-edit.service';
 
 @Component({
   selector: 'app-user-edit',
   templateUrl: './user-edit.component.html',
-  styleUrls: ['./user-edit.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  styleUrls: ['./user-edit.component.scss']
 })
 export class UserEditComponent implements OnInit, OnDestroy {
-  // Public
   public url = this.router.url;
-  public urlLastValue;
-  public rows;
-  public currentRow;
-  public tempRow;
-  public avatarImage: string;
+  public urlLastValue: string;
+  public rows: any[];
+  public nom: string;
+  public prenom: string;
+  public email: string;
+  public password: string;
+  public role: string;
+  public matricule: string;
+  public matriculeEtudiant: string;
+  public matriculeEncadreur: string;
+  public departement: string;
+  public selectedRole: string;
+
+  public roles: string[] = ['ADMIN', 'SECRETAIRE', 'ENCADREUR', 'ETUDIANT'];
+
+  private _unsubscribeAll: Subject<any>;
 
   @ViewChild('accountForm') accountForm: NgForm;
 
-  public birthDateOptions: FlatpickrOptions = {
-    altInput: true
-  };
-
-  public selectMultiLanguages = ['English', 'Spanish', 'French', 'Russian', 'German', 'Arabic', 'Sanskrit'];
-  public selectMultiLanguagesSelected = [];
-
-  // Private
-  private _unsubscribeAll: Subject<any>;
-
-  /**
-   * Constructor
-   *
-   * @param {Router} router
-   * @param {UserEditService} _userEditService
-   */
   constructor(private router: Router, private _userEditService: UserEditService) {
     this._unsubscribeAll = new Subject();
     this.urlLastValue = this.url.substr(this.url.lastIndexOf('/') + 1);
   }
 
-  // Public Methods
-  // -----------------------------------------------------------------------------------------------------
-
-  /**
-   * Reset Form With Default Values
-   */
-  resetFormWithDefaultValues() {
-    this.accountForm.resetForm(this.tempRow);
-  }
-
-  /**
-   * Upload Image
-   *
-   * @param event
-   */
-  uploadImage(event: any) {
-    if (event.target.files && event.target.files[0]) {
-      let reader = new FileReader();
-
-      reader.onload = (event: any) => {
-        this.avatarImage = event.target.result;
-      };
-
-      reader.readAsDataURL(event.target.files[0]);
-    }
-  }
-
-  /**
-   * Submit
-   *
-   * @param form
-   */
-  submit(form) {
-    if (form.valid) {
-      console.log('Submitted...!');
-    }
-  }
-
-  // Lifecycle Hooks
-  // -----------------------------------------------------------------------------------------------------
-  /**
-   * On init
-   */
   ngOnInit(): void {
     this._userEditService.onUserEditChanged.pipe(takeUntil(this._unsubscribeAll)).subscribe(response => {
-      this.rows = response;
-      this.rows.map(row => {
-        if (row.id == this.urlLastValue) {
-          this.currentRow = row;
-          this.avatarImage = this.currentRow.avatar;
-          this.tempRow = cloneDeep(row);
+      console.log('Données reçues:', response);
+  
+      if (response && typeof response === 'object') {
+        this.rows = Array.isArray(response) ? response : [response];
+      } else {
+        this.rows = [];
+      }
+  
+      if (Array.isArray(this.rows)) {
+        const user = this.rows.find(row => row.id == this.urlLastValue);
+        if (user) {
+          this.nom = user.nom;
+          this.prenom = user.prenom;
+          this.email = user.email;
+          this.password = user.password;
+          this.role = user.role;
+          this.matricule= user.matricule;
+          this.matriculeEtudiant = user.matriculeEtudiant;
+          this.matriculeEncadreur = user.matriculeEncadreur;
+          this.departement = user.departement;
+          this.selectedRole = user.role;
+        } else {
+          console.error('Utilisateur non trouvé');
         }
-      });
+      } else {
+        console.error('Les données reçues ne sont pas un tableau');
+      }
     });
   }
 
-  /**
-   * On destroy
-   */
   ngOnDestroy(): void {
-    // Unsubscribe from all subscriptions
     this._unsubscribeAll.next();
     this._unsubscribeAll.complete();
   }
+
+  toggleSidebar(sidebarId: string): void {
+    const sidebar = document.getElementById(sidebarId);
+    if (sidebar) {
+      sidebar.classList.toggle('open');
+    }
+  }
+
+  resetFormWithDefaultValues(): void {
+    this.accountForm.resetForm({
+      nom: this.nom || '',
+      prenom: this.prenom || '',
+      email: this.email || '',
+      password: this.password || '',
+      role: this.role || '',
+      matricule: this.matricule || '',
+      matriculeEtudiant: this.matriculeEtudiant || '',
+      matriculeEncadreur: this.matriculeEncadreur || '',
+      departement: this.departement || '',
+      selectedRole: this.selectedRole || ''
+    });
+  }
+
+  submit(form: NgForm): void {
+    if (form.valid) {
+      console.log('Form Submitted:', form.value);
+  
+      const userId = this.urlLastValue; 
+      this._userEditService.updateUser(userId, form.value).subscribe(
+        (response) => {
+          console.log('Utilisateur mis à jour avec succès', response);
+          // Affichage d'un message de succès
+          alert('Utilisateur mis à jour avec succès!');
+          setTimeout(() => {
+            this.router.navigate(['apps/user/user-list']);
+          }, 1000);
+        },
+        (error) => {
+          console.log("test ", form.value);
+          console.error('Erreur lors de la soumission du formulaire', error);
+          // Affichage d'un message d'erreur
+          alert('Une erreur est survenue, veuillez réessayer.');
+        }
+      );
+    } else {
+      console.error('Formulaire invalide');
+      alert('Veuillez remplir correctement tous les champs.');
+    }
+  }
+  
 }

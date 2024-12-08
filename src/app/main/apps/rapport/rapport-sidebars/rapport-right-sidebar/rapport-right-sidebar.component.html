@@ -6,13 +6,17 @@
       class="rapport-modal needs-validation"
       (ngSubmit)="onSubmit(rapportForm)"
       #rapportForm="ngForm"
+      novalidate
     >
+      <!-- Modal Header -->
       <div class="modal-header align-items-center mb-1">
-        <h5 *ngIf="isDataEmpty === true; else updateRapportsRef" class="modal-title">
+        <h5 *ngIf="isDataEmpty; else updateRapportsRef" class="modal-title">
           Ajouter un rapport
         </h5>
         <ng-template #updateRapportsRef>
-          <h5 class="modal-title">Rapport: {{ rapport.titre }} ({{ rapport.echeance.description }})</h5>
+          <h5 class="modal-title">
+            Rapport: {{ rapport.titre }} ({{ rapport.echeance.description }})
+          </h5>
           <div class="rapport-item-action d-flex align-items-center justify-content-between ml-auto">
             <button
               (click)="toggleComplete()"
@@ -27,10 +31,10 @@
 
         <div class="rapport-item-action d-flex align-items-center justify-content-between ml-auto">
           <button
-            *ngIf="isDataEmpty === false"
+            *ngIf="!isDataEmpty"
             (click)="deleteRapport()"
             type="button"
-            class="rapport-item-favorite cursor-pointer mr-75 btn p-0"
+            class="btn p-0 rapport-item-favorite cursor-pointer mr-75"
           >
             <i data-feather="trash" [size]="18"></i>
           </button>
@@ -39,14 +43,14 @@
             (click)="closeSidebar()"
             type="button"
             class="close font-large-1 font-weight-normal py-0"
-            data-dismiss="modal"
             aria-label="Close"
           >
-            ×
+            &times;
           </button>
         </div>
       </div>
 
+      <!-- Modal Body -->
       <div class="modal-body flex-grow-1 pb-sm-0 pb-3">
         <div class="action-tags">
           <!-- Title Input -->
@@ -57,44 +61,54 @@
               id="rapportTitleAdd"
               name="addTitle"
               class="new-rapport-item-title form-control"
-              [class.error]="rapportForm.submitted && RDNameRef.invalid"
-              placeholder="Titre"
+              placeholder="Entrez le titre du rapport"
               [(ngModel)]="rapport.titre"
               #RDNameRef="ngModel"
               required
             />
-            <span *ngIf="rapportForm.submitted && RDNameRef.invalid" class="invalid-form">
-              <small class="form-text text-danger" *ngIf="RDNameRef.errors.required">Ce champ est requis !</small>
-            </span>
+            <small class="text-danger" *ngIf="rapportForm.submitted && RDNameRef.invalid">
+              Le titre est requis.
+            </small>
           </div>
 
           <!-- Due Date Picker -->
-          <div class="form-group position-relative">
+          <!-- <div class="form-group position-relative">
             <label for="task-due-date" class="form-label">Date d'échéance</label>
             <ng2-flatpickr
+              id="task-due-date"
               #dueDateRef
               name="addDueDate"
               [setDate]="rapport.echeance.description"
+              [(ngModel)]="rapport.echeance.description"
+              required
             ></ng2-flatpickr>
-          </div>
+            <small class="text-danger" *ngIf="rapportForm.submitted && !dueDateRef.model">
+              La date d'échéance est requise.
+            </small>
+          </div> -->
 
-          <!-- Group Report Section -->
-          <div class="form-group">
-            <label class="form-label">Groupe</label>
+          <!-- Group Input -->
+          <!-- <div class="form-group">
+            <label for="groupeName" class="form-label">Groupe</label>
             <input
               type="text"
+              id="groupeName"
               class="form-control"
               [(ngModel)]="rapport.groupeEtudiant.nom"
               name="groupe"
               placeholder="Nom du groupe"
               required
             />
-          </div>
+            <small class="text-danger" *ngIf="rapportForm.submitted && !rapport.groupeEtudiant.nom">
+              Le nom du groupe est requis.
+            </small>
+          </div> -->
 
-          <!-- Content View Button -->
+          <!-- Content View -->
           <div class="form-group">
-            <label class="form-label">Contenu</label>
+            <label for="rapportContent" class="form-label">Contenu</label>
             <a
+              id="rapportContent"
               [routerLink]="'/webview'"
               [queryParams]="{ content: rapport.contenuUrl }"
               class="btn btn-outline-primary"
@@ -105,11 +119,11 @@
         </div>
 
         <!-- Action Buttons -->
-        <div class="form-group my-1">
+        <div class="form-group my-1 d-flex justify-content-end">
           <button
             type="submit"
-            class="btn btn-primary add-rapport-item mr-1"
-            *ngIf="isDataEmpty === true"
+            class="btn btn-primary mr-1"
+            *ngIf="isDataEmpty"
             [disabled]="!rapportForm.form.valid"
             rippleEffect
           >
@@ -117,21 +131,20 @@
           </button>
           <button
             type="button"
-            class="btn btn-primary update-btn update-rapport-item mr-1"
-            *ngIf="isDataEmpty === false"
+            class="btn btn-primary mr-1"
+            *ngIf="!isDataEmpty"
             (click)="updateRapport()"
             rippleEffect
           >
             Mettre à jour
           </button>
           <button
-            class="btn btn-outline-secondary add-rapport-item"
+            class="btn btn-outline-secondary"
             type="button"
             (click)="closeSidebar()"
-            data-dismiss="modal"
             rippleEffect
           >
-            Fermer
+            Annuler
           </button>
         </div>
       </div>

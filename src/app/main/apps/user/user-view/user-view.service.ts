@@ -36,11 +36,12 @@ export class UserViewService implements Resolve<any> {
     });
   }
 
+
   /**
    * Get rows
    */
   getApiData(id: number): Promise<any[]> {
-    const url = `api/users-data/${id}`;
+    const url = `http://localhost:8080/user/${id}`;
 
     return new Promise((resolve, reject) => {
       this._httpClient.get(url).subscribe((response: any) => {
@@ -50,4 +51,18 @@ export class UserViewService implements Resolve<any> {
       }, reject);
     });
   }
+  createUser(user: { 
+    nom: string; 
+    prenom: string; 
+    email: string; 
+    password: string; 
+    role: string; 
+    matriculeEtudiant: string; 
+    matriculeEncadreur: string; 
+    departement: string; 
+    selectedRole: string; 
+  }): Observable<any> {
+    return this._httpClient.post<any>("http://localhost:8080/auth/signup", user);
+  }
+  
 }
