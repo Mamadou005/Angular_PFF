@@ -58,7 +58,7 @@ export const menu: CoreMenu[] = [
         translate: 'Sujet',
         type: 'item',
         icon: 'check-square',
-        url: 'apps/sujet'
+        url: 'apps/todo'
       },
       {
         id: 'rapport',

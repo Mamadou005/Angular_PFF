@@ -9,7 +9,7 @@ import { TodoService } from 'app/main/apps/todo/todo.service';
 })
 export class TodoListItemComponent implements OnInit {
   // Input Decorator
-  @Input() todo: Todo;
+  @Input() sujet: any;
 
   // Public
   public selected;
@@ -26,8 +26,8 @@ export class TodoListItemComponent implements OnInit {
    * @param stateRef
    */
   checkboxStateChange(stateRef) {
-    this.todo.completed = stateRef;
-    this._todoService.updateCurrentTodo(this.todo);
+    this.sujet.completed = stateRef;
+    this._todoService.updateCurrentTodo(this.sujet);
   }
 
   ngOnInit(): void {}

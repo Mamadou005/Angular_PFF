@@ -4,6 +4,8 @@ import { CoreSidebarService } from '@core/components/core-sidebar/core-sidebar.s
 
 import { Todo } from 'app/main/apps/todo/todo.model';
 import { TodoService } from 'app/main/apps/todo/todo.service';
+import {Echeanche} from "../../../sujet/sujet.model";
+import {AuthenticationService} from "../../../../../auth/service";
 
 @Component({
   selector: 'app-todo-right-sidebar',
@@ -13,20 +15,17 @@ import { TodoService } from 'app/main/apps/todo/todo.service';
 export class TodoRightSidebarComponent implements OnInit {
   // Public
   public isDataEmpty;
-  public todo: Todo;
+  public sujet: any;
   public tags;
   public selectTags;
-  public selectAssignee;
+  public selectEncadreur;
+  public selectEtudiant;
+
+  public isEtudiant: boolean = false;
 
   @ViewChild('dueDateRef') private dueDateRef: any;
 
-  public dueDateOptions = {
-    altInput: true,
-    mode: 'single',
-    altInputClass: 'form-control flat-picker flatpickr-input invoice-edit-input',
-    altFormat: 'F j, Y',
-    dateFormat: 'Y-m-d'
-  };
+  public listeEcheances: any[];
 
   /**
    * Constructor
@@ -34,7 +33,7 @@ export class TodoRightSidebarComponent implements OnInit {
    * @param {TodoService} _todoService
    * @param {CoreSidebarService} _coreSidebarService
    */
-  constructor(private _todoService: TodoService, private _coreSidebarService: CoreSidebarService) {}
+  constructor(private _todoService: TodoService, private _coreSidebarService: CoreSidebarService, private authService: AuthenticationService) {}
 
   // Public Methods
   // -----------------------------------------------------------------------------------------------------
@@ -51,9 +50,13 @@ export class TodoRightSidebarComponent implements OnInit {
    */
   updateTodo() {
     //! Fix: Temp fix till ng2-flatpicker support ng-modal (Getting NG0100: Expression has changed after it was checked error if we use ng-model with ng2-flatpicker)
-    this.todo.dueDate = this.dueDateRef.flatpickrElement.nativeElement.children[0].value;
-
-    this._todoService.updateCurrentTodo(this.todo);
+    /* this.sujet.echeanche = JSON.parse(this.sujet.echeanche);
+    *this.sujet.etudiants = this.sujet.etudiants.map(id =>  {
+       return {
+         id: id,
+       }
+     })*/
+    this._todoService.updateCurrentTodo(this.sujet);
     this.closeSidebar();
   }
 
@@ -63,8 +66,13 @@ export class TodoRightSidebarComponent implements OnInit {
   addTodo(todoForm) {
     if (todoForm.valid) {
       //! Fix: Temp fix till ng2-flatpicker support ng-modal
-      this.todo.dueDate = this.dueDateRef.flatpickrElement.nativeElement.children[0].value;
-      this._todoService.updateCurrentTodo(this.todo);
+      /* this.sujet.echeanche = JSON.parse(this.sujet.echeanche);
+      *this.sujet.etudiants = this.sujet.etudiants.map(id =>  {
+         return {
+           id: id,
+         }
+       })*/
+      this._todoService.updateCurrentTodo(this.sujet);
       this.closeSidebar();
     }
   }
@@ -73,8 +81,8 @@ export class TodoRightSidebarComponent implements OnInit {
    * Delete Todo
    */
   deleteTodo() {
-    this.todo.deleted = !this.todo.deleted;
-    this._todoService.updateCurrentTodo(this.todo);
+    this.sujet.deleted = !this.sujet.deleted;
+    this._todoService.updateCurrentTodo(this.sujet);
     this.closeSidebar();
   }
 
@@ -82,8 +90,8 @@ export class TodoRightSidebarComponent implements OnInit {
    * Toggle Complete
    */
   toggleComplete() {
-    this.todo.completed = !this.todo.completed;
-    this._todoService.updateCurrentTodo(this.todo);
+    this.sujet.completed = !this.sujet.completed;
+    this._todoService.updateCurrentTodo(this.sujet);
     this.closeSidebar();
   }
 
@@ -91,8 +99,8 @@ export class TodoRightSidebarComponent implements OnInit {
    * Toggle Important
    */
   toggleImportant() {
-    this.todo.important = !this.todo.important;
-    this._todoService.updateCurrentTodo(this.todo);
+    this.sujet.important = !this.sujet.important;
+    this._todoService.updateCurrentTodo(this.sujet);
     this.closeSidebar();
   }
 
@@ -103,12 +111,13 @@ export class TodoRightSidebarComponent implements OnInit {
    * On init
    */
   ngOnInit(): void {
+    this.isEtudiant = this.authService.currentUserValue.role.includes("ETUDIANT")
     this._todoService.onCurrentTodoChange.subscribe(response => {
       if (Object.keys(response).length > 0) {
-        this.todo = response;
+        this.sujet = response;
         this.isDataEmpty = false;
       } else {
-        this.todo = new Todo();
+        this.sujet = new Todo();
 
         this.isDataEmpty = true;
       }
@@ -119,8 +128,33 @@ export class TodoRightSidebarComponent implements OnInit {
       });
     });
 
-    this._todoService.onAssigneeChange.subscribe(assigneeRef => {
-      this.selectAssignee = assigneeRef;
+    this._todoService.onEncadreurChange.subscribe(assigneeRef => {
+      this.selectEncadreur = assigneeRef;
     });
+
+    this._todoService.onEtudiantChange.subscribe(assigneeRef => {
+      this.selectEtudiant = assigneeRef;
+    });
+
+
+    this._todoService.getAllEcheances().subscribe({
+      next: (data: Echeanche[]) => {
+        this.listeEcheances = data;
+      },
+      error: (err) => {
+        console.error('Erreur lors de la récupération des échéances :', err);
+      }
+    });
+  }
+
+  convert(echeance: any) {
+    return JSON.stringify(echeance);
+  }
+
+  getLibelle() {
+    return this.isEtudiant ? "Rejoindre un Groupe" : "Gestion de Sujet";
+  }
+
+  onRemove($event) {
   }
 }
