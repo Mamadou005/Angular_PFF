@@ -29,6 +29,7 @@ export class ChatSidebarComponent implements OnInit {
   /**
    * Constructor
    *
+   * @param _authenticationService
    * @param {ChatService} _chatService
    * @param {CoreSidebarService} _coreSidebarService
    */
@@ -44,6 +45,7 @@ export class ChatSidebarComponent implements OnInit {
    * @param newChat
    */
   openChat(id) {
+    console.log('openChat', id);
     this._chatService.openChat(id);
 
     // Reset unread Message to zero
@@ -97,38 +99,7 @@ export class ChatSidebarComponent implements OnInit {
   //   });
   // }
 
-  createDiscussion(): void {
-    this._authenticationService.currentUser.subscribe(user => {
-      if (user && user.id) {
-        const userId: number = user.id;
 
-        // Initialiser `createur` si nécessaire
-        if (!this.chats.createur) {
-          this.chats.createur = {};  // Crée un objet vide pour 'createur'
-        }
-
-        // Affecter l'ID de l'utilisateur au créateur de la discussion
-        this.chats.createur.id = userId;
-
-        console.log('Titre:', this.chats.titre);
-        console.log('Description:', this.chats.description);
-        console.log('Createur:', this.chats.createur);
-
-        // Appel au service pour créer la discussion
-        this._chatService.createDiscussion(this.chats).subscribe(
-            (response) => {
-              console.log('Discussion créée avec succès.', response);
-            },
-            (error) => {
-              console.error('Erreur lors de la création de la discussion :', error);
-              alert('Une erreur est survenue lors de la création de la discussion: ' + error);
-            }
-        );
-      } else {
-        console.error('Utilisateur non authentifié ou ID utilisateur introuvable.');
-      }
-    });
-  }
 
 
   /**
@@ -171,6 +142,12 @@ export class ChatSidebarComponent implements OnInit {
         }
       });
     });
+
+    this._chatService.onChatsChange.subscribe(res => {
+      console.log("magui bakh")
+      console.log(res);
+      this.chatUsers = res;
+    })
 
     let skipFirst = 0;
 

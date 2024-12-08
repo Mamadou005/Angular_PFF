@@ -5,7 +5,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class InitialsPipe implements PipeTransform {
   transform(fullName: string): any {
-    return fullName
+    return fullName.toUpperCase()
       ?.split(' ')
       .map(n => n[0])
       .join('');

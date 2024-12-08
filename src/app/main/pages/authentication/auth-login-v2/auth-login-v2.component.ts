@@ -93,7 +93,7 @@ export class AuthLoginV2Component implements OnInit {
           this._router.navigate([this.returnUrl]);
         },
         error => {
-          this.error = error;
+          this.error = error?.error.description;
           this.loading = false;
         }
       );

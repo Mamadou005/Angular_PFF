@@ -82,6 +82,10 @@ export class ChatService implements Resolve<any> {
      return this._httpClient.get(this.apiUrl+'/api/discussions');
   }
 
+  getUser(): Observable<any> {
+    return this._httpClient.get(environment.apiUrl + '/api/user/all');
+  }
+
   /**
    * Get User Profile
    */
@@ -147,24 +151,12 @@ export class ChatService implements Resolve<any> {
    * @param id
    */
   selectedChats(id) {
-    this._httpClient.get<Discussion[]>(`${this.apiUrl}api/discussions/utilisateur/${id}`).subscribe({
-      next: (discussions) => {
-        if (discussions.length > 0) {
-          this.selectedChat = discussions[0];
-        } else {
-          const newChat = {
-            titre: "Nouvelle discussion",
-            description: `Discussion pour l'utilisateur ${id}`
-          };
-          this._httpClient.post<Discussion>(`${this.apiUrl}api/discussions`, newChat).subscribe({
-            next: (createdChat) => {
-              this.selectedChat = createdChat;
-            },
-            error: (err) => {
-              console.error("Erreur lors de la création de la discussion :", err);
-            }
-          });
-        }
+    console.log('selectedChats', id);
+    this._httpClient.get<any>(`${this.apiUrl}/api/discussions/${id}`).subscribe({
+      next: (discussion) => {
+        console.log(discussion);
+        this.onSelectedChatChange.next(discussion.messages);
+        this.onSelectedChatUserChange.next(discussion);
       },
       error: (err) => {
         console.error("Erreur lors de la récupération des discussions :", err);
@@ -234,8 +226,8 @@ export class ChatService implements Resolve<any> {
    */
   updateChat(chats) {
     return new Promise<void>((resolve, reject) => {
-      this._httpClient.post('api/chat-chats/' + chats.id, { ...chats }).subscribe(() => {
-        this.getChats();
+      this._httpClient.post(environment.apiUrl + '/api/messages/envoyer', chats).subscribe(() => {
+        this.selectedChats(chats.discussionId);
         resolve();
       }, reject);
     });

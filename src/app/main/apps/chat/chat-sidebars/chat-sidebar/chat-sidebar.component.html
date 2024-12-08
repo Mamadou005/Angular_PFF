@@ -6,18 +6,10 @@
   <!-- Sidebar header start -->
   <div class="chat-fixed-search">
     <div class="d-flex align-items-center w-100">
-      <div class="sidebar-profile-toggle">
-        <button class="btn avatar avatar-border bg-transparent p-0" (click)="toggleSidebar('chat-user-sidebar')">
-          <img [src]="userProfile.avatar" alt="user_avatar" height="42" width="42" />
-          <span
-            [ngClass]="{
-              'avatar-status-offline': userProfile.status == 'offline',
-              'avatar-status-online': userProfile.status == 'online',
-              'avatar-status-busy': userProfile.status == 'busy',
-              'avatar-status-away': userProfile.status == 'away'
-            }"
-          ></span>
-        </button>
+      <div class="text-nowrap d-flex">
+            <button type="button" class="btn btn-outline-primary" style="font-size: 12px" (click)="toggleSidebar('chat-user-sidebar')" rippleEffect>
+                <span [data-feather]="'message-square'" [class]="'mr-25'"></span>Nouveau</button
+            >
       </div>
       <div class="input-group input-group-merge ml-1 w-100">
         <div class="input-group-prepend">
@@ -37,47 +29,7 @@
   </div>
   <!-- Sidebar header end -->
 
-    <!-- Ajouter une Discussions -->
-    <form (ngSubmit)="createDiscussion()" #discussionForm="ngForm">
-        <div class="form-group">
-            <label for="titre">Titre de la discussion</label>
-            <input
-                    type="text"
-                    id="titre"
-                    class="form-control"
-                    required
-                    [(ngModel)]="chats.titre"
-                    name="titre"
-                    #titre="ngModel"
-            />
-            <div *ngIf="titre.invalid && titre.touched" class="text-danger">
-                Le titre est requis.
-            </div>
-        </div>
 
-        <div class="form-group">
-            <label for="description">Description</label>
-            <textarea
-                    id="description"
-                    class="form-control"
-                    required
-                    [(ngModel)]="chats.description"
-                    name="description"
-                    #description="ngModel"
-            ></textarea>
-            <div *ngIf="description.invalid && description.touched" class="text-danger">
-                La description est requise.
-            </div>
-        </div>
-
-        <button
-                type="submit"
-                class="btn btn-primary"
-                [disabled]="discussionForm.invalid"
-        >
-            Créer la discussion
-        </button>
-    </form>
 
 
 

@@ -14,6 +14,7 @@ import { ChatUserSidebarComponent } from 'app/main/apps/chat/chat-sidebars/chat-
 import { ChatActiveSidebarComponent } from 'app/main/apps/chat/chat-sidebars/chat-active-sidebar/chat-active-sidebar.component';
 import { ChatComponent } from 'app/main/apps/chat/chat.component';
 import { ChatService } from 'app/main/apps/chat/chat.service';
+import {NgSelectModule} from "@ng-select/ng-select";
 
 // routing
 const routes: Routes = [
@@ -35,14 +36,15 @@ const routes: Routes = [
     ChatUserSidebarComponent,
     ChatActiveSidebarComponent
   ],
-  imports: [
-    CommonModule,
-    CoreSidebarModule,
-    RouterModule.forChild(routes),
-    CoreCommonModule,
-    PerfectScrollbarModule,
-    NgbModule
-  ],
+    imports: [
+        CommonModule,
+        CoreSidebarModule,
+        RouterModule.forChild(routes),
+        CoreCommonModule,
+        PerfectScrollbarModule,
+        NgbModule,
+        NgSelectModule
+    ],
   providers: [ChatService]
 })
 export class ChatModule {}

@@ -3,6 +3,9 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CoreSidebarService } from '@core/components/core-sidebar/core-sidebar.service';
 
 import { ChatService } from 'app/main/apps/chat/chat.service';
+import {Utilisateur} from "../../sujet/sujet.model";
+import {Discussion} from "../DIscussion.model";
+import {AuthenticationService} from "../../../../auth/service";
 
 @Component({
   selector: 'app-chat-content',
@@ -26,8 +29,9 @@ export class ChatContentComponent implements OnInit {
    *
    * @param {ChatService} _chatService
    * @param {CoreSidebarService} _coreSidebarService
+   * @param authService
    */
-  constructor(private _chatService: ChatService, private _coreSidebarService: CoreSidebarService) {}
+  constructor(private _chatService: ChatService, private _coreSidebarService: CoreSidebarService, private authService: AuthenticationService) {}
 
   // Public Methods
   // -----------------------------------------------------------------------------------------------------
@@ -35,29 +39,25 @@ export class ChatContentComponent implements OnInit {
   /**
    * Update Chat
    */
-  // updateChat() {
-  //   this.newChat = {
-  //     message: this.chatMessage,
-  //     time: 'Mon Dec 10 2018 07:46:43 GMT+0000 (GMT)',
-  //     senderId: this.userProfile.id
-  //   };
-  //
-  //   // If chat data is available (update chat)
-  //   if (this.chats.chat) {
-  //     if (this.newChat.message !== '') {
-  //       this.chats.chat.push(this.newChat);
-  //       this._chatService.updateChat(this.chats);
-  //       this.chatMessage = '';
-  //       setTimeout(() => {
-  //         this.scrolltop = this.scrollMe?.nativeElement.scrollHeight;
-  //       }, 0);
-  //     }
-  //   }
-  //   // Else create new chat
-  //   else {
-  //     this._chatService.createDiscussion(this.chatUser.id, this.newChat);
-  //   }
-  // }
+  updateChat() {
+    this.newChat = {
+      contenu: this.chatMessage,
+      dateEnvoie: new Date(),
+      dateModification: new Date(),
+      utilisateurId: this.authService.currentUserValue.id,
+      discussionId: this.chatUser.id
+    };
+
+    // If chat data is available (update chat)
+      if (this.newChat.contenu !== '' && this.newChat.contenu !== undefined) {
+        this._chatService.updateChat(this.newChat);
+        this.chatMessage = '';
+        setTimeout(() => {
+          this.scrolltop = this.scrollMe?.nativeElement.scrollHeight;
+        }, 0);
+      }
+
+  }
 
   /**
    * Toggle Sidebar
@@ -75,6 +75,7 @@ export class ChatContentComponent implements OnInit {
    * On init
    */
   ngOnInit(): void {
+    this.userProfile = this.authService.currentUserValue;
     // Subscribe to Chat Change
     this._chatService.onChatOpenChange.subscribe(res => {
       this.chatMessage = '';
@@ -86,6 +87,7 @@ export class ChatContentComponent implements OnInit {
 
     // Subscribe to Selected Chat Change
     this._chatService.onSelectedChatChange.subscribe(res => {
+      console.log(res);
       this.chats = res;
     });
 
@@ -95,5 +97,9 @@ export class ChatContentComponent implements OnInit {
     });
 
     this.userProfile = this._chatService.userProfile;
+  }
+
+  getBoll(chatRef: any) {
+    return chatRef?.utilisateur?.id == this.authService.currentUserValue.id
   }
 }
