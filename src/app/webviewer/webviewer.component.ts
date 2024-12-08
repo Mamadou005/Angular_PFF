@@ -22,20 +22,17 @@ import { DocumentService } from './document.service';
   styleUrls: ['webviewer.component.css'],
   templateUrl: 'webviewer.component.html',
 })
-export class WebviewerComponent
-  implements AfterViewInit, OnChanges, OnDestroy, OnInit
-{
-  wvInstance?: WebViewerInstance;
+export class WebviewerComponent implements AfterViewInit, OnChanges, OnDestroy, OnInit {
   @ViewChild('viewer') viewer!: ElementRef;
   @Output() coreControlsEvent: EventEmitter<string> = new EventEmitter();
   @Input() documentId: number = 1;
-  public rapportContent: string = '';
-  public sujetContent: string = '';
 
+  public rapportContent: string = '';
+  public rapportTitle: string = '';
+  private wvInstance?: WebViewerInstance;
+  private fichierUrl: string = '';
   private documentLoaded$ = new Subject<void>();
   private annotationsLoaded$ = new Subject<void>();
-  private fichierUrl: string = '';
-  public rapportTitle: string = '';
 
   constructor(
     private documentService: DocumentService,
@@ -54,9 +51,9 @@ export class WebviewerComponent
   }
 
   ngAfterViewInit(): void {
-    if (this.viewer && this.viewer.nativeElement) {
+    if (this.viewer?.nativeElement) {
       if (this.fichierUrl) {
-        this.initializeViewer(this.fichierUrl);  // Initialiser WebViewer seulement après que fichierUrl est disponible
+        this.initializeViewer(this.fichierUrl);
       } else {
         console.warn('Document URL is not defined yet.');
       }
@@ -66,31 +63,38 @@ export class WebviewerComponent
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (
-      changes['documentId'] &&
-      this.documentId !== changes['documentId'].previousValue
-    ) {
+    if (changes['documentId']?.currentValue !== changes['documentId']?.previousValue) {
       this.loadDocument();
-    }
-    // Si le fichierUrl change, on initialise à nouveau WebViewer
-    if (changes['fichierUrl']) {
-      this.initializeViewer(this.fichierUrl);
     }
   }
 
-  private initializeViewer(url: string): void {
-    if (!this.viewer || !this.viewer.nativeElement) {
-      console.error('Viewer element is not initialized.');
+  private loadDocument(): void {
+    if (!this.documentId) {
+      console.warn('Document ID is not defined.');
       return;
     }
 
+    this.rapportService.getRapportById(this.documentId).subscribe(
+      (rapport) => {
+        this.rapportTitle = rapport.titre;
+        this.fichierUrl = rapport.contenuUrl;
+        this.rapportContent = rapport.content;
+
+        if (this.fichierUrl) {
+          this.reloadViewer(this.fichierUrl);
+        }
+      },
+      (error) => console.error('Error loading rapport:', error)
+    );
+  }
+
+  private initializeViewer(url: string): void {
     WebViewer(
       {
         path: '../../lib',
         enableOfficeEditing: true,
-        initialDoc: url,  // Utilisation correcte de fichierUrl
-        licenseKey:
-          'demo:1731372460021:7ef9fd110300000000ec33ffa1b45492254e5640546bff52dc10b5080f',
+        initialDoc: url,
+        licenseKey: 'demo:1731372460021:7ef9fd110300000000ec33ffa1b45492254e5640546bff52dc10b5080f',
       },
       this.viewer.nativeElement
     )
@@ -104,10 +108,16 @@ export class WebviewerComponent
       });
   }
 
+  private reloadViewer(newUrl: string): void {
+    if (this.wvInstance) {
+      this.wvInstance.UI.loadDocument(newUrl);
+    } else {
+      this.initializeViewer(newUrl);
+    }
+  }
+
   private setUpEventListeners(instance: WebViewerInstance): void {
     const { documentViewer, Annotations, annotationManager } = instance.Core;
-
-    instance.UI.openElements(['notesPanel']);
 
     documentViewer.addEventListener('annotationsLoaded', () => {
       this.annotationsLoaded$.next();
@@ -119,42 +129,40 @@ export class WebviewerComponent
     });
   }
 
-  private loadDocument(): void {
-    if (!this.documentId) {
-      console.warn('Document ID is not defined.');
-      return;
-    }
-
-    this.rapportService.getRapportById(this.documentId).subscribe(
-      (rapport) => {
-        this.rapportTitle = rapport.titre;
-        this.fichierUrl = rapport.contenuUrl;  // Assurez-vous que fichierUrl est bien assigné ici
-        this.rapportContent = rapport.content;
-        // Au moment où fichierUrl est chargé, initialisez le viewer
-        if (this.fichierUrl) {
-          this.initializeViewer(this.fichierUrl);
-        } else {
-          console.warn('fichierUrl is not available yet.');
-        }
-      },
-      (error) => console.error('Erreur lors du chargement du rapport:', error)
-    );
-  }
-
-  private addRectangleAnnotation(
-    Annotations: any,
-    annotationManager: any
-  ): void {
+  private addRectangleAnnotation(Annotations: any, annotationManager: any): void {
     const rectangleAnnot = new Annotations.RectangleAnnotation();
     rectangleAnnot.PageNumber = 1;
     rectangleAnnot.X = 100;
-    rectangleAnnot.Y = 150;
+    rectangleAnnot.Y = 100;
     rectangleAnnot.Width = 200;
     rectangleAnnot.Height = 100;
-    rectangleAnnot.StrokeColor = new Annotations.Color(255, 0, 0);
-
     annotationManager.addAnnotation(rectangleAnnot);
     annotationManager.redrawAnnotation(rectangleAnnot);
+  }
+
+  async saveModifiedDocument(){
+  
+    const fileContent = await this.wvInstance.UI.downloadPdf(({ downloadType: 'office' }));
+
+    console.log("fileContent ", fileContent);
+
+  }
+
+  downloadAnnotatedFile(): void {
+    if (this.wvInstance) {
+      const { documentViewer } = this.wvInstance.Core;
+      documentViewer.getDocument().getFileData().then((fileData: Uint8Array) => {
+        const blob = new Blob([fileData], { type: 'application/pdf' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Document-${this.documentId}.pdf`;
+        a.click();
+        window.URL.revokeObjectURL(url);
+      });
+    } else {
+      console.error('WebViewer instance is not initialized.');
+    }
   }
 
   ngOnDestroy(): void {
@@ -162,10 +170,5 @@ export class WebviewerComponent
     this.documentLoaded$.complete();
     this.annotationsLoaded$.next();
     this.annotationsLoaded$.complete();
-
-    if (this.wvInstance) {
-      const viewerElement = this.viewer.nativeElement;
-      viewerElement.innerHTML = '';
-    }
   }
 }
