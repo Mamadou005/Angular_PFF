@@ -18,10 +18,10 @@ export class RapportListComponent implements OnInit {
   public searchQuery: Subject<string> = new Subject<string>();
 
   constructor(
-    private _dragulaService: DragulaService,
-    private _rapportService: RapportService,
-    private _coreSidebarService: CoreSidebarService,
-    private _router: Router
+      private _dragulaService: DragulaService,
+      private _rapportService: RapportService,
+      private _coreSidebarService: CoreSidebarService,
+      private _router: Router
   ) {
     this._dragulaService.destroy('rapport-tasks-drag-area');
     this._dragulaService.createGroup('rapport-tasks-drag-area', {
@@ -72,10 +72,10 @@ export class RapportListComponent implements OnInit {
   deleteRapport(rapportId: number): void {
     // Supprimer un rapport
     this._rapportService.deleteRapport(rapportId).subscribe(
-      () => {
-        this.rapports = this.rapports.filter((rapport) => rapport.id !== rapportId);
-      },
-      (error) => console.error('Erreur lors de la suppression:', error)
+        () => {
+          this.rapports = this.rapports.filter((rapport) => rapport.id !== rapportId);
+        },
+        (error) => console.error('Erreur lors de la suppression:', error)
     );
   }
 

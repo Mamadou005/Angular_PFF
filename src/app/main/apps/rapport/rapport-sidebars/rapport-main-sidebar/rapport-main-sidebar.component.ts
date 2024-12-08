@@ -13,8 +13,8 @@ export class RapportMainSidebarComponent {
   public selectedFile: File | null = null;
 
   constructor(
-    private _coreSidebarService: CoreSidebarService,
-    private _rapportService: RapportService
+      private _coreSidebarService: CoreSidebarService,
+      private _rapportService: RapportService
   ) {}
 
   toggleForm(): void {
@@ -60,6 +60,7 @@ export class RapportMainSidebarComponent {
         }
       );
       
+
     } else {
       alert('Le formulaire est invalide ou aucun fichier n\'a été sélectionné.');
     }

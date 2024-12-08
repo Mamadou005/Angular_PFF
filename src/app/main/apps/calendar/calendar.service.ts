@@ -55,8 +55,16 @@ export class CalendarService implements Resolve<any> {
 
     return new Promise((resolve, reject) => {
       this._httpClient.get(url).subscribe((response: any) => {
-        this.events = response;
-        this.tempEvents = response;
+        this.events = response.map(event=>{
+          return {
+            title: event.titre,
+            start: new Date( event.dateDebut),
+            end: new Date(event.dateFin),
+            allDay : true
+          };
+        });
+        this.tempEvents = this.events;
+        console.log(this.tempEvents);
         this.onEventChange.next(this.events);
         resolve(this.events);
       }, reject);

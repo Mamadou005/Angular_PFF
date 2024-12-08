@@ -21,7 +21,7 @@ import { CoreModule } from '@core/core.module';
 
 import { coreConfig } from 'app/app-config';
 import { AppComponent } from 'app/app.component';
-import { ErrorInterceptor, fakeBackendProvider, JwtInterceptor } from 'app/auth/helpers'; // used to create fake backend
+import { ErrorInterceptor, JwtInterceptor } from 'app/auth/helpers'; // used to create fake backend
 import localeFr from '@angular/common/locales/fr';
 import { AuthGuard } from 'app/auth/helpers/auth.guards';
 import { ContentHeaderModule } from 'app/layout/components/content-header/content-header.module';

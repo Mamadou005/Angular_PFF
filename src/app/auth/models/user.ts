@@ -9,6 +9,7 @@ export class Utilisateur {
   email: string;
   password: string;
   role: Role;
+  token: string;
   matricule: string;
   //messagesEnvoyes: Message[] = [];
   //messagesRecus: Message[] = [];

@@ -22,6 +22,7 @@ export class RapportRightSidebarComponent implements OnInit {
     private _rapportService: RapportService,
     private _coreSidebarService: CoreSidebarService,
     private _formBuilder: FormBuilder
+
   ) {}
 
   ngOnInit(): void {
@@ -78,6 +79,7 @@ export class RapportRightSidebarComponent implements OnInit {
           console.error('Erreur lors de l\'ajout du rapport:', errorMessage);
           alert(`Une erreur est survenue: ${errorMessage}`);
         }
+
       );
     } else {
       console.error('Formulaire invalide ou fichier manquant');

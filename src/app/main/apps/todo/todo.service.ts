@@ -193,7 +193,7 @@ export class TodoService implements Resolve<any> {
    */
   getEncadreur(): Promise<any[]> {
     return new Promise((resolve, reject) => {
-      this._httpClient.get(environment.apiUrl + '/user/encadreurs').subscribe((assignee: any) => {
+      this._httpClient.get(environment.apiUrl + '/api/user/encadreurs').subscribe((assignee: any) => {
         this.encadreurs = assignee;
         this.onEncadreurChange.next(this.encadreurs);
         resolve(this.sujets);
@@ -207,7 +207,7 @@ export class TodoService implements Resolve<any> {
    */
   getEtudiant(): Promise<any[]> {
     return new Promise((resolve, reject) => {
-      this._httpClient.get(environment.apiUrl + '/user/etudiants').subscribe((assignee: any) => {
+      this._httpClient.get(environment.apiUrl + '/api/user/etudiants').subscribe((assignee: any) => {
         this.etudiants = assignee;
         this.onEtudiantChange.next(this.etudiants);
         resolve(this.sujets);

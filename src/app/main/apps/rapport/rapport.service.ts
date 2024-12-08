@@ -31,6 +31,7 @@ export class RapportService {
   uploadFileToMinIO(file: File): Observable<string> {
     const formData = new FormData();
     formData.append('file', file);
+
   
     return this.http.post(`${this.MINIO_API_URL}/upload`, formData).pipe(
       map((response: any) => {
@@ -56,12 +57,14 @@ export class RapportService {
         console.error('Erreur dans addRapport:', error);
         return throwError(() => new Error('Erreur lors de l\'ajout du rapport: ' + (error.message || error)));
       })
+
     );
   }
   
   
 
   
+
 
 
   getInitialRapports(): Observable<Rapport[]> {
@@ -79,6 +82,7 @@ export class RapportService {
   applyFilters(): void {
     this.rapports = this.tempRapports.filter((rapport) =>
       this.onFiltersChange.value.every((filter) => rapport[filter.field] === filter.value)
+
     );
     this.onRapportDataChange.next(this.rapports);
   }
@@ -90,8 +94,6 @@ export class RapportService {
     alert(`Une erreur est survenue: ${errorMessage}`);
     return throwError(() => new Error(errorMessage));
   }
-  
-  
 
   getRapportById(id: number): Observable<any> {
     return this.http.get<any>(`${this.API_URL}/${id}`);
@@ -106,6 +108,7 @@ export class RapportService {
   getRapportsBySearch(query: string): any[] {
     return this.rapports.filter((rapport) =>
       rapport.titre.toLowerCase().includes(query.toLowerCase())
+
     );
   }
 
