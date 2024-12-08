@@ -1,19 +1,19 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+import { Role, Utilisateur } from 'app/auth/models';
 import { environment } from 'environments/environment';
-import { User, Role } from 'app/auth/models';
 import { ToastrService } from 'ngx-toastr';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
   //public
-  public currentUser: Observable<User>;
+  public currentUser: Observable<Utilisateur>;
 
   //private
-  private currentUserSubject: BehaviorSubject<User>;
+  private currentUserSubject: BehaviorSubject<Utilisateur>;
 
   /**
    *
@@ -21,12 +21,12 @@ export class AuthenticationService {
    * @param {ToastrService} _toastrService
    */
   constructor(private _http: HttpClient, private _toastrService: ToastrService) {
-    this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
+    this.currentUserSubject = new BehaviorSubject<Utilisateur>(JSON.parse(localStorage.getItem('currentUser')));
     this.currentUser = this.currentUserSubject.asObservable();
   }
 
   // getter: currentUserValue
-  public get currentUserValue(): User {
+  public get currentUserValue(): Utilisateur {
     return this.currentUserSubject.value;
   }
 
@@ -34,14 +34,14 @@ export class AuthenticationService {
    *  Confirms if user is admin
    */
   get isAdmin() {
-    return this.currentUser && this.currentUserSubject.value.role === Role.Admin;
+    return this.currentUser && this.currentUserSubject.value.role === Role.ADMIN;
   }
 
   /**
    *  Confirms if user is client
    */
   get isClient() {
-    return this.currentUser && this.currentUserSubject.value.role === Role.Client;
+    return this.currentUser && this.currentUserSubject.value.role === Role.ETUDIANT;
   }
 
   /**
@@ -64,11 +64,12 @@ export class AuthenticationService {
             // Display welcome toast!
             setTimeout(() => {
               this._toastrService.success(
-                  'Vous vous êtes connecté avec succès en tant qu\'utilisateur ' +
+
+                'Votre connexion a été effectué avec succé ' +
                   user.role +
-                  ' sur Academy Log. Vous pouvez maintenant commencer à explorer. Profitez-en ! 🎉',
-                  '👋 Bienvenue, ' + user.prenom + ' !',
-                  { toastClass: 'toast ngx-toastr', closeButton: true }
+                  ' votre espace AcademyLog vous est servi 🎉',
+                '👋 Bienvenue, ' + user.prenom + '!',
+                { toastClass: 'toast ngx-toastr', closeButton: true }
               );
             }, 2500);
 

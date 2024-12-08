@@ -11,12 +11,11 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
-import WebViewer, {WebViewerInstance} from '@pdftron/webviewer';
-import {Subject} from 'rxjs';
-import {RapportService} from '../main/apps/rapport/rapport.service';
-import {DocumentService} from './document.service';
-import {SujetService} from "../main/apps/sujet/sujet.service";
+import { ActivatedRoute } from '@angular/router';
+import WebViewer, { WebViewerInstance } from '@pdftron/webviewer';
+import { Subject } from 'rxjs';
+import { RapportService } from '../main/apps/rapport/rapport.service';
+import { DocumentService } from './document.service';
 
 @Component({
   selector: 'app-webviewer',
@@ -38,7 +37,7 @@ export class WebviewerComponent implements AfterViewInit, OnChanges, OnDestroy, 
   constructor(
     private documentService: DocumentService,
     private rapportService: RapportService,
-    private sujetService: SujetService,
+    //private sujetService: SujetService,
     private route: ActivatedRoute
   ) {}
 
@@ -114,7 +113,7 @@ export class WebviewerComponent implements AfterViewInit, OnChanges, OnDestroy, 
 
     this.rapportService.getRapportById(this.documentId).subscribe(
       (rapport) => {
-        this.fichierUrl = rapport.contenu;
+        this.fichierUrl = rapport.contenuUrl;
 
       },
       (error) => console.error('Error loading rapport:', error)
@@ -127,13 +126,13 @@ export class WebviewerComponent implements AfterViewInit, OnChanges, OnDestroy, 
       return;
     }
 
-    this.sujetService.getSujetById(this.documentId).subscribe(
-        (sujet) => {
-          this.fichierUrl = sujet.description;
+    // this.sujetService.getSujetById(this.documentId).subscribe(
+    //     (sujet) => {
+    //       this.fichierUrl = sujet.description;
 
-        },
-        (error) => console.error('Error loading sujet:', error)
-    );
+    //     },
+    //     (error) => console.error('Error loading sujet:', error)
+    // );
   }
 
   private addRectangleAnnotation(

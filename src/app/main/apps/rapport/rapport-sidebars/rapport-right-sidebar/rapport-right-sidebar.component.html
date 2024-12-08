@@ -9,7 +9,7 @@
     >
       <div class="modal-header align-items-center mb-1">
         <h5 *ngIf="isDataEmpty === true; else updateRapportsRef" class="modal-title">
-          Ajouter un projet
+          Ajouter un rapport
         </h5>
         <ng-template #updateRapportsRef>
           <h5 class="modal-title">Rapport: {{ rapport.titre }} ({{ rapport.echeance.description }})</h5>
@@ -96,7 +96,7 @@
             <label class="form-label">Contenu</label>
             <a
               [routerLink]="'/webview'"
-              [queryParams]="{ content: rapport.contenu }"
+              [queryParams]="{ content: rapport.contenuUrl }"
               class="btn btn-outline-primary"
             >
               Voir le contenu dans une nouvelle page

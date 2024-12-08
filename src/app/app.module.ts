@@ -11,6 +11,7 @@ import { ContextMenuModule } from '@ctrl/ngx-rightclick';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import 'hammerjs';
+
 import { ToastrModule } from 'ngx-toastr';
 
 import { CoreCommonModule } from '@core/common.module';
@@ -141,7 +142,7 @@ registerLocaleData(localeFr, 'fr');
         { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
          { provide: LOCALE_ID , useValue: 'fr' },
         // ! IMPORTANT: Provider used to create fake backend, comment while using real API
-        fakeBackendProvider,
+      
         RapportService,
     ],
     bootstrap: [AppComponent]

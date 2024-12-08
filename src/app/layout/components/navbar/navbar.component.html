@@ -75,13 +75,13 @@
         <ng-container *ngIf="this.currentUser">
           <div class="user-nav d-sm-flex d-none">
             <span class="user-name font-weight-bolder"
-              >{{ this.currentUser.firstName }} {{ this.currentUser.lastName }}</span>
+              >{{ this.currentUser.prenom}} {{ this.currentUser.nom }}</span>
               <span class="user-status">{{ this.currentUser.role }}</span>
           </div>
             <div
                     class="avatar bg-light-success"
             >
-                <div class="avatar-content">{{ this.currentUser.firstName + ' ' + this.currentUser.lastName | initials }}</div>
+                <div class="avatar-content">{{ this.currentUser.prenom + ' ' + this.currentUser.nom | initials }}</div>
             </div>
         </ng-container>
       </a>

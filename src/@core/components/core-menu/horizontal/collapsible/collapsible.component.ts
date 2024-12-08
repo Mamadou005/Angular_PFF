@@ -1,13 +1,13 @@
-import { Component, HostListener, HostBinding, ElementRef, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, HostBinding, HostListener, Input, OnDestroy, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 
 import { Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 
-import { CoreConfigService } from '@core/services/config.service';
 import { CoreMenuService } from '@core/components/core-menu/core-menu.service';
+import { CoreConfigService } from '@core/services/config.service';
 
-import { User } from 'app/auth/models';
+import { Utilisateur } from 'app/auth/models';
 
 @Component({
   selector: '[core-menu-horizontal-collapsible]',
@@ -15,7 +15,7 @@ import { User } from 'app/auth/models';
 })
 export class CoreMenuHorizontalCollapsibleComponent implements OnInit, OnDestroy {
   coreConfig: any;
-  currentUser: User;
+  currentUser: Utilisateur;
   isShow = false;
 
   // Conditionally add the active classes if UrlInChildren

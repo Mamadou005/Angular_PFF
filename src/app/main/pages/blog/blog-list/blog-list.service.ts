@@ -10,23 +10,11 @@ export class BlogListService implements Resolve<any> {
   public apiData: any;
   public onBlogListChanged: BehaviorSubject<any>;
 
-  /**
-   * Constructor
-   *
-   * @param {HttpClient} _httpClient
-   */
   constructor(private _httpClient: HttpClient) {
-    // Set the defaults
+    // Initialisation du comportement
     this.onBlogListChanged = new BehaviorSubject({});
   }
 
-  /**
-   * Resolver
-   *
-   * @param {ActivatedRouteSnapshot} route
-   * @param {RouterStateSnapshot} state
-   * @returns {Observable<any> | Promise<any> | any}
-   */
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | Promise<any> | any {
     return new Promise<void>((resolve, reject) => {
       Promise.all([this.getData()]).then(() => {
@@ -35,16 +23,16 @@ export class BlogListService implements Resolve<any> {
     });
   }
 
-  /**
-   * Get Data
-   */
+  // Méthode pour récupérer les données depuis l'API
   getData(): Promise<any[]> {
     return new Promise((resolve, reject) => {
-      this._httpClient.get('api/blog-data').subscribe((response: any) => {
-        this.apiData = response;
-        this.onBlogListChanged.next(this.apiData);
-        resolve(this.apiData);
-      }, reject);
+      // Remplacez l'URL par l'URL de votre API backend pour récupérer les données
+      this._httpClient.get('http://localhost:8080/api/user') 
+        .subscribe((response: any) => {
+          this.apiData = response;
+          this.onBlogListChanged.next(this.apiData);
+          resolve(this.apiData);
+        }, reject);
     });
   }
 }
