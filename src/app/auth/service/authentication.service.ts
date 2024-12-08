@@ -65,6 +65,7 @@ export class AuthenticationService {
             setTimeout(() => {
               this._toastrService.success(
                 'Votre connexion a été effectuée avec succès ' +
+
                   user.role +
                   ' votre espace AcademyLog vous est servi 🎉',
                 '👋 Bienvenue, ' + user.prenom + '!',
@@ -74,6 +75,7 @@ export class AuthenticationService {
 
             // notify
             this.currentUserSubject.next(user);
+
           }
 
           return user;

@@ -5,6 +5,8 @@ import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/r
 import { BehaviorSubject, Observable } from 'rxjs';
 
 import { EventRef } from 'app/main/apps/calendar/calendar.model';
+import {environment} from "../../../../environments/environment";
+import {Echeanche} from "../sujet/sujet.model";
 @Injectable()
 export class CalendarService implements Resolve<any> {
   // Public
@@ -16,6 +18,7 @@ export class CalendarService implements Resolve<any> {
   public onEventChange: BehaviorSubject<any>;
   public onCurrentEventChange: BehaviorSubject<any>;
   public onCalendarChange: BehaviorSubject<any>;
+  private apiUrl = `${environment.apiUrl}/api/echeances`;
 
   /**
    * Constructor
@@ -26,6 +29,7 @@ export class CalendarService implements Resolve<any> {
     this.onEventChange = new BehaviorSubject({});
     this.onCurrentEventChange = new BehaviorSubject({});
     this.onCalendarChange = new BehaviorSubject({});
+
   }
 
   /**
@@ -47,7 +51,7 @@ export class CalendarService implements Resolve<any> {
    * Get Events
    */
   getEvents(): Promise<any[]> {
-    const url = `api/calendar-events`;
+    const url = this.apiUrl;
 
     return new Promise((resolve, reject) => {
       this._httpClient.get(url).subscribe((response: any) => {
@@ -109,7 +113,7 @@ export class CalendarService implements Resolve<any> {
    */
   deleteEvent(event) {
     return new Promise((resolve, reject) => {
-      this._httpClient.delete('api/calendar-events/' + event.id).subscribe(response => {
+      this._httpClient.delete(this.apiUrl + "/" + event.id).subscribe(response => {
         this.getEvents();
         resolve(response);
       }, reject);
@@ -122,17 +126,7 @@ export class CalendarService implements Resolve<any> {
    * @param eventForm
    */
   addEvent(eventForm) {
-    const newEvent = new EventRef();
-    newEvent.url = eventForm.url;
-    newEvent.title = eventForm.title;
-    newEvent.start = eventForm.start;
-    newEvent.end = eventForm.end;
-    newEvent.allDay = eventForm.allDay;
-    newEvent.calendar = eventForm.selectlabel;
-    newEvent.extendedProps.location = eventForm.location;
-    newEvent.extendedProps.description = eventForm.description;
-    newEvent.extendedProps.addGuest = eventForm.addGuest;
-    this.currentEvent = newEvent;
+    this.currentEvent = eventForm;
     this.onCurrentEventChange.next(this.currentEvent);
     this.postNewEvent();
   }
@@ -163,7 +157,7 @@ export class CalendarService implements Resolve<any> {
    */
   postNewEvent() {
     return new Promise((resolve, reject) => {
-      this._httpClient.post('api/calendar-events/', this.currentEvent).subscribe(response => {
+      this._httpClient.post(this.apiUrl, this.currentEvent).subscribe(response => {
         this.getEvents();
         resolve(response);
       }, reject);
@@ -182,5 +176,25 @@ export class CalendarService implements Resolve<any> {
         resolve(response);
       }, reject);
     });
+  }
+
+  // Récupérer toutes les échéances
+  getAllEcheances(): Observable<Echeanche[]> {
+    return this._httpClient.get<Echeanche[]>(this.apiUrl);
+  }
+
+  // Récupérer une échéance par ID
+  getEcheanceById(id: number): Observable<Echeanche> {
+    return this._httpClient.get<Echeanche>(`${this.apiUrl}/${id}`);
+  }
+
+  // Sauvegarder une nouvelle échéance
+  createEcheance(echeanche: Echeanche): Observable<any> {
+    return this._httpClient.post(this.apiUrl, echeanche);
+  }
+
+  // Supprimer une échéance
+  deleteEcheance(id: number): Observable<any> {
+    return this._httpClient.delete(`${this.apiUrl}/${id}`);
   }
 }
