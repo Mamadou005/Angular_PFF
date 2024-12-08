@@ -23,24 +23,16 @@ import { DocumentService } from './document.service';
   templateUrl: 'webviewer.component.html',
 })
 export class WebviewerComponent implements AfterViewInit, OnChanges, OnDestroy, OnInit {
-  @ViewChild('viewer') viewer!: ElementRef;
+  wvInstance?: WebViewerInstance;
+  @ViewChild('viewer') viewer!: ElementRef; // Référence à l'élément HTML du viewer
   @Output() coreControlsEvent: EventEmitter<string> = new EventEmitter();
-  @Input() documentId: number = 1;
-
+  @Input() documentId: number = 1; // Identifiant du document, valeur par défaut
   public rapportContent: string = '';
   public sujetContent: string = '';
-  public rapportTitle: string = '';
 
-  private wvInstance?: WebViewerInstance;
-  private fichierUrl: string = '';
   private documentLoaded$ = new Subject<void>();
   private annotationsLoaded$ = new Subject<void>();
-
-  // Variables pour l'annotation
-  annotationText: string = '';
-  annotationX: number = 0;
-  annotationY: number = 0;
-  annotationPage: number = 1;
+  private fichierUrl: string;
 
   constructor(
     private documentService: DocumentService,
@@ -48,30 +40,20 @@ export class WebviewerComponent implements AfterViewInit, OnChanges, OnDestroy, 
     private route: ActivatedRoute
   ) {}
 
-  ngOnInit(): void {
-    this.route.queryParams.subscribe((params) => {
-      const rapportId = params['id'];
-      if (rapportId) {
-        this.documentId = parseInt(rapportId, 10);
-        this.loadDocument();
-      }
-    });
-  }
-
   ngAfterViewInit(): void {
-    if (this.viewer?.nativeElement) {
-      if (this.fichierUrl) {
-        this.initializeViewer(this.fichierUrl);
-      } else {
-        console.warn('Document URL is not defined yet.');
-      }
-    } else {
+    // Initialisation du WebViewer après le rendu de la vue
+    if (!this.viewer || !this.viewer.nativeElement) {
       console.error('Viewer element is not initialized in ngAfterViewInit.');
     }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['documentId']?.currentValue !== changes['documentId']?.previousValue) {
+    // Chargement du document si l'ID change
+    if (
+      changes['documentId'] &&
+      this.documentId !== changes['documentId'].previousValue
+    ) {
+      this.loadDocument();
       this.loadDocument();
     }
   }
@@ -96,28 +78,38 @@ export class WebviewerComponent implements AfterViewInit, OnChanges, OnDestroy, 
   }
 
   private initializeViewer(url: string): void {
-    const fileType = url.split('.').pop()?.toLowerCase();
-    if (!fileType) {
-      console.error('Unable to determine file type.');
+    if (!this.viewer || !this.viewer.nativeElement) {
+      console.error('Viewer element is not initialized.');
       return;
     }
 
-    const supportedExtensions = ['pdf', 'docx', 'xlsx', 'pptx', 'txt', 'png', 'jpg'];
-    if (!supportedExtensions.includes(fileType)) {
-      console.warn(`File type ${fileType} is not supported.`);
-      return;
-    }
+    this.rapportService.getRapportById(this.documentId).subscribe(
+      (rapport) => {
+        this.rapportTitle = rapport.titre;
+        this.fichierUrl = rapport.contenuUrl;
+        this.rapportContent = rapport.content;
 
+        if (this.fichierUrl) {
+          this.reloadViewer(this.fichierUrl);
+        }
+      },
+      (error) => console.error('Error loading rapport:', error)
+    );
+  }
+
+  private initializeViewer(url: string): void {
     WebViewer(
       {
-        path: '../../lib',
+        path: '../../lib', // Chemin vers les ressources WebViewer
         enableOfficeEditing: true,
-        initialDoc: url,
-        licenseKey: 'demo:1731372460021:7ef9fd110300000000ec33ffa1b45492254e5640546bff52dc10b5080f',
+        initialDoc: this.fichierUrl, // Document initial (peut être vide)
+        licenseKey:
+          'demo:1731372460021:7ef9fd110300000000ec33ffa1b45492254e5640546bff52dc10b5080f',
       },
       this.viewer.nativeElement
     )
       .then((instance) => {
+        console.log('WebViewer instance initialized:', instance);
         this.wvInstance = instance;
         this.coreControlsEvent.emit(instance.UI.LayoutMode.Single);
         this.setUpEventListeners(instance);
@@ -127,74 +119,97 @@ export class WebviewerComponent implements AfterViewInit, OnChanges, OnDestroy, 
       });
   }
 
+  private reloadViewer(newUrl: string): void {
+    if (this.wvInstance) {
+      this.wvInstance.UI.loadDocument(newUrl);
+    } else {
+      this.initializeViewer(newUrl);
+    }
+  }
+
   private setUpEventListeners(instance: WebViewerInstance): void {
     const { documentViewer, Annotations, annotationManager } = instance.Core;
 
+    instance.UI.openElements(['notesPanel']); // Ouvre le panneau des annotations
+
     documentViewer.addEventListener('annotationsLoaded', () => {
+      console.log('Annotations loaded');
       this.annotationsLoaded$.next();
     });
 
     documentViewer.addEventListener('documentLoaded', () => {
+      console.log('Document loaded');
       this.documentLoaded$.next();
       this.addRectangleAnnotation(Annotations, annotationManager);
     });
   }
 
-  private addRectangleAnnotation(Annotations: any, annotationManager: any): void {
+  private loadDocument(): void {
+    if (!this.documentId || !this.wvInstance) {
+      console.warn('Document ID or WebViewer instance is not ready yet.');
+      return;
+    }
+
+    this.rapportService.getRapportById(this.documentId).subscribe(
+      (rapport) => {
+        this.fichierUrl = rapport.contenuUrl;
+
+      },
+      (error) => console.error('Error loading rapport:', error)
+    );
+  }
+
+  private loadSujet(): void {
+    if (!this.documentId || !this.wvInstance) {
+      console.warn('Sujet ID or WebViewer instance is not ready yet.');
+      return;
+    }
+
+    // this.sujetService.getSujetById(this.documentId).subscribe(
+    //     (sujet) => {
+    //       this.fichierUrl = sujet.description;
+
+    //     },
+    //     (error) => console.error('Error loading sujet:', error)
+    // );
+  }
+
+  private addRectangleAnnotation(
+    Annotations: any,
+    annotationManager: any
+  ): void {
     const rectangleAnnot = new Annotations.RectangleAnnotation();
-    rectangleAnnot.PageNumber = this.annotationPage;
-    rectangleAnnot.X = this.annotationX;
-    rectangleAnnot.Y = this.annotationY;
-    rectangleAnnot.Width = 200;
-    rectangleAnnot.Height = 100;
+    rectangleAnnot.PageNumber = 1; // Sur quelle page ajouter l'annotation
+    rectangleAnnot.X = 100; // Position X
+    rectangleAnnot.Y = 150; // Position Y
+    rectangleAnnot.Width = 200; // Largeur
+    rectangleAnnot.Height = 100; // Hauteur
+    rectangleAnnot.StrokeColor = new Annotations.Color(255, 0, 0); // Couleur rouge
+
     annotationManager.addAnnotation(rectangleAnnot);
     annotationManager.redrawAnnotation(rectangleAnnot);
   }
 
-  saveModifiedDocument(): void {
-    if (this.wvInstance) {
-      const { documentViewer, annotationManager } = this.wvInstance.Core;
-      annotationManager.exportAnnotations({ links: false }).then((xfdfString: string) => {
-        const doc = documentViewer.getDocument();
-        doc.getFileData({ xfdfString }).then((data: Uint8Array) => {
-          const blob = new Blob([data], { type: 'application/pdf' });
-          const fileName = `ModifiedDocument-${this.documentId}.pdf`;
+  ngOnInit(): void {
+    // Récupération des paramètres de la route pour charger le bon document
+    this.route.queryParams.subscribe((params) => {
+      const rapportId = params.get('content');
+      console.log("voici l'id du document " + rapportId);
+    });
 
-          this.documentService.saveModifiedDocument(this.documentId, blob, fileName).subscribe(
-            () => {
-              console.log('Modified document saved successfully.');
-              this.loadDocument();
-            },
-            (error) => console.error('Error saving modified document:', error)
-          );
-        });
-      });
-    } else {
-      console.error('WebViewer instance is not initialized.');
-    }
-  }
-
-  downloadAnnotatedFile(): void {
-    if (this.wvInstance) {
-      const { documentViewer } = this.wvInstance.Core;
-      documentViewer.getDocument().getFileData().then((fileData: Uint8Array) => {
-        const blob = new Blob([fileData], { type: 'application/pdf' });
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `Document-${this.documentId}.pdf`;
-        a.click();
-        window.URL.revokeObjectURL(url);
-      });
-    } else {
-      console.error('WebViewer instance is not initialized.');
-    }
   }
 
   ngOnDestroy(): void {
+    // Nettoyage des observables
     this.documentLoaded$.next();
     this.documentLoaded$.complete();
     this.annotationsLoaded$.next();
     this.annotationsLoaded$.complete();
+
+    // Libération des ressources WebViewer
+    if (this.wvInstance) {
+      const viewerElement = this.viewer.nativeElement;
+      viewerElement.innerHTML = '';
+    }
   }
 }

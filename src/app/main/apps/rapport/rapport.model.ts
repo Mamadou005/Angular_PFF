@@ -7,3 +7,4 @@ export class Rapport {
   // groupeEtudiant: { id?: number; nom: string } = { id: undefined, nom: '' };
   // echeance: { id?: number; description: string } = { id: undefined, description: '' };
 }
+

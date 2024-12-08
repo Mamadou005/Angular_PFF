@@ -32,35 +32,38 @@ export class RapportService {
     const formData = new FormData();
     formData.append('file', file);
 
+  
     return this.http.post(`${this.MINIO_API_URL}/upload`, formData).pipe(
-        map((response: any) => {
-          if (response && response.url) {
-            return response.url;
-          }
-          throw new Error(`Réponse inattendue : ${JSON.stringify(response)}`);
-        }),
-        catchError((error) => {
-          console.error('Erreur lors de l\'upload:', error);
-          return throwError(() => new Error('Erreur lors de l\'upload du fichier'));
-        })
+      map((response: any) => {
+        if (response && response.url) {
+          return response.url;
+        }
+        throw new Error(`Réponse inattendue : ${JSON.stringify(response)}`);
+      }),
+      catchError((error) => {
+        console.error('Erreur lors de l\'upload:', error);
+        return throwError(() => new Error('Erreur lors de l\'upload du fichier'));
+      })
     );
   }
-
-
-
+  
+  
+  
 
   addRapport(rapport: Rapport): Observable<any> {
     return this.http.post(`${this.API_URL}`, rapport).pipe(
-        tap((response) => console.log('Réponse du backend après ajout du rapport:', response)),
-        catchError((error) => {
-          console.error('Erreur dans addRapport:', error);
-          return throwError(() => new Error('Erreur lors de l\'ajout du rapport: ' + (error.message || error)));
-        })
+      tap((response) => console.log('Réponse du backend après ajout du rapport:', response)),
+      catchError((error) => {
+        console.error('Erreur dans addRapport:', error);
+        return throwError(() => new Error('Erreur lors de l\'ajout du rapport: ' + (error.message || error)));
+      })
+
     );
   }
+  
+  
 
-
-
+  
 
 
 
@@ -78,7 +81,8 @@ export class RapportService {
 
   applyFilters(): void {
     this.rapports = this.tempRapports.filter((rapport) =>
-        this.onFiltersChange.value.every((filter) => rapport[filter.field] === filter.value)
+      this.onFiltersChange.value.every((filter) => rapport[filter.field] === filter.value)
+
     );
     this.onRapportDataChange.next(this.rapports);
   }
@@ -90,8 +94,6 @@ export class RapportService {
     alert(`Une erreur est survenue: ${errorMessage}`);
     return throwError(() => new Error(errorMessage));
   }
-
-
 
   getRapportById(id: number): Observable<any> {
     return this.http.get<any>(`${this.API_URL}/${id}`);
@@ -105,7 +107,8 @@ export class RapportService {
 
   getRapportsBySearch(query: string): any[] {
     return this.rapports.filter((rapport) =>
-        rapport.titre.toLowerCase().includes(query.toLowerCase())
+      rapport.titre.toLowerCase().includes(query.toLowerCase())
+
     );
   }
 

@@ -1,18 +1,17 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-
 import { Role, Utilisateur } from 'app/auth/models';
 import { environment } from 'environments/environment';
 import { ToastrService } from 'ngx-toastr';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
-  //public
+  // public
   public currentUser: Observable<Utilisateur>;
 
-  //private
+  // private
   private currentUserSubject: BehaviorSubject<Utilisateur>;
 
   /**
@@ -60,12 +59,13 @@ export class AuthenticationService {
           if (user && user.token) {
             // store user details and jwt token in local storage to keep user logged in between page refreshes
             localStorage.setItem('currentUser', JSON.stringify(user));
+            localStorage.setItem('token', user.token);
 
             // Display welcome toast!
             setTimeout(() => {
               this._toastrService.success(
+                'Votre connexion a été effectuée avec succès ' +
 
-                'Votre connexion a été effectué avec succé ' +
                   user.role +
                   ' votre espace AcademyLog vous est servi 🎉',
                 '👋 Bienvenue, ' + user.prenom + '!',
@@ -90,6 +90,7 @@ export class AuthenticationService {
   logout() {
     // remove user from local storage to log user out
     localStorage.removeItem('currentUser');
+    localStorage.removeItem('token');
     // notify
     this.currentUserSubject.next(null);
   }
