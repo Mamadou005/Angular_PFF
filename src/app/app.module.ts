@@ -11,6 +11,7 @@ import { ContextMenuModule } from '@ctrl/ngx-rightclick';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import 'hammerjs';
+
 import { ToastrModule } from 'ngx-toastr';
 
 import { CoreCommonModule } from '@core/common.module';
@@ -20,7 +21,7 @@ import { CoreModule } from '@core/core.module';
 
 import { coreConfig } from 'app/app-config';
 import { AppComponent } from 'app/app.component';
-import { ErrorInterceptor, fakeBackendProvider, JwtInterceptor } from 'app/auth/helpers'; // used to create fake backend
+import { ErrorInterceptor, JwtInterceptor } from 'app/auth/helpers'; // used to create fake backend
 import localeFr from '@angular/common/locales/fr';
 import { AuthGuard } from 'app/auth/helpers/auth.guards';
 import { ContentHeaderModule } from 'app/layout/components/content-header/content-header.module';
@@ -142,7 +143,7 @@ registerLocaleData(localeFr, 'fr');
         {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
         {provide: LOCALE_ID, useValue: 'fr'},
         // ! IMPORTANT: Provider used to create fake backend, comment while using real API
-        fakeBackendProvider,
+      
         RapportService,
         ChatService,
     ],

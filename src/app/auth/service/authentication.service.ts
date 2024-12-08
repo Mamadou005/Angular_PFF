@@ -1,19 +1,18 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Role, Utilisateur } from 'app/auth/models';
+import { environment } from 'environments/environment';
+import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { environment } from 'environments/environment';
-import { User, Role } from 'app/auth/models';
-import { ToastrService } from 'ngx-toastr';
-
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
-  //public
-  public currentUser: Observable<User>;
+  // public
+  public currentUser: Observable<Utilisateur>;
 
-  //private
-  private currentUserSubject: BehaviorSubject<User>;
+  // private
+  private currentUserSubject: BehaviorSubject<Utilisateur>;
 
   /**
    *
@@ -21,12 +20,12 @@ export class AuthenticationService {
    * @param {ToastrService} _toastrService
    */
   constructor(private _http: HttpClient, private _toastrService: ToastrService) {
-    this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
+    this.currentUserSubject = new BehaviorSubject<Utilisateur>(JSON.parse(localStorage.getItem('currentUser')));
     this.currentUser = this.currentUserSubject.asObservable();
   }
 
   // getter: currentUserValue
-  public get currentUserValue(): User {
+  public get currentUserValue(): Utilisateur {
     return this.currentUserSubject.value;
   }
 
@@ -34,14 +33,14 @@ export class AuthenticationService {
    *  Confirms if user is admin
    */
   get isAdmin() {
-    return this.currentUser && this.currentUserSubject.value.role === Role.Admin;
+    return this.currentUser && this.currentUserSubject.value.role === Role.ADMIN;
   }
 
   /**
    *  Confirms if user is client
    */
   get isClient() {
-    return this.currentUser && this.currentUserSubject.value.role === Role.Client;
+    return this.currentUser && this.currentUserSubject.value.role === Role.ETUDIANT;
   }
 
   /**
@@ -60,15 +59,17 @@ export class AuthenticationService {
           if (user && user.token) {
             // store user details and jwt token in local storage to keep user logged in between page refreshes
             localStorage.setItem('currentUser', JSON.stringify(user));
+            localStorage.setItem('token', user.token);
 
             // Display welcome toast!
             setTimeout(() => {
               this._toastrService.success(
-                  'Vous vous êtes connecté avec succès en tant qu\'utilisateur ' +
+                'Votre connexion a été effectuée avec succès ' +
+
                   user.role +
-                  ' sur Academy Log. Vous pouvez maintenant commencer à explorer. Profitez-en ! 🎉',
-                  '👋 Bienvenue, ' + user.prenom + ' !',
-                  { toastClass: 'toast ngx-toastr', closeButton: true }
+                  ' votre espace AcademyLog vous est servi 🎉',
+                '👋 Bienvenue, ' + user.prenom + '!',
+                { toastClass: 'toast ngx-toastr', closeButton: true }
               );
             }, 2500);
 
@@ -89,6 +90,7 @@ export class AuthenticationService {
   logout() {
     // remove user from local storage to log user out
     localStorage.removeItem('currentUser');
+    localStorage.removeItem('token');
     // notify
     this.currentUserSubject.next(null);
   }

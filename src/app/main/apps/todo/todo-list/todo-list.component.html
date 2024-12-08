@@ -51,7 +51,7 @@
   <div class="todo-task-list-wrapper list-group" [perfectScrollbar]>
     <ul class="todo-task-list media-list" id="todo-task-list" dragula="todo-tasks-drag-area">
       <app-todo-list-item
-        [todo]="todo"
+        [sujet]="todo"
         *ngFor="let todo of todos; let i = index"
         (click)="openTodo(todo.id); $event.stopPropagation()"
       ></app-todo-list-item>

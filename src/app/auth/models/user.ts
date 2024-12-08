@@ -1,14 +1,17 @@
-﻿import { Role } from './role';
+﻿// src/app/models/utilisateur.model.ts
 
-export class User {
+import { Role } from './role';
+
+export class Utilisateur {
   id: number;
+  nom: string;
+  prenom: string;
   email: string;
   password: string;
-  firstName: string;
-  nom?: string;
-  lastName: string;
-  prenom?: string;
-  avatar: string;
   role: Role;
-  token?: string;
+  token: string;
+  matricule: string;
+  //messagesEnvoyes: Message[] = [];
+  //messagesRecus: Message[] = [];
 }
+

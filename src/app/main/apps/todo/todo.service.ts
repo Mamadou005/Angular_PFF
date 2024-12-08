@@ -2,24 +2,29 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 
-import { BehaviorSubject, Observable } from 'rxjs';
+import {BehaviorSubject, Observable, throwError} from 'rxjs';
 
 import { Todo } from './todo.model';
+import {environment} from "../../../../environments/environment";
+import {Echeanche} from "../sujet/sujet.model";
+import {catchError} from "rxjs/operators";
 
 @Injectable()
 export class TodoService implements Resolve<any> {
   // Public
-  public todos: Todo[];
-  public assignee;
+  public sujets: any[];
+  public encadreurs;
+  public etudiants;
   public filters;
   public tags;
-  public tempTodos: Todo[];
+  public tempTodos: any[];
   public currentTodo;
   public sortParamRef = 'id';
 
   public onTodoDataChange: BehaviorSubject<any>;
   public onCurrentTodoChange: BehaviorSubject<any>;
-  public onAssigneeChange: BehaviorSubject<any>;
+  public onEncadreurChange: BehaviorSubject<any>;
+  public onEtudiantChange: BehaviorSubject<any>;
   public onFilterChange: BehaviorSubject<any>;
   public onTagChange: BehaviorSubject<any>;
   public onSearchQueryChange: BehaviorSubject<any>;
@@ -73,7 +78,8 @@ export class TodoService implements Resolve<any> {
   constructor(private _httpClient: HttpClient) {
     this.onTodoDataChange = new BehaviorSubject({});
     this.onCurrentTodoChange = new BehaviorSubject({});
-    this.onAssigneeChange = new BehaviorSubject({});
+    this.onEncadreurChange = new BehaviorSubject({});
+    this.onEtudiantChange = new BehaviorSubject({});
     this.onFilterChange = new BehaviorSubject({});
     this.onTagChange = new BehaviorSubject({});
     this.onSearchQueryChange = new BehaviorSubject({});
@@ -90,7 +96,7 @@ export class TodoService implements Resolve<any> {
   resolve(route: ActivatedRouteSnapshot): Observable<any> | Promise<any> | any {
     this.routeParams = route.params;
     return new Promise<void>((resolve, reject) => {
-      Promise.all([this.getTodosList(), this.getFilters(), this.getTags(), this.getAssignee()]).then(() => {
+      Promise.all([this.getTodosList(), this.getFilters(), this.getTags(), this.getEncadreur(), this.getEtudiant()]).then(() => {
         resolve();
       }, reject);
     });
@@ -154,12 +160,12 @@ export class TodoService implements Resolve<any> {
     }
 
     return new Promise((resolve, reject) => {
-      this._httpClient.get('api/todos-data?' + param).subscribe((todos: any) => {
-        this.todos = todos;
+      this._httpClient.get(environment.apiUrl + '/api/sujets?' + param).subscribe((todos: any) => {
+        this.sujets = todos;
         this.tempTodos = todos;
-        this.onTodoDataChange.next(this.todos);
+        this.onTodoDataChange.next(this.sujets);
         this.sortTodos(this.sortParamRef);
-        resolve(this.todos);
+        resolve(this.sujets);
       }, reject);
     });
   }
@@ -171,12 +177,12 @@ export class TodoService implements Resolve<any> {
    */
   getTodosByTag(tagHandel): Promise<any[]> {
     return new Promise((resolve, reject) => {
-      this._httpClient.get('api/todos-data?tags=' + tagHandel).subscribe((todos: any) => {
-        this.todos = todos;
+      this._httpClient.get(environment.apiUrl + '/api/sujets?tags=' + tagHandel).subscribe((todos: any) => {
+        this.sujets = todos;
         this.tempTodos = todos;
-        this.onTodoDataChange.next(this.todos);
+        this.onTodoDataChange.next(this.sujets);
         this.sortTodos(this.sortParamRef);
-        resolve(this.todos);
+        resolve(this.sujets);
       }, reject);
     });
   }
@@ -185,12 +191,26 @@ export class TodoService implements Resolve<any> {
    * Get Todos Assignee
    *
    */
-  getAssignee(): Promise<any[]> {
+  getEncadreur(): Promise<any[]> {
     return new Promise((resolve, reject) => {
-      this._httpClient.get('api/todos-assignee').subscribe((assignee: any) => {
-        this.assignee = assignee;
-        this.onAssigneeChange.next(this.assignee);
-        resolve(this.todos);
+      this._httpClient.get(environment.apiUrl + '/api/user/encadreurs').subscribe((assignee: any) => {
+        this.encadreurs = assignee;
+        this.onEncadreurChange.next(this.encadreurs);
+        resolve(this.sujets);
+      }, reject);
+    });
+  }
+
+  /**
+   * Get Todos Assignee
+   *
+   */
+  getEtudiant(): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      this._httpClient.get(environment.apiUrl + '/api/user/etudiants').subscribe((assignee: any) => {
+        this.etudiants = assignee;
+        this.onEtudiantChange.next(this.etudiants);
+        resolve(this.sujets);
       }, reject);
     });
   }
@@ -202,10 +222,10 @@ export class TodoService implements Resolve<any> {
    */
   getTodosBySearch(query) {
     const filteredTodos = this.tempTodos.filter(todo => {
-      return todo.title.toLowerCase().includes(query.toLowerCase());
+      return todo.titre.toLowerCase().includes(query.toLowerCase());
     });
-    this.todos = filteredTodos;
-    this.onTodoDataChange.next(this.todos);
+    this.sujets = filteredTodos;
+    this.onTodoDataChange.next(this.sujets);
     this.sortTodos(this.sortParamRef);
   }
 
@@ -223,7 +243,7 @@ export class TodoService implements Resolve<any> {
    * @param id
    */
   setCurrentTodo(id) {
-    this.currentTodo = this.todos.find(todo => {
+    this.currentTodo = this.sujets.find(todo => {
       return todo.id === id;
     });
     this.onCurrentTodoChange.next(this.currentTodo);
@@ -235,6 +255,7 @@ export class TodoService implements Resolve<any> {
    * @param todo
    */
   updateCurrentTodo(todo) {
+    console.log(todo)
     if (todo.id === undefined) {
       this.currentTodo = todo;
       this.onCurrentTodoChange.next(this.currentTodo);
@@ -251,7 +272,7 @@ export class TodoService implements Resolve<any> {
    */
   postTodo() {
     return new Promise((resolve, reject) => {
-      this._httpClient.post('api/todos-data/' + this.currentTodo.id, { ...this.currentTodo }).subscribe(response => {
+      this._httpClient.put(environment.apiUrl + '/api/sujets/' + this.currentTodo.id, { ...this.currentTodo }).subscribe(response => {
         this.getTodosList().then(todos => {
           resolve(todos);
         }, reject);
@@ -267,7 +288,7 @@ export class TodoService implements Resolve<any> {
    */
   postNewTodo() {
     return new Promise((resolve, reject) => {
-      this._httpClient.post('api/todos-data/', this.currentTodo).subscribe(response => {
+      this._httpClient.post(environment.apiUrl + '/api/sujets', this.currentTodo).subscribe(response => {
         this.getTodosList().then(todos => {
           this.sortTodos(this.sortParamRef);
           resolve(todos);
@@ -288,9 +309,9 @@ export class TodoService implements Resolve<any> {
     const sortBy = (() => {
       if (sortByParam === 'title-asc') {
         sortDesc = false;
-        return 'title';
+        return 'titre';
       }
-      if (sortByParam === 'title-desc') return 'title';
+      if (sortByParam === 'title-desc') return 'titre';
       if (sortByParam === 'assignee') {
         sortDesc = false;
         return 'assignee';
@@ -303,10 +324,19 @@ export class TodoService implements Resolve<any> {
     })();
 
     if (sortByParam !== null) {
-      this.todos = this.todos.sort(this.sortTodoRef(sortBy));
-      if (sortDesc) this.todos.reverse();
+      this.sujets = this.sujets.sort(this.sortTodoRef(sortBy));
+      if (sortDesc) this.sujets.reverse();
 
-      this.onTodoDataChange.next(this.todos);
+      this.onTodoDataChange.next(this.sujets);
     }
+  }
+
+  getAllEcheances(): Observable<any[]> {
+    return this._httpClient.get<any[]>(environment.apiUrl + "/api/echeances").pipe(
+        catchError(error => {
+          console.error('Erreur lors de la récupération des échéances :', error);
+          return throwError(() => error);
+        })
+    );
   }
 }

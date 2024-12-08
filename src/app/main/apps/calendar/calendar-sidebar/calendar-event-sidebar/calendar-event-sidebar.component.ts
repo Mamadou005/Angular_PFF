@@ -4,6 +4,7 @@ import { CoreSidebarService } from '@core/components/core-sidebar/core-sidebar.s
 
 import { EventRef } from 'app/main/apps/calendar/calendar.model';
 import { CalendarService } from 'app/main/apps/calendar/calendar.service';
+import {AuthenticationService} from "../../../../../auth/service";
 
 @Component({
   selector: 'app-calendar-event-sidebar',
@@ -16,7 +17,7 @@ export class CalendarEventSidebarComponent implements OnInit {
   @ViewChild('endDatePicker') endDatePicker;
 
   // Public
-  public event: EventRef;
+  public event: any;
   public isDataEmpty;
   public selectLabel = [
     { label: 'Business', bullet: 'primary' },
@@ -37,21 +38,25 @@ export class CalendarEventSidebarComponent implements OnInit {
     altInput: true,
     mode: 'single',
     altInputClass: 'form-control flat-picker flatpickr-input invoice-edit-input',
-    enableTime: true
+    enableTime: true,
+    dateFormat: 'Y-m-d'
   };
   public endDateOptions = {
     altInput: true,
     mode: 'single',
     altInputClass: 'form-control flat-picker flatpickr-input invoice-edit-input',
-    enableTime: true
+    enableTime: true,
+    dateFormat: 'Y-m-d'
   };
+  public isSecretaire: boolean = false;
 
   /**
    *
    * @param {CoreSidebarService} _coreSidebarService
    * @param {CalendarService} _calendarService
+   * @param authService
    */
-  constructor(private _coreSidebarService: CoreSidebarService, private _calendarService: CalendarService) {}
+  constructor(private _coreSidebarService: CoreSidebarService, private _calendarService: CalendarService,private authService: AuthenticationService,) {}
 
   // Public Methods
   // -----------------------------------------------------------------------------------------------------
@@ -71,9 +76,9 @@ export class CalendarEventSidebarComponent implements OnInit {
   addEvent(eventForm) {
     if (eventForm.valid) {
       //! Fix: Temp fix till ng2-flatpicker support ng-modal (Getting NG0100: Expression has changed after it was checked error if we use ng-model with ng2-flatpicker)
-      eventForm.form.value.start = this.startDatePicker.flatpickrElement.nativeElement.children[0].value;
-      eventForm.form.value.end = this.endDatePicker.flatpickrElement.nativeElement.children[0].value;
-
+      eventForm.form.value.dateDebut = this.startDatePicker.flatpickrElement.nativeElement.children[0].value;
+      eventForm.form.value.dateFin = this.endDatePicker.flatpickrElement.nativeElement.children[0].value;
+      console.log(eventForm.form.value)
       this._calendarService.addEvent(eventForm.form.value);
       this.toggleEventSidebar();
     }
@@ -85,8 +90,8 @@ export class CalendarEventSidebarComponent implements OnInit {
   updateEvent() {
     this.toggleEventSidebar();
     //! Fix: Temp fix till ng2-flatpicker support ng-modal
-    this.event.start = this.startDatePicker.flatpickrElement.nativeElement.children[0].value;
-    this.event.end = this.endDatePicker.flatpickrElement.nativeElement.children[0].value;
+    this.event.dateDebut = this.startDatePicker.flatpickrElement.nativeElement.children[0].value;
+    this.event.dateFin = this.endDatePicker.flatpickrElement.nativeElement.children[0].value;
     this._calendarService.postUpdatedEvent(this.event);
   }
 
@@ -105,6 +110,7 @@ export class CalendarEventSidebarComponent implements OnInit {
    * On init
    */
   ngOnInit(): void {
+    this.isSecretaire = this.authService.currentUserValue.role.includes("SECRETAIRE")
     // Subscribe to current event changes
     this._calendarService.onCurrentEventChange.subscribe(response => {
       this.event = response;
@@ -119,7 +125,7 @@ export class CalendarEventSidebarComponent implements OnInit {
       }
       // else Create New Event
       else {
-        this.event = new EventRef();
+        this.event = {};
 
         // Clear Flatpicker Values
         setTimeout(() => {

@@ -13,8 +13,8 @@ import { Role } from 'app/auth/models';
 
 import { CoreCommonModule } from '@core/common.module';
 
-import { InvoiceModule } from 'app/main/apps/invoice/invoice.module';
 import { InvoiceListService } from 'app/main/apps/invoice/invoice-list/invoice-list.service';
+import { InvoiceModule } from 'app/main/apps/invoice/invoice.module';
 
 import { DashboardService } from 'app/main/dashboard/dashboard.service';
 
@@ -26,7 +26,7 @@ const routes = [
     path: 'analytics',
     component: AnalyticsComponent,
     canActivate: [AuthGuard],
-    data: { roles: [Role.Admin], animation: 'danalytics' },
+    data: { roles: [Role.ADMIN], animation: 'danalytics' },
     resolve: {
       css: DashboardService,
       inv: InvoiceListService

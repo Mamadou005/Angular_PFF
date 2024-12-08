@@ -24,15 +24,6 @@ export const menu: CoreMenu[] = [
         type: 'item',
         icon: 'circle',
         url: 'dashboard/analytics'
-      },
-      {
-        // If role is not assigned will be display to all
-        id: 'ecommerce',
-        title: 'eCommerce',
-        translate: 'MENU.DASHBOARD.ECOMMERCE',
-        type: 'item',
-        icon: 'circle',
-        url: 'dashboard/ecommerce'
       }
     ]
   },
@@ -50,7 +41,7 @@ export const menu: CoreMenu[] = [
         translate: 'Clavardage',
         type: 'item',
         icon: 'message-square',
-        url: 'apps/chat'
+        url: 'apps/chat',
       },
       {
         id: 'todo',
@@ -58,7 +49,7 @@ export const menu: CoreMenu[] = [
         translate: 'Sujet',
         type: 'item',
         icon: 'check-square',
-        url: 'apps/sujet'
+        url: 'apps/todo'
       },
       {
         id: 'rapport',
@@ -74,7 +65,8 @@ export const menu: CoreMenu[] = [
         translate: 'Calendrier',
         type: 'item',
         icon: 'calendar',
-        url: 'apps/calendar'
+        url: 'apps/calendar',
+        role: ['ADMIN','SECRETAIRE','ENCADREUR'],
       },
      /* {
         id: 'pages',
@@ -425,6 +417,7 @@ export const menu: CoreMenu[] = [
         translate: 'MENU.APPS.USER.COLLAPSIBLE',
         type: 'collapsible',
         icon: 'user',
+        role: ['ADMIN'],
         children: [
           {
             id: 'list',

@@ -4,17 +4,17 @@ import { NavigationEnd, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 
-import { CoreMenuItem } from '@core/types';
 import { CoreMenuService } from '@core/components/core-menu/core-menu.service';
+import { CoreMenuItem } from '@core/types';
 
-import { User } from 'app/auth/models';
+import { Utilisateur } from 'app/auth/models';
 
 @Component({
   selector: '[core-menu-vertical-collapsible]',
   templateUrl: './collapsible.component.html'
 })
 export class CoreMenuVerticalCollapsibleComponent implements OnInit, OnDestroy {
-  currentUser: User;
+  currentUser: Utilisateur;
 
   @Input()
   item: CoreMenuItem;

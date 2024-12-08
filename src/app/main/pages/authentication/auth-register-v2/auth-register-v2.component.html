@@ -1,123 +1,86 @@
 <div class="auth-wrapper auth-v2">
   <div class="auth-inner row m-0">
-    <!-- Brand logo--><a class="brand-logo" href="javascript:void(0);">
-      <img src="{{ coreConfig.app.appLogoImage }}" alt="brand-logo" height="28" />
-      <h2 class="brand-text text-primary ml-1">{{ coreConfig.app.appName }}</h2></a
-    >
-    <!-- /Brand logo-->
-    <!-- Left Text-->
-    <div class="d-none d-lg-flex col-lg-8 align-items-center p-5">
-      <div class="w-100 d-lg-flex align-items-center justify-content-center px-5">
-        <img
-          class="img-fluid"
-          [src]="
-            coreConfig.layout.skin === 'dark'
-              ? 'assets/images/pages/register-v2-dark.svg'
-              : 'assets/images/pages/register-v2.svg'
-          "
-          alt="Register V2"
-        />
-      </div>
-    </div>
-    <!-- /Left Text-->
-    <!-- Register-->
+    <div class="auth-wrapper auth-v2">
+      <div class="auth-inner row m-0">
+        <!-- Brand logo--><a class="brand-logo" href="javascript:void(0);">
+          <img src="{{ coreConfig.app.appLogoImage }}" alt="brand-logo" height="28" />
+          <h2 class="brand-text text-primary ml-1">{{ coreConfig.app.appName }}</h2></a
+        >
+        <!-- /Brand logo-->
+        <!-- Left Text-->
+        <div class="d-none d-lg-flex col-lg-8 align-items-center p-5">
+          <div class="w-100 d-lg-flex align-items-center justify-content-center px-5">
+            <img
+              class="img-fluid"
+              [src]="
+                coreConfig.layout.skin === 'dark'
+                  ? 'assets/images/pages/register-v2-dark.svg'
+                  : 'assets/images/pages/register-v2.svg'
+              "
+              alt="Register V2"
+            />
+          </div>
+        </div>
+        <!-- /Left Text-->
+
+    <!-- Form Section -->
     <div class="d-flex col-lg-4 align-items-center auth-bg px-2 p-lg-5">
       <div class="col-12 col-sm-8 col-md-6 col-lg-12 px-xl-2 mx-auto">
-        <h2 class="card-title font-weight-bold mb-1">Adventure starts here 🚀</h2>
-        <p class="card-text mb-2">Make your app management easy and fun!</p>
-        <form class="auth-register-form mt-2" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+        <h2 class="card-title font-weight-bold mb-1">Créer un compte utilisateur</h2>
+        <p class="card-text mb-2">Veuillez remplir les informations ci-dessous</p>
+
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="auth-register-form mt-2">
+          <!-- Nom -->
           <div class="form-group">
-            <label for="register-username" class="form-label">Username</label>
-            <input
-              type="text"
-              formControlName="username"
-              class="form-control"
-              placeholder="johndoe"
-              aria-describedby="register-username"
-              tabindex="1"
-              autofocus
-              [ngClass]="{ 'is-invalid': submitted && f.username.errors }"
-            />
-            <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
-              <div *ngIf="f.username.errors.required">Username is required</div>
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="register-email" class="form-label">Email</label>
-            <input
-              type="text"
-              formControlName="email"
-              class="form-control"
-              placeholder="john@example.com"
-              aria-describedby="register-email"
-              tabindex="2"
-              [ngClass]="{ 'is-invalid': submitted && f.email.errors }"
-            />
-            <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
-              <div *ngIf="f.email.errors.required">Email is required</div>
-              <div *ngIf="f.email.errors.email">Email must be a valid email address</div>
-            </div>
+            <label for="nom">Nom</label>
+            <input id="nom" formControlName="nom" class="form-control" placeholder="Entrez le nom" />
           </div>
 
+          <!-- Prénom -->
           <div class="form-group">
-            <label for="register-password" class="form-label">Password</label>
+            <label for="prenom">Prénom</label>
+            <input id="prenom" formControlName="prenom" class="form-control" placeholder="Entrez le prénom" />
+          </div>
 
-            <div class="input-group input-group-merge form-password-toggle">
-              <input
-                [type]="passwordTextType ? 'text' : 'password'"
-                formControlName="password"
-                class="form-control form-control-merge"
-                placeholder="············"
-                aria-describedby="register-password"
-                tabindex="3"
-                [ngClass]="{ 'is-invalid error': submitted && f.password.errors }"
-              />
-              <div class="input-group-append">
-                <span class="input-group-text cursor-pointer"
-                  ><i
-                    class="feather font-small-4"
-                    [ngClass]="{
-                      'icon-eye-off': passwordTextType,
-                      'icon-eye': !passwordTextType
-                    }"
-                    (click)="togglePasswordTextType()"
-                  ></i
-                ></span>
-              </div>
-            </div>
-            <div
-              *ngIf="submitted && f.password.errors"
-              class="invalid-feedback"
-              [ngClass]="{ 'd-block': submitted && f.password.errors }"
-            >
-              <div *ngIf="f.password.errors.required">Password is required</div>
-            </div>
-          </div>
+          <!-- Email -->
           <div class="form-group">
-            <div class="custom-control custom-checkbox">
-              <input class="custom-control-input" type="checkbox" id="register-privacy-policy" tabindex="4" />
-              <label class="custom-control-label" for="register-privacy-policy">
-                I agree to <a href="javascript:void(0);">privacy policy & terms</a>
-              </label>
-            </div>
+            <label for="email">Email</label>
+            <input id="email" type="email" formControlName="email" class="form-control" placeholder="exemple@academy.com" />
           </div>
-          <button class="btn btn-primary btn-block" tabindex="5" rippleEffect>Sign up</button>
+
+          <!-- Mot de passe -->
+          <div class="form-group">
+            <label for="password">Mot de passe</label>
+            <input id="password" type="password" formControlName="password" class="form-control" placeholder="············" />
+          </div>
+
+          <!-- Rôle -->
+          <div class="form-group">
+            <label for="role">Rôle</label>
+            <select id="role" formControlName="role" class="form-control" (change)="onRoleChange($event.target.value)">
+              <option value="">--Sélectionnez un rôle--</option>
+              <option value="ETUDIANT">Étudiant</option>
+              <!-- <option value="ENCADREUR">Encadreur</option>
+              <option value="SECRETAIRE">Secrétaire</option> -->
+            </select>
+          </div>
+
+          <!-- Champs spécifiques au rôle -->
+          <div *ngIf="selectedRole === 'ETUDIANT'" class="form-group">
+            <label for="matriculeEtudiant">Matricule Étudiant</label>
+            <input id="matriculeEtudiant" formControlName="matriculeEtudiant" class="form-control" placeholder="Entrez le matricule" />
+          </div>
+
+          <!-- <div *ngIf="selectedRole === 'ENCADREUR'" class="form-group">
+            <label for="matriculeEncadreur">Matricule Encadreur</label>
+            <input id="matriculeEncadreur" formControlName="matriculeEncadreur" class="form-control" placeholder="Entrez le matricule" />
+          </div>
+
+          <div *ngIf="selectedRole === 'SECRETAIRE'" class="form-group">
+            <label for="departement">Département</label>
+            <input id="departement" formControlName="departement" class="form-control" placeholder="Entrez le département" />
+          </div> -->
+
+          <!-- Bouton de soumission -->
+          <button type="submit" class="btn btn-primary btn-block mt-3">Créer le compte</button>
         </form>
-        <p class="text-center mt-2">
-          <span>Already have an account?</span
-          ><a routerLink="/pages/authentication/login-v2"><span>&nbsp;Sign in instead</span></a>
-        </p>
-        <div class="divider my-2">
-          <div class="divider-text">or</div>
-        </div>
-        <div class="auth-footer-btn d-flex justify-content-center">
-          <a class="btn btn-facebook" href="javascript:void(0)"><i data-feather="facebook"></i></a
-          ><a class="btn btn-twitter white" href="javascript:void(0)"><i data-feather="twitter"></i></a
-          ><a class="btn btn-google" href="javascript:void(0)"><i data-feather="mail"></i></a
-          ><a class="btn btn-github" href="javascript:void(0)"><i data-feather="github"></i></a>
-        </div>
-      </div>
-    </div>
-    <!-- /Register-->
-  </div>
-</div>

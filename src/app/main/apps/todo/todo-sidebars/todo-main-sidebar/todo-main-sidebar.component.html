@@ -3,7 +3,7 @@
   <div class="sidebar-content todo-sidebar">
     <div class="todo-app-menu" [perfectScrollbar]>
       <div class="add-task">
-        <button
+        <button [disabled] ="isEtudiant"
           type="button"
           class="btn btn-primary btn-block"
           (click)="createNewTodo('todo-sidebar-right', 'todo-sidebar-main')"

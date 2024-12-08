@@ -13,94 +13,147 @@
           ×
         </button>
         <div class="modal-header mb-1">
-          <h5 class="modal-title" id="exampleModalLabel">New User</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Créer un compte utilisateur</h5>
         </div>
         <div class="modal-body flex-grow-1">
+          <!-- Nom -->
           <div class="form-group">
-            <label class="form-label" for="basic-icon-default-fullname">Full Name</label>
+            <label class="form-label" for="basic-icon-default-nom">Nom</label>
             <input
               type="text"
-              class="form-control dt-full-name"
-              id="basic-icon-default-fullname"
-              placeholder="John Doe"
-              name="user-fullname"
-              [(ngModel)]="fullname"
-              [class.error]="newUserForm.submitted && FNameRef.invalid"
-              #FNameRef="ngModel"
+              class="form-control"
+              id="basic-icon-default-nom"
+              placeholder="Entrez le nom"
+              name="nom"
+              [(ngModel)]="nom"
+              [class.error]="newUserForm.submitted && nomRef.invalid"
+              #nomRef="ngModel"
               required
-              aria-label="John Doe"
-              aria-describedby="basic-icon-default-fullname2"
             />
-            <span *ngIf="newUserForm.submitted && FNameRef.invalid" class="invalid-form">
-              <small class="form-text text-danger" *ngIf="FNameRef.errors.required">This field is required!</small>
+            <span *ngIf="newUserForm.submitted && nomRef.invalid" class="invalid-form">
+              <small class="form-text text-danger">Ce champ est obligatoire !</small>
             </span>
           </div>
+
+          <!-- Prénom -->
           <div class="form-group">
-            <label class="form-label" for="basic-icon-default-uname">Username</label>
+            <label class="form-label" for="basic-icon-default-prenom">Prénom</label>
             <input
               type="text"
-              id="basic-icon-default-uname"
-              class="form-control dt-uname"
-              placeholder="Web Developer"
-              aria-label="jdoe1"
-              aria-describedby="basic-icon-default-uname2"
-              name="user-name"
-              [(ngModel)]="username"
-              [class.error]="newUserForm.submitted && FUserNameRef.invalid"
-              #FUserNameRef="ngModel"
+              class="form-control"
+              id="basic-icon-default-prenom"
+              placeholder="Entrez le prénom"
+              name="prenom"
+              [(ngModel)]="prenom"
+              [class.error]="newUserForm.submitted && prenomRef.invalid"
+              #prenomRef="ngModel"
               required
             />
-            <span *ngIf="newUserForm.submitted && FUserNameRef.invalid" class="invalid-form">
-              <small class="form-text text-danger" *ngIf="FUserNameRef.errors.required">This field is required!</small>
+            <span *ngIf="newUserForm.submitted && prenomRef.invalid" class="invalid-form">
+              <small class="form-text text-danger">Ce champ est obligatoire !</small>
             </span>
           </div>
+
+          <!-- Email -->
           <div class="form-group">
             <label class="form-label" for="basic-icon-default-email">Email</label>
             <input
-              type="text"
+              type="email"
+              class="form-control"
               id="basic-icon-default-email"
-              class="form-control dt-email"
-              placeholder="john.doe@example.com"
-              aria-label="john.doe@example.com"
-              aria-describedby="basic-icon-default-email2"
-              name="user-email"
+              placeholder="exemple@academy.com"
+              name="email"
               [(ngModel)]="email"
-              [class.error]="newUserForm.submitted && FEmailRef.invalid"
-              #FEmailRef="ngModel"
+              [class.error]="newUserForm.submitted && emailRef.invalid"
+              #emailRef="ngModel"
               required
             />
-            <span *ngIf="newUserForm.submitted && FEmailRef.invalid" class="invalid-form">
-              <small class="form-text text-danger" *ngIf="FEmailRef.errors.required">This field is required!</small>
+            <span *ngIf="newUserForm.submitted && emailRef.invalid" class="invalid-form">
+              <small class="form-text text-danger">Ce champ est obligatoire !</small>
             </span>
-            <small class="form-text text-muted"> You can use letters, numbers & periods </small>
           </div>
+
+          <!-- Mot de passe -->
           <div class="form-group">
-            <label class="form-label" for="user-role">User Role</label>
-            <select id="user-role" class="form-control">
-              <option value="subscriber">Subscriber</option>
-              <option value="editor">Editor</option>
-              <option value="maintainer">Maintainer</option>
-              <option value="author">Author</option>
-              <option value="admin">Admin</option>
+            <label class="form-label" for="basic-icon-default-password">Mot de passe</label>
+            <input
+              type="password"
+              class="form-control"
+              id="basic-icon-default-password"
+              placeholder="············"
+              name="password"
+              [(ngModel)]="password"
+              [class.error]="newUserForm.submitted && passwordRef.invalid"
+              #passwordRef="ngModel"
+              required
+            />
+            <span *ngIf="newUserForm.submitted && passwordRef.invalid" class="invalid-form">
+              <small class="form-text text-danger">Ce champ est obligatoire !</small>
+            </span>
+          </div>
+
+          <!-- Rôle -->
+          <div class="form-group">
+            <label class="form-label" for="user-role">Rôle</label>
+            <select
+              id="user-role"
+              class="form-control"
+              name="role"
+              [(ngModel)]="selectedRole"
+              required
+            >
+              <option value="">--Sélectionnez un rôle--</option>
+              <option value="ETUDIANT">Étudiant</option>
+              <option value="ENCADREUR">Encadreur</option>
+              <option value="SECRETAIRE">Secrétaire</option>
             </select>
           </div>
-          <div class="form-group mb-2">
-            <label class="form-label" for="user-plan">Select Plan</label>
-            <select id="user-plan" class="form-control">
-              <option value="basic">Basic</option>
-              <option value="enterprise">Enterprise</option>
-              <option value="company">Company</option>
-              <option value="team">Team</option>
-            </select>
+
+          <!-- Champs spécifiques au rôle -->
+          <div *ngIf="selectedRole === 'ETUDIANT'" class="form-group">
+            <label for="matriculeEtudiant">Matricule Étudiant</label>
+            <input
+              id="matriculeEtudiant"
+              class="form-control"
+              name="matriculeEtudiant"
+              [(ngModel)]="matriculeEtudiant"
+              placeholder="Entrez le matricule"
+              required
+            />
           </div>
-          <button type="submit" class="btn btn-primary mr-1" (click)="submit(newUserForm)" rippleEffect>Submit</button>
+
+          <div *ngIf="selectedRole === 'ENCADREUR'" class="form-group">
+            <label for="matriculeEncadreur">Matricule Encadreur</label>
+            <input
+              id="matriculeEncadreur"
+              class="form-control"
+              name="matriculeEncadreur"
+              [(ngModel)]="matriculeEncadreur"
+              placeholder="Entrez le matricule"
+              required
+            />
+          </div>
+
+          <div *ngIf="selectedRole === 'SECRETAIRE'" class="form-group">
+            <label for="departement">Département</label>
+            <input
+              id="departement"
+              class="form-control"
+              name="departement"
+              [(ngModel)]="departement"
+              placeholder="Entrez le département"
+              required
+            />
+          </div>
+
+          <!-- Boutons -->
+          <button type="submit" class="btn btn-primary mr-1" (click)="submit(newUserForm)">Créer le compte</button>
           <button
             type="reset"
             class="btn btn-outline-secondary"
             (click)="toggleSidebar('new-user-sidebar')"
-            rippleEffect
           >
-            Cancel
+            Annuler
           </button>
         </div>
       </form>
