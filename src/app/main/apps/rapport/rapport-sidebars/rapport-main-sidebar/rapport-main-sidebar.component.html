@@ -1,61 +1,85 @@
 <!-- Main Sidebar -->
 <div class="main-sidebar sidebar">
-  <div class="sidebar-content rapport-sidebar">
-    <div class="rapport-app-menu" [perfectScrollbar]>
-    
-      <!-- Ajouter un rapport -->
-      <div class="add-task">
-        <button
-          type="button"
-          class="btn btn-primary btn-block"
-          (click)="createNewRapportForm()"
-          rippleEffect
-        >
-          Nouveau rapport
-        </button>
-      </div>
-      
-      <!-- Si showForm est vrai, afficher le formulaire -->
-      <div class="sidebar-form" *ngIf="showForm">
-        <form #form="ngForm" (ngSubmit)="addRapport()">
-          <!-- Contenu du formulaire -->
-          <div class="form-group">
-            <label for="rapportTitle">Titre</label>
-            <input type="text" id="rapportTitle" class="form-control" ngModel name="titre" required>
-          </div>
-          
-          <div class="form-group">
-            <label for="rapportContenu">Contenu</label>
-            <input type="file" id="rapportContenu" class="form-control" (change)="handleFileInput($event.target.files)" name="contenu" />
-          </div>
-          
-          <div class="form-group">
-            <button type="submit" class="btn btn-primary">
-              Enregistrer
-            </button>
-          </div>
-        </form>
-        
-      </div>
-      <div class="sidebar-menu-list">
-        <div class="list-group list-group-filters">
-          <!-- Boucle sur les filtres -->
-          <a
-            *ngFor="let filter of filters"
-            [routerLink]="'/apps/rapport/' + filter.handle"
-            [routerLinkActive]="'active'"
-            class="list-group-item list-group-item-action"
-            (click)="toggleSidebar('rapport-sidebar-main')"
-          >
-            <i [data-feather]="filter.icon" [size]="18" class="mr-75"></i>
-            <span class="align-middle">{{ filter.titre }}</span>
-          </a>
-        </div>
+    <div class="sidebar-content rapport-sidebar">
+        <div class="rapport-app-menu" [perfectScrollbar]>
 
-        <div class="list-group list-group-labels">
-          <!-- Section pour les tags -->
+            <!-- Ajouter un rapport -->
+            <div class="add-task mb-2">
+                <button
+                        type="button"
+                        class="btn btn-primary btn-block"
+                        (click)="toggleForm()"
+                        rippleEffect
+                >
+                    {{ showForm ? 'Annuler' : 'Nouveau rapport' }}
+                </button>
+            </div>
+
+            <!-- Si showForm est vrai, afficher le formulaire -->
+            <div class="sidebar-form" *ngIf="showForm">
+                <form #form="ngForm" (ngSubmit)="addRapport(form)">
+                    <!-- Titre du rapport -->
+                    <div class="form-group">
+                        <label for="rapportTitle">Titre</label>
+                        <input
+                                type="text"
+                                id="rapportTitle"
+                                class="form-control"
+                                placeholder="Entrez un titre"
+                                ngModel
+                                name="titre"
+                                required
+                        />
+                        <div *ngIf="form.controls['titre']?.invalid && form.controls['titre']?.touched" class="text-danger">
+                            Le titre est requis.
+                        </div>
+                    </div>
+
+                    <!-- Contenu du rapport -->
+                    <div class="form-group">
+                        <label for="rapportContenu">Contenu</label>
+                        <input
+                                type="file"
+                                id="rapportContenu"
+                                class="form-control"
+                                (change)="handleFileInput($event.target.files)"
+                                required
+                        />
+                        <div *ngIf="!selectedFile && form.submitted" class="text-danger">
+                            Un fichier est requis.
+                        </div>
+                    </div>
+
+                    <!-- Bouton Enregistrer -->
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary" [disabled]="form.invalid || !selectedFile">
+                            Enregistrer
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Liste des filtres -->
+            <div class="sidebar-menu-list mt-3">
+                <div class="list-group list-group-filters">
+                    <!-- Boucle sur les filtres -->
+                    <a
+                            *ngFor="let filter of filters"
+                            [routerLink]="'/apps/rapport/' + filter.handle"
+                            [routerLinkActive]="'active'"
+                            class="list-group-item list-group-item-action"
+                            (click)="toggleSidebar('rapport-sidebar-main')"
+                    >
+                        <i [data-feather]="filter.icon" [size]="18" class="mr-75"></i>
+                        <span class="align-middle">{{ filter.titre }}</span>
+                    </a>
+                </div>
+
+                <!-- Ajout éventuel d'autres sections -->
+                <div class="list-group list-group-labels">
+                    <!-- Section pour les tags ou labels -->
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 </div>
