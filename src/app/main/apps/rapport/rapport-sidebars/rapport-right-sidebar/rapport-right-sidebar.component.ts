@@ -12,6 +12,7 @@ import { RapportService } from 'app/main/apps/rapport/rapport.service';
 export class RapportRightSidebarComponent implements OnInit {
   public isDataEmpty: boolean = false;
   public rapport: Rapport = new Rapport();  // Initialisation correcte de l'objet Rapport
+
   
   public selectTags: any;
   public selectAssignee: any;
@@ -95,8 +96,8 @@ export class RapportRightSidebarComponent implements OnInit {
     });
   }
 
-  onSubmit(rapportForm: NgForm): void {
-    if (rapportForm.valid) {
+  onSubmit(discussionForm: NgForm): void {
+    if (discussionForm.valid) {
       console.log('Formulaire soumis', this.rapport);
     }
   }

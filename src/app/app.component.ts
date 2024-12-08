@@ -93,8 +93,6 @@ export class AppComponent implements OnInit, OnDestroy {
     // Set the private defaults
     this._unsubscribeAll = new Subject();
 
-    this.chatService.loadContacts(); // load all users on contact
-    this.chatService.loadDiscussions();
   }
 
   // Lifecycle hooks

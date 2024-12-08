@@ -35,29 +35,29 @@ export class ChatContentComponent implements OnInit {
   /**
    * Update Chat
    */
-  updateChat() {
-    this.newChat = {
-      message: this.chatMessage,
-      time: 'Mon Dec 10 2018 07:46:43 GMT+0000 (GMT)',
-      senderId: this.userProfile.id
-    };
-
-    // If chat data is available (update chat)
-    if (this.chats.chat) {
-      if (this.newChat.message !== '') {
-        this.chats.chat.push(this.newChat);
-        this._chatService.updateChat(this.chats);
-        this.chatMessage = '';
-        setTimeout(() => {
-          this.scrolltop = this.scrollMe?.nativeElement.scrollHeight;
-        }, 0);
-      }
-    }
-    // Else create new chat
-    else {
-      this._chatService.createNewChat(this.chatUser.id, this.newChat);
-    }
-  }
+  // updateChat() {
+  //   this.newChat = {
+  //     message: this.chatMessage,
+  //     time: 'Mon Dec 10 2018 07:46:43 GMT+0000 (GMT)',
+  //     senderId: this.userProfile.id
+  //   };
+  //
+  //   // If chat data is available (update chat)
+  //   if (this.chats.chat) {
+  //     if (this.newChat.message !== '') {
+  //       this.chats.chat.push(this.newChat);
+  //       this._chatService.updateChat(this.chats);
+  //       this.chatMessage = '';
+  //       setTimeout(() => {
+  //         this.scrolltop = this.scrollMe?.nativeElement.scrollHeight;
+  //       }, 0);
+  //     }
+  //   }
+  //   // Else create new chat
+  //   else {
+  //     this._chatService.createDiscussion(this.chatUser.id, this.newChat);
+  //   }
+  // }
 
   /**
    * Toggle Sidebar

@@ -1,19 +1,19 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
 import {environment} from "../../../../environments/environment";
-import {BehaviorSubject, Observable, of} from 'rxjs';
+import {BehaviorSubject, Observable, of, throwError} from 'rxjs';
 import {Discussion} from "./DIscussion.model";
 import {Utilisateur} from "../sujet/sujet.model";
-import {catchError, tap} from "rxjs/operators";
+
 
 @Injectable()
-export class ChatService {
+export class ChatService implements Resolve<any> {
   public contacts: Utilisateur[] = [];
-  public chats: Discussion[] = [];
+  public chats: any[]= [];
   public userProfile;
   public isChatOpen: Boolean;
-  public chatUsers: any[];
+  public chatUsers: any[]= [];
   public selectedChat;
   public selectedChatUser;
 
@@ -22,6 +22,7 @@ export class ChatService {
   public onSelectedChatChange: BehaviorSubject<any>;
   public onSelectedChatUserChange: BehaviorSubject<any>;
   public onChatUsersChange: BehaviorSubject<any>;
+  public onChatChange: BehaviorSubject<any>;
   public onChatOpenChange: BehaviorSubject<Boolean>;
   public onUserProfileChange: BehaviorSubject<any>;
 
@@ -34,32 +35,9 @@ export class ChatService {
     this.onSelectedChatChange = new BehaviorSubject([]);
     this.onSelectedChatUserChange = new BehaviorSubject([]);
     this.onChatUsersChange = new BehaviorSubject([]);
+    this.onChatChange = new BehaviorSubject([]);
     this.onChatOpenChange = new BehaviorSubject(false);
     this.onUserProfileChange = new BehaviorSubject([]);
-  }
-  loadContacts(): void {
-    console.log('Contacts loaded:');
-    this.getAllUsers().subscribe({
-      next: (utilisateurs) => {
-        this.contacts = utilisateurs;
-        console.log('Contacts loaded:', this.contacts);
-      },
-      error: (err) => {
-        console.error('Error loading contacts', err);
-      },
-    });
-  }
-  loadDiscussions(): void {
-    console.log('Discussions loaded:');
-    this.getChats().subscribe({
-      next: (discussions) => {
-        this.chats = discussions;
-        console.log('Discussions loaded:', this.chats);
-      },
-      error: (err) => {
-        console.error('Error loading discussions', err);
-      },
-    });
   }
 
   /**
@@ -76,7 +54,6 @@ export class ChatService {
         this.getChats(),
         this.getUserProfile(),
         this.getActiveChats(),
-        this.getChatUsers()
       ]).then(() => {
         resolve();
       }, reject);
@@ -101,16 +78,8 @@ export class ChatService {
   /**
    * Get Chats
    */
-  getChats(): Observable<Discussion[]> {
-    return this._httpClient.get<Discussion[]>(this.apiUrl + '/api/discussions').pipe(
-        tap((data) => {
-          this.chats = data;
-        }),
-        catchError((error) => {
-          console.error('Erreur lors de la récupération des discussions:', error);
-          return of([]);
-        })
-    );
+  getChats(): Observable<any> {
+     return this._httpClient.get(this.apiUrl+'/api/discussions');
   }
 
   /**
@@ -160,18 +129,18 @@ export class ChatService {
   /**
    * Get Chat Users
    */
-  getChatUsers() {
-    console.log("get chat users");
-    const contactArr = this.contacts.filter(contact => {
-      return this.chats.some(chat => {
-        return chat.membres.some(membre => membre.id === contact.id);
-      });
-    });
-
-    this.chatUsers = contactArr;
-
-    this.onChatUsersChange.next(this.chatUsers);
-  }
+  // getChatUsers() {
+  //   console.log("get chat users");
+  //   const contactArr = this.contacts.filter(contact => {
+  //     return this.chats.some(chat => {
+  //       return chat.membres.some(membre => membre.id === contact.id);
+  //     });
+  //   });
+  //
+  //   this.chatUsers = contactArr;
+  //
+  //   this.onChatUsersChange.next(this.chatUsers);
+  // }
   /**
    * Selected Chats
    *
@@ -205,26 +174,45 @@ export class ChatService {
   /**
    * Create New Chat
    *
-   * @param id
-   * @param chat
+   * @param discussion
    */
-  createNewChat(id, chat) {
-    const newChat = {
-      userId: id,
-      unseenMsgs: 0,
-      chat: [chat]
+  // createNewChat(id, chat) {
+  //   const newChat = {
+  //     userId: id,
+  //     unseenMsgs: 0,
+  //     chat: [chat]
+  //   };
+  //
+  //   if (chat.message !== '') {
+  //     return new Promise<void>((resolve, reject) => {
+  //       this._httpClient.post('api/chat-chats/', { ...newChat }).subscribe(() => {
+  //         this.getChats();
+  //         //this.getChatUsers();
+  //         this.getSelectedChatUser(id);
+  //         this.openChat(id);
+  //         resolve();
+  //       }, reject);
+  //     });
+  //   }
+  // }
+  createDiscussion(discussion: Discussion): Observable<any> {
+    // Vérifiez que l'objet discussion a les propriétés attendues
+    if (!discussion || !discussion.titre || !discussion.description) {
+      console.warn('Dans ChatService Titre et description requis pour créer une discussion.');
+      return throwError('Dans ChatService Titre et description requis.');
+    }
+    const newDiscussion = {
+      titre: discussion?.titre,
+      description: discussion?.description,
+      membres: discussion?.membres || [],
+      createur: discussion?.createur || {}
     };
-
-    if (chat.message !== '') {
-      return new Promise<void>((resolve, reject) => {
-        this._httpClient.post('api/chat-chats/', { ...newChat }).subscribe(() => {
-          this.getChats();
-          this.getChatUsers();
-          this.getSelectedChatUser(id);
-          this.openChat(id);
-          resolve();
-        }, reject);
-      });
+    console.log('Données envoyées au backend :', newDiscussion);
+    if (newDiscussion.titre !== '' && newDiscussion.description !== '') {
+      return this._httpClient.post(this.apiUrl+'/api/discussions', newDiscussion);
+    } else {
+      console.warn('Titre et description requis pour créer une discussion.');
+      return throwError('Titre et description requis.');
     }
   }
 
