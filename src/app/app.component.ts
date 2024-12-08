@@ -19,6 +19,7 @@ import { locale as menuEnglish } from 'app/menu/i18n/en';
 import { locale as menuFrench } from 'app/menu/i18n/fr';
 import { locale as menuPortuguese } from 'app/menu/i18n/pt';
 import { menu } from 'app/menu/menu';
+import {ChatService} from "./main/apps/chat/chat.service";
 
 
 
@@ -55,6 +56,7 @@ export class AppComponent implements OnInit, OnDestroy {
    * @param {CoreMenuService} _coreMenuService
    * @param {CoreTranslationService} _coreTranslationService
    * @param {TranslateService} _translateService
+   * @param chatService
    */
   constructor(
     @Inject(DOCUMENT) private document: any,
@@ -66,7 +68,9 @@ export class AppComponent implements OnInit, OnDestroy {
     private _coreLoadingScreenService: CoreLoadingScreenService,
     private _coreMenuService: CoreMenuService,
     private _coreTranslationService: CoreTranslationService,
-    private _translateService: TranslateService
+    private _translateService: TranslateService,
+    private chatService: ChatService,
+
   ) {
     // Get the application main menu
     this.menu = menu;
@@ -88,6 +92,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     // Set the private defaults
     this._unsubscribeAll = new Subject();
+
   }
 
   // Lifecycle hooks

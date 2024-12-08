@@ -1,16 +1,19 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
+import {environment} from "../../../../environments/environment";
+import {BehaviorSubject, Observable, of, throwError} from 'rxjs';
+import {Discussion} from "./DIscussion.model";
+import {Utilisateur} from "../sujet/sujet.model";
 
-import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable()
-export class ChatService {
-  public contacts: any[];
-  public chats: any[];
+export class ChatService implements Resolve<any> {
+  public contacts: Utilisateur[] = [];
+  public chats: any[]= [];
   public userProfile;
   public isChatOpen: Boolean;
-  public chatUsers: any[];
+  public chatUsers: any[]= [];
   public selectedChat;
   public selectedChatUser;
 
@@ -19,8 +22,11 @@ export class ChatService {
   public onSelectedChatChange: BehaviorSubject<any>;
   public onSelectedChatUserChange: BehaviorSubject<any>;
   public onChatUsersChange: BehaviorSubject<any>;
+  public onChatChange: BehaviorSubject<any>;
   public onChatOpenChange: BehaviorSubject<Boolean>;
   public onUserProfileChange: BehaviorSubject<any>;
+
+  private apiUrl: string = environment.apiUrl;
 
   constructor(private _httpClient: HttpClient) {
     this.isChatOpen = false;
@@ -29,6 +35,7 @@ export class ChatService {
     this.onSelectedChatChange = new BehaviorSubject([]);
     this.onSelectedChatUserChange = new BehaviorSubject([]);
     this.onChatUsersChange = new BehaviorSubject([]);
+    this.onChatChange = new BehaviorSubject([]);
     this.onChatOpenChange = new BehaviorSubject(false);
     this.onUserProfileChange = new BehaviorSubject([]);
   }
@@ -47,7 +54,6 @@ export class ChatService {
         this.getChats(),
         this.getUserProfile(),
         this.getActiveChats(),
-        this.getChatUsers()
       ]).then(() => {
         resolve();
       }, reject);
@@ -72,17 +78,8 @@ export class ChatService {
   /**
    * Get Chats
    */
-  getChats(): Promise<any[]> {
-    const url = `api/chat-chats`;
-
-    return new Promise((resolve, reject) => {
-      this._httpClient.get(url).subscribe((response: any) => {
-        this.chats = response;
-        this.onChatsChange.next(this.chats);
-
-        resolve(this.chats);
-      }, reject);
-    });
+  getChats(): Observable<any> {
+     return this._httpClient.get(this.apiUrl+'/api/discussions');
   }
 
   /**
@@ -115,76 +112,107 @@ export class ChatService {
   /**
    * Get Active Chats
    */
+  // getActiveChats() {
+  //   const chatArr = this.chats.filter(chat => {
+  //     return this.contacts.some(contact => {
+  //       return contact.id === chat.userId;
+  //     });
+  //   });
+  // }
   getActiveChats() {
-    const chatArr = this.chats.filter(chat => {
-      return this.contacts.some(contact => {
-        return contact.id === chat.userId;
-      });
-    });
+    if (!this.chats) {
+      console.error('Chats is undefined or null');
+      return [];
+    }
+    return this.chats;
   }
-
   /**
    * Get Chat Users
    */
-  getChatUsers() {
-    const contactArr = this.contacts.filter(contact => {
-      return this.chats.some(chat => {
-        return chat.userId === contact.id;
-      });
-    });
-    this.chatUsers = contactArr;
-    this.onChatUsersChange.next(this.chatUsers);
-  }
-
+  // getChatUsers() {
+  //   console.log("get chat users");
+  //   const contactArr = this.contacts.filter(contact => {
+  //     return this.chats.some(chat => {
+  //       return chat.membres.some(membre => membre.id === contact.id);
+  //     });
+  //   });
+  //
+  //   this.chatUsers = contactArr;
+  //
+  //   this.onChatUsersChange.next(this.chatUsers);
+  // }
   /**
    * Selected Chats
    *
    * @param id
    */
   selectedChats(id) {
-    const selectChat = this.chats.find(chat => chat.userId === id);
-
-    // If Chat is Avaiable of Selected Id
-    if (selectChat !== undefined) {
-      this.selectedChat = selectChat;
-
-      this.onSelectedChatChange.next(this.selectedChat);
-      this.getSelectedChatUser(id);
-    }
-    // Else Create New Chat
-    else {
-      const newChat = {
-        userId: id,
-        unseenMsgs: 0
-      };
-      this.onSelectedChatChange.next(newChat);
-      this.getSelectedChatUser(id);
-    }
+    this._httpClient.get<Discussion[]>(`${this.apiUrl}api/discussions/utilisateur/${id}`).subscribe({
+      next: (discussions) => {
+        if (discussions.length > 0) {
+          this.selectedChat = discussions[0];
+        } else {
+          const newChat = {
+            titre: "Nouvelle discussion",
+            description: `Discussion pour l'utilisateur ${id}`
+          };
+          this._httpClient.post<Discussion>(`${this.apiUrl}api/discussions`, newChat).subscribe({
+            next: (createdChat) => {
+              this.selectedChat = createdChat;
+            },
+            error: (err) => {
+              console.error("Erreur lors de la création de la discussion :", err);
+            }
+          });
+        }
+      },
+      error: (err) => {
+        console.error("Erreur lors de la récupération des discussions :", err);
+      }
+    });
   }
-
   /**
    * Create New Chat
    *
-   * @param id
-   * @param chat
+   * @param discussion
    */
-  createNewChat(id, chat) {
-    const newChat = {
-      userId: id,
-      unseenMsgs: 0,
-      chat: [chat]
+  // createNewChat(id, chat) {
+  //   const newChat = {
+  //     userId: id,
+  //     unseenMsgs: 0,
+  //     chat: [chat]
+  //   };
+  //
+  //   if (chat.message !== '') {
+  //     return new Promise<void>((resolve, reject) => {
+  //       this._httpClient.post('api/chat-chats/', { ...newChat }).subscribe(() => {
+  //         this.getChats();
+  //         //this.getChatUsers();
+  //         this.getSelectedChatUser(id);
+  //         this.openChat(id);
+  //         resolve();
+  //       }, reject);
+  //     });
+  //   }
+  // }
+  createDiscussion(discussion: Discussion): Observable<any> {
+    // Vérifiez que l'objet discussion a les propriétés attendues
+    if (!discussion || !discussion.titre || !discussion.description) {
+      console.warn('Dans ChatService Titre et description requis pour créer une discussion.');
+      return throwError('Dans ChatService Titre et description requis.');
+    }
+    const newDiscussion = {
+      titre: discussion?.titre,
+      description: discussion?.description,
+      membres: discussion?.membres || [],
+      createur: discussion?.createur || {}
     };
-
-    if (chat.message !== '') {
-      return new Promise<void>((resolve, reject) => {
-        this._httpClient.post('api/chat-chats/', { ...newChat }).subscribe(() => {
-          this.getChats();
-          this.getChatUsers();
-          this.getSelectedChatUser(id);
-          this.openChat(id);
-          resolve();
-        }, reject);
-      });
+    console.log('Données envoyées au backend :', newDiscussion);
+    if (newDiscussion.titre !== '' && newDiscussion.description !== '') {
+      return this._httpClient.post(this.apiUrl+'/api/discussions', newDiscussion);
+    } else {
+      console.warn('Titre et description requis pour créer une discussion.');
+      return throwError('Titre et description requis.');
     }
   }
 
@@ -221,5 +249,15 @@ export class ChatService {
   updateUserProfile(userProfileRef) {
     this.userProfile = userProfileRef;
     this.onUserProfileChange.next(this.userProfile);
+  }
+
+  getAllUsers(): Observable<Utilisateur[]> {
+    console.log("Get All User");
+    return this._httpClient.get<Utilisateur[]>(this.apiUrl+'/api/user');
+  }
+
+  getAllUsersr(): Observable<Utilisateur[]> {
+    console.log("Get All User");
+    return this._httpClient.get<Utilisateur[]>(`${this.apiUrl}/api/user`);
   }
 }

@@ -65,6 +65,7 @@
         </div>
         <div class="form-group d-flex">
           <button
+                  [disabled] = "!isSecretaire"
             type="submit"
             class="btn btn-primary add-event-btn mr-1"
             *ngIf="isDataEmpty !== false; else addEventRef"
@@ -84,7 +85,7 @@
             Annuler
           </button>
           <ng-template #addEventRef>
-            <button type="submit" class="btn btn-primary update-event-btn mr-1" (click)="updateEvent()" rippleEffect>
+            <button type="submit" class="btn btn-primary update-event-btn mr-1" (click)="updateEvent()" rippleEffect [disabled] = "!isSecretaire">
               Mise a jour
             </button>
           </ng-template>

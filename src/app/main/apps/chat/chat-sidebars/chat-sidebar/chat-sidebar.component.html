@@ -37,9 +37,54 @@
   </div>
   <!-- Sidebar header end -->
 
-  <!-- Sidebar Users start -->
+    <!-- Ajouter une Discussions -->
+    <form (ngSubmit)="createDiscussion()" #discussionForm="ngForm">
+        <div class="form-group">
+            <label for="titre">Titre de la discussion</label>
+            <input
+                    type="text"
+                    id="titre"
+                    class="form-control"
+                    required
+                    [(ngModel)]="chats.titre"
+                    name="titre"
+                    #titre="ngModel"
+            />
+            <div *ngIf="titre.invalid && titre.touched" class="text-danger">
+                Le titre est requis.
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea
+                    id="description"
+                    class="form-control"
+                    required
+                    [(ngModel)]="chats.description"
+                    name="description"
+                    #description="ngModel"
+            ></textarea>
+            <div *ngIf="description.invalid && description.touched" class="text-danger">
+                La description est requise.
+            </div>
+        </div>
+
+        <button
+                type="submit"
+                class="btn btn-primary"
+                [disabled]="discussionForm.invalid"
+        >
+            Créer la discussion
+        </button>
+    </form>
+
+
+
+
+    <!-- Sidebar Users start -->
   <div id="users-list" class="chat-user-list-wrapper list-group" [perfectScrollbar]>
-    <h4 class="chat-list-title">Chats</h4>
+    <h4 class="chat-list-title">Discussions</h4>
     <ng-container *ngIf="(chatUsers | filter: searchText:'fullName').length; else noResultsChats"></ng-container>
     <ul class="chat-users-list chat-list media-list">
       <li
@@ -47,21 +92,14 @@
         [class.active]="selectedIndex === i"
         (click)="openChat(chatUser.id); toggleSidebar('chat-sidebar'); setIndex(i)"
       >
-        <span class="avatar"
-          ><img [src]="chatUser.avatar" height="42" width="42" alt="Generic placeholder image" />
-          <span
-            [ngClass]="{
-              'avatar-status-offline': chatUser.status == 'offline',
-              'avatar-status-online': chatUser.status == 'online',
-              'avatar-status-busy': chatUser.status == 'busy',
-              'avatar-status-away': chatUser.status == 'away'
-            }"
-          ></span>
+        <span class="avatar bg-light-secondary "
+        >
+            <span class="avatar-content"><i data-feather="user"></i></span>
         </span>
         <div class="chat-info flex-grow-1">
-          <h5 class="mb-0">{{ chatUser.fullName }}</h5>
+          <h5 class="mb-0">{{ chatUser.titre }}</h5>
           <p class="card-text text-truncate">
-            {{ chatUser.about }}
+            {{ chatUser.description }}
           </p>
         </div>
         <div class="chat-meta text-nowrap">
@@ -78,31 +116,7 @@
         </li>
       </ng-template>
     </ul>
-    <h4 class="chat-list-title">Contacts</h4>
-    <ng-container *ngIf="(contacts | filter: searchText:'fullName').length; else noResultsContacts"></ng-container>
-    <ul class="chat-users-list contact-list media-list">
-      <li
-        *ngFor="let contact of contacts | filter: searchText:'fullName'"
-        (click)="openChat(contact.id); toggleSidebar('chat-sidebar')"
-      >
-        <span class="avatar"
-          ><img [src]="contact.avatar" height="42" width="42" alt="Generic placeholder image" />
-        </span>
-        <div class="chat-info">
-          <h5 class="mb-0">{{ contact.fullName }}</h5>
-          <p class="card-text text-truncate">
-            {{ contact.about }}
-          </p>
-        </div>
-      </li>
 
-      <ng-template #noResultsContacts>
-        <li class="no-results" [ngClass]="{ show: (contacts | filter: searchText:'fullName').length <= 0 }">
-          <h6 class="mb-0">No Contacts Found</h6>
-        </li>
-      </ng-template>
-    </ul>
-  </div>
   <!-- Sidebar Users end -->
 </div>
 <!--/ Chat Sidebar area -->
