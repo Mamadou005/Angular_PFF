@@ -60,8 +60,8 @@
             <select id="role" formControlName="role" class="form-control" (change)="onRoleChange($event.target.value)">
               <option value="">--Sélectionnez un rôle--</option>
               <option value="ETUDIANT">Étudiant</option>
-              <option value="ENCADREUR">Encadreur</option>
-              <option value="SECRETAIRE">Secrétaire</option>
+              <!-- <option value="ENCADREUR">Encadreur</option>
+              <option value="SECRETAIRE">Secrétaire</option> -->
             </select>
           </div>
 
@@ -71,7 +71,7 @@
             <input id="matriculeEtudiant" formControlName="matriculeEtudiant" class="form-control" placeholder="Entrez le matricule" />
           </div>
 
-          <div *ngIf="selectedRole === 'ENCADREUR'" class="form-group">
+          <!-- <div *ngIf="selectedRole === 'ENCADREUR'" class="form-group">
             <label for="matriculeEncadreur">Matricule Encadreur</label>
             <input id="matriculeEncadreur" formControlName="matriculeEncadreur" class="form-control" placeholder="Entrez le matricule" />
           </div>
@@ -79,7 +79,7 @@
           <div *ngIf="selectedRole === 'SECRETAIRE'" class="form-group">
             <label for="departement">Département</label>
             <input id="departement" formControlName="departement" class="form-control" placeholder="Entrez le département" />
-          </div>
+          </div> -->
 
           <!-- Bouton de soumission -->
           <button type="submit" class="btn btn-primary btn-block mt-3">Créer le compte</button>

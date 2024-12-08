@@ -31,42 +31,43 @@ export class RapportMainSidebarComponent {
     if (form.valid && this.selectedFile) {
       const rapport: Rapport = {
         titre: form.value.titre,
-        contenuUrl: '',
+        contenuUrl: '', 
         dateSoumission: new Date(),
         etatSoumission: 'EN_ATTENTE',
       };
-
+  
       this._rapportService.uploadFileToMinIO(this.selectedFile).subscribe(
-          (fileUrl: string) => {
-            console.log('URL du fichier uploadé reçu:', fileUrl);
-            rapport.contenuUrl = fileUrl;
-
-            this._rapportService.addRapport(rapport).subscribe(
-                (response) => {
-                  console.log('Réponse après ajout du rapport:', response);
-                  alert("Rapport ajouté avec succès !");
-                  this.showForm = false;
-                  form.reset();
-                },
-                (error) => {
-                  console.error('Erreur lors de l\'ajout du rapport:', error);
-                  alert(`Erreur lors de l'ajout du rapport : ${error.message}`);
-                }
-            );
-          },
-          (error) => {
-            console.error('Erreur lors de l\'upload du fichier:', error);
-            alert(`Erreur lors de l'upload du fichier : ${error.message}`);
-          }
+        (fileUrl: string) => {
+          console.log('URL du fichier uploadé reçu:', fileUrl);
+          rapport.contenuUrl = fileUrl;  
+      
+          this._rapportService.addRapport(rapport).subscribe(
+            (response) => {
+              console.log('Réponse après ajout du rapport:', response);
+              alert("Rapport ajouté avec succès !");
+              this.showForm = false;
+              form.reset();
+            },
+            (error) => {
+              console.error('Erreur lors de l\'ajout du rapport:', error);
+              alert(`Erreur lors de l'ajout du rapport : ${error.message}`);
+            }
+          );
+        },
+        (error) => {
+          console.error('Erreur lors de l\'upload du fichier:', error);
+          alert(`Erreur lors de l'upload du fichier : ${error.message}`);
+        }
       );
+      
 
     } else {
       alert('Le formulaire est invalide ou aucun fichier n\'a été sélectionné.');
     }
   }
-
-
-
+  
+  
+  
 
   toggleSidebar(nameRef: string): void {
     const sidebar = this._coreSidebarService.getSidebarRegistry(nameRef);

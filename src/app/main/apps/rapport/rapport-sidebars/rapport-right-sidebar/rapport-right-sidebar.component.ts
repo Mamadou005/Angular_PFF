@@ -19,9 +19,10 @@ export class RapportRightSidebarComponent implements OnInit {
   @ViewChild('dueDateRef', { static: false }) private dueDateRef: any;
 
   constructor(
-      private _rapportService: RapportService,
-      private _coreSidebarService: CoreSidebarService,
-      private _formBuilder: FormBuilder
+    private _rapportService: RapportService,
+    private _coreSidebarService: CoreSidebarService,
+    private _formBuilder: FormBuilder
+
   ) {}
 
   ngOnInit(): void {
@@ -60,24 +61,25 @@ export class RapportRightSidebarComponent implements OnInit {
         contenuUrl: '',  // Vous devrez peut-être utiliser l'URL du fichier téléchargé
         dateSoumission: new Date(),
         etatSoumission: 'EN_ATTENTE',
-
+        
       };
 
       console.log("rapport", rapport);
-
-
+      
+  
       this._rapportService.addRapport(rapport).subscribe(
-          (response) => {
-            console.log('Rapport ajouté avec succès:', response);
-            //this.showForm = false;
-            form.reset();
-          },
-          (error) => {
-            console.error('Erreur complète:', error);  // Afficher l'objet d'erreur complet
-            const errorMessage = error?.message || (error?.error?.message) || 'Une erreur inconnue est survenue';
-            console.error('Erreur lors de l\'ajout du rapport:', errorMessage);
-            alert(`Une erreur est survenue: ${errorMessage}`);
-          }
+        (response) => {
+          console.log('Rapport ajouté avec succès:', response);
+          //this.showForm = false;
+          form.reset();
+        },
+        (error) => {
+          console.error('Erreur complète:', error);  // Afficher l'objet d'erreur complet
+          const errorMessage = error?.message || (error?.error?.message) || 'Une erreur inconnue est survenue';
+          console.error('Erreur lors de l\'ajout du rapport:', errorMessage);
+          alert(`Une erreur est survenue: ${errorMessage}`);
+        }
+
       );
     } else {
       console.error('Formulaire invalide ou fichier manquant');

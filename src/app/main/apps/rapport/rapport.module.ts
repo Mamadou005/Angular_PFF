@@ -9,16 +9,18 @@ import { Ng2FlatpickrModule } from 'ng2-flatpickr';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { QuillModule } from 'ngx-quill';
 
+import { FormsModule } from '@angular/forms';
 import { CoreCommonModule } from '@core/common.module';
 import { CoreSidebarModule } from '@core/components';
 
+
 import { RapportListItemComponent } from 'app/main/apps/rapport/rapport-list/rapport-list-item/rapport-list-item.component';
 import { RapportListComponent } from 'app/main/apps/rapport/rapport-list/rapport-list.component';
-import { RapportMainSidebarComponent } from 'app/main/apps/rapport/rapport-sidebars/rapport-main-sidebar/rapport-main-sidebar.component';
 import { RapportRightSidebarComponent } from 'app/main/apps/rapport/rapport-sidebars/rapport-right-sidebar/rapport-right-sidebar.component';
 
 import { RapportComponent } from 'app/main/apps/rapport/rapport.component';
 import { RapportService } from 'app/main/apps/rapport/rapport.service';
+import { RapportMainSidebarComponent } from './rapport-sidebars/rapport-main-sidebar/rapport-main-sidebar.component';
 
 // routing
 const routes: Routes = [
@@ -65,7 +67,12 @@ const routes: Routes = [
     NgbModule,
     Ng2FlatpickrModule,
     PerfectScrollbarModule,
-    RouterModule
+    RouterModule,
+    FormsModule 
+
+  ],
+  exports: [
+    RapportMainSidebarComponent
   ],
   providers: [RapportService]
 })

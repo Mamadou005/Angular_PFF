@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { takeUntil, first } from 'rxjs/operators';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
+import { first, takeUntil } from 'rxjs/operators';
 
-import { AuthenticationService } from 'app/auth/service';
 import { CoreConfigService } from '@core/services/config.service';
+import { AuthenticationService } from 'app/auth/service';
 
 @Component({
   selector: 'app-auth-login-v2',
@@ -107,8 +107,8 @@ export class AuthLoginV2Component implements OnInit {
    */
   ngOnInit(): void {
     this.loginForm = this._formBuilder.group({
-      email: ['admin@demo.com', [Validators.required, Validators.email]],
-      password: ['admin', Validators.required]
+      email: ['academyLog@gmail.com', [Validators.required, Validators.email]],
+      password: ['academyLog1234', Validators.required]
     });
 
     // get return url from route parameters or default to '/'
@@ -119,6 +119,7 @@ export class AuthLoginV2Component implements OnInit {
       this.coreConfig = config;
     });
   }
+  
 
   /**
    * On destroy
